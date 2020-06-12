@@ -39,9 +39,9 @@ public class DepartmentServiceImpl implements DepartmentService {
                 List<Department> departments = departmentMap.get(department.getParentId());
                 if (departments == null) {
                     departments = new ArrayList<>();
-                    departmentMap.put(department.getParentId(), departments);
                 }
                 departments.add(department);
+                departmentMap.put(department.getParentId(), departments);
             }
         });
         departmentDomainList.forEach(departmentDomain -> {
