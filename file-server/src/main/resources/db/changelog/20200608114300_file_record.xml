@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="now" value="sysdate" dbms="oracle"/>
+    <changeSet id="20200608114300" author="xiagen">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="file"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="file_record" remarks="文件上传记录表">
+            <column name="ID" type="bigint" remarks="主键" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(200)" remarks="文件名"/>
+            <column name="path" type="varchar(200)" remarks="文件存储路径"/>
+            <column name="file_type" type="varchar(10)" remarks="文件类型"/>
+            <column name="create_time" type="DATETIME" defaultValueDate="${now}" />
+
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

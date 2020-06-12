@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: api-server
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.199.209:8848
+        file-extension: yml
+      discovery:
+        server-addr: 192.168.199.209:8848
+
+
+
+
+
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 3000

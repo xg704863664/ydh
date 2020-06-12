@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <!--<include file="classpath:db/changelog/20191101140300_chapter_container.xml" relativeToChangelogFile="false"></include>-->
+    <include file="classpath:db/changelog/20200604105300_user.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200605111400_account.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200605120000_organization.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200605140500_department.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200605142500_user_department.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200605150500_role.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200605151500_account_role.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200605152100_permission.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200605153300_role_permission.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200609163300_user_update.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200609184100_user_update_phone.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200611135000_project.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200611120100_organization_update_name.xml" relativeToChangelogFile="false"></include>
+</databaseChangeLog>

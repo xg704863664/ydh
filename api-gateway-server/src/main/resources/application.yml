@@ -1,0 +1,30 @@
+#server:
+#  port: 15001
+#zuul:
+#  routes:
+#    oauth-server:
+#      path: /oauth-server/**
+#      service-id: oauth-server
+#      sensitiveHeaders:
+#    file-server:
+#      path: /file-server/**
+#      service-id: file-server
+#      sensitiveHeaders:
+#    api-server:
+#      path: /api-server/**
+#      service-id: api-server
+#      sensitiveHeaders:
+#  prefix: /api
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+#ribbon:
+#  ConnectTimeout: 60000
+#  ReadTimeout: 8000
+#spring:
+#  servlet:
+#    multipart:
+#      max-file-size: 2GB
+#      max-request-size: 3GB

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="APP_NAME" value="file-server" />
+    <property name="LOG_HOME" value="./logs" />
+    <!-- 控制台打印日志的相关配置 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg %n</pattern>
+            <charset>utf-8</charset>
+        </encoder>
+    </appender>
+
+    　<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+          <File>${LOG_HOME}/${APP_NAME}.log</File>
+    　　　<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+    　　　　　　<fileNamePattern>${LOG_HOME}/${APP_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+    　　　　　  <maxHistory>30</maxHistory>
+    　　　</rollingPolicy>
+    　　　　　　<encoder>
+    　　　　　　　　　<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+    　　　　　　      <charset>utf-8</charset>
+                </encoder>
+    　</appender>
+
+    <!-- 基于dubug处理日志：具体控制台或者文件对日志级别的处理还要看所在appender配置的filter，如果没有配置filter，则使用root配置 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+    <!--<root level="error">-->
+        <!--<appender-ref ref="STDOUT" />-->
+        <!--<appender-ref ref="FILE" />-->
+    <!--</root>-->
+</configuration>
