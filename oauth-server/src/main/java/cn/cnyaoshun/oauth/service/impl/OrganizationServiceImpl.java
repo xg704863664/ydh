@@ -32,10 +32,6 @@ import static org.springframework.aop.framework.AopContext.currentProxy;
  */
 @Service
 @RequiredArgsConstructor
-<<<<<<< HEAD
-@Slf4j
-=======
->>>>>>> a6ee4905603850e6e50cbf3e22bd2c1c9f6756d2
 public class OrganizationServiceImpl implements OrganizationService{
 
     private final OrganizationRepository organizationRepository;

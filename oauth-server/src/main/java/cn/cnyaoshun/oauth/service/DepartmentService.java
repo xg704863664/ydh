@@ -9,5 +9,5 @@ import java.util.Map;
  * Created by fyh on 2020-6-12.
  */
 public interface DepartmentService {
-    Map<Long ,List<DepartmentDomain>> findByOrganizationId(Long organizationId);
+    List<DepartmentDomain> findByOrganizationId(Long organizationId);
 }
