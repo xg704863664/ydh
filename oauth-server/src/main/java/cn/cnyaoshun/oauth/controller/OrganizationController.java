@@ -21,14 +21,14 @@ import javax.validation.constraints.Min;
  */
 @RestController
 @RequestMapping("/organization")
-@Api(description = "公司组织机构操作Api")
+@Api(description = "组织操作Api")
 @RequiredArgsConstructor
 @Validated
 public class OrganizationController {
 
     private  final  OrganizationService organizationService;
 
-    @ApiOperation(value = "新增公司组织机构",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "新增组织",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public ReturnJsonData<Long> insertUser(@Valid @RequestBody OrganizationDomain OrganizationDomain){
         Long id = organizationService.insertOrganization(OrganizationDomain);
@@ -51,7 +51,7 @@ public class OrganizationController {
         return ReturnJsonData.build(organizationList);
     }
 
-    @ApiOperation(value = "删除组织机构",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "删除组织",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/delete/{organizationId}",method = RequestMethod.DELETE)
     public ReturnJsonData<Long> deleteOrganization(@ApiParam(value = "组织机构id",required = true)@PathVariable(value = "organizationId") Long organizationId){
         organizationService.deleteOrganization(organizationId);

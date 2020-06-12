@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
  */
 @RestController
 @RequestMapping("/user")
-@Api(description = "用户组织机构操作Api")
+@Api(description = "用户操作Api")
 @RequiredArgsConstructor
 @Validated
 public class UserController {
