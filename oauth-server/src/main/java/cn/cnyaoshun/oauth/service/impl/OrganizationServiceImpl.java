@@ -1,34 +1,50 @@
 package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
+import cn.cnyaoshun.oauth.dao.DepartmentRepository;
 import cn.cnyaoshun.oauth.dao.OrganizationRepository;
+import cn.cnyaoshun.oauth.dao.UserDepartmentRepository;
+import cn.cnyaoshun.oauth.dao.UserRepository;
 import cn.cnyaoshun.oauth.domain.OrganizationDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
 import cn.cnyaoshun.oauth.entity.Organization;
+import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
+
+import static org.springframework.aop.framework.AopContext.currentProxy;
 
 /**
  * Created by fyh on 2020-6-11.
  */
 @Service
 @RequiredArgsConstructor
+<<<<<<< HEAD
+@Slf4j
+=======
+>>>>>>> a6ee4905603850e6e50cbf3e22bd2c1c9f6756d2
 public class OrganizationServiceImpl implements OrganizationService{
 
-    public final OrganizationRepository organizationRepository;
+    private final OrganizationRepository organizationRepository;
 
+    private final DepartmentRepository departmentRepository;
+
+    private final UserDepartmentRepository userDepartmentRepository;
+
+    private final UserRepository userRepository;
     /**
      * 新增
      * @param organizationDomain
@@ -89,9 +105,35 @@ public class OrganizationServiceImpl implements OrganizationService{
         return pageDataDomain;
     }
 
+    /**
+     * 删除
+     * @param organizationId
+     */
     @Override
     @Transactional
     public void deleteOrganization(Long organizationId){
         organizationRepository.deleteById(organizationId);
+        OrganizationServiceImpl organizationService = (OrganizationServiceImpl) AopContext.currentProxy();
+        organizationService.deleteDepartment(organizationId);
+
+    }
+
+    @Async
+    @Transactional
+    public void deleteDepartment(Long organizationId){
+        //根据组织机构id删除所有部门信息
+        departmentRepository.deleteAllByOrganizationId(organizationId);
+        //在关联关系表中根据组织机构id查询所有userId
+        List<UserDepartment> userDepartmentList = userDepartmentRepository.findByOrganizationId(organizationId);
+        //去除重复
+        Set<Long> userIds = new HashSet<>();
+        //遍历删除用户信息
+        userDepartmentList.forEach(userDepartment -> {
+            userDepartmentRepository.delete(userDepartment);
+            userIds.add(userDepartment.getUserId());
+        });
+        if (!userIds.isEmpty()){
+            userRepository.deleteAllByIdIn(userIds);
+        }
     }
 }

@@ -6,7 +6,6 @@ import cn.cnyaoshun.oauth.domain.OrganizationDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
 import cn.cnyaoshun.oauth.service.OrganizationService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 /**
  * Created by fyh on 2020-6-11.
@@ -44,10 +44,17 @@ public class OrganizationController {
 
     @ApiOperation(value = "查询",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ReturnJsonData<OrganizationDomainV2> organizationList(@ApiParam(value = "pageNumber 起始页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
-                                                                 @ApiParam(value = "pageSize 每页显示数量",required = true) @RequestParam(value = "pageSize") Integer pageSize
+    public ReturnJsonData<OrganizationDomainV2> organizationList(@Min(1)@ApiParam(value = "pageNumber 起始页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
+                                                                 @Min(1)@ApiParam(value = "pageSize 每页显示数量",required = true) @RequestParam(value = "pageSize") Integer pageSize
                                                                 ){
         PageDataDomain<OrganizationDomainV2> organizationList = organizationService.organizationList(pageNumber, pageSize);
         return ReturnJsonData.build(organizationList);
+    }
+
+    @ApiOperation(value = "删除组织机构",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/delete/{organizationId}",method = RequestMethod.DELETE)
+    public ReturnJsonData<Long> deleteOrganization(@ApiParam(value = "组织机构id",required = true)@PathVariable(value = "organizationId") Long organizationId){
+        organizationService.deleteOrganization(organizationId);
+        return ReturnJsonData.build(organizationId);
     }
 }
