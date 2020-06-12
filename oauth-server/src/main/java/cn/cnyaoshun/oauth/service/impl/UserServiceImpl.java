@@ -7,9 +7,11 @@ import cn.cnyaoshun.oauth.dao.AccountRepository;
 import cn.cnyaoshun.oauth.dao.UserRepository;
 import cn.cnyaoshun.oauth.dao.UserDao;
 import cn.cnyaoshun.oauth.dao.UserDepartmentRepository;
+import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
 import cn.cnyaoshun.oauth.domain.UserDomain;
 import cn.cnyaoshun.oauth.domain.UserDomainV2;
 import cn.cnyaoshun.oauth.entity.Account;
+import cn.cnyaoshun.oauth.entity.Organization;
 import cn.cnyaoshun.oauth.entity.User;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.UserService;
@@ -22,7 +24,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by fyh on 2020-6-4.
@@ -98,5 +102,28 @@ public class UserServiceImpl implements UserService {
             userDepartmentRepository.save(userDepartment);
         }
         return user.getId();
+    }
+
+    /**
+     * 修改
+     * @param userDomainV2
+     * @return
+     */
+    @Override
+    @Transactional
+    public Long updateUser(UserDomainV2 userDomainV2){
+        Optional<User> userOptional = userRepository.findById(userDomainV2.getId());
+        userOptional.ifPresent(user -> {
+            BeanUtils.copyProperties(userDomainV2,user);
+            user.setId(user.getId());
+            user.setUpdateTime(new Date());
+            userRepository.save(user);
+        });
+        return userDomainV2.getId();
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
     }
 }

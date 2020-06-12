@@ -4,6 +4,7 @@ package cn.cnyaoshun.oauth.controller;
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
 import cn.cnyaoshun.oauth.domain.UserDomain;
+import cn.cnyaoshun.oauth.domain.UserDomainV2;
 import cn.cnyaoshun.oauth.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,4 +49,19 @@ public class UserController {
         Long id = crmUserService.insertUser(userDomain);
         return ReturnJsonData.build(id);
     }
+
+    @ApiOperation(value = "修改",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/update",method = RequestMethod.PUT)
+    public ReturnJsonData<Long> updateOrganization(@Valid @RequestBody UserDomainV2 userDomainV2){
+        Long userId = crmUserService.updateUser(userDomainV2);
+        return ReturnJsonData.build(userId);
+    }
+
+    @ApiOperation(value = "删除",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/delete/{userId}",method = RequestMethod.DELETE)
+    public ReturnJsonData<Long> deleteOrganization(@ApiParam(value = "用户id",required = true)@PathVariable(value = "userId") Long userId){
+        crmUserService.deleteUser(userId);
+        return ReturnJsonData.build(userId);
+    }
+
 }
