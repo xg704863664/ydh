@@ -6,11 +6,9 @@ import cn.cnyaoshun.oauth.domain.OrganizationDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
 import cn.cnyaoshun.oauth.service.OrganizationService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Parameter;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -54,7 +52,7 @@ public class OrganizationController {
 
     @ApiOperation(value = "删除组织机构",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/delete",method = RequestMethod.DELETE)
-    public void deleteOrganization(@ApiParam(value = "组织机构id",required = true)@RequestParam(value = "OrganizationId") Long organizationId){
+    public void deleteOrganization(@ApiParam(value = "组织机构id",required = true)@PathVariable(value = "OrganizationId") Long organizationId){
         organizationService.deleteOrganization(organizationId);
     }
 }
