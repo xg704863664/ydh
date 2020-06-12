@@ -15,26 +15,12 @@ import java.util.List;
  */
 @Data
 public class DepartmentDomainV3 {
-    @ApiModelProperty(value = "id")
-    private  Long id;
-    @ApiModelProperty(value = "组织机构id")
-    private Long organizationId;
-    @ApiModelProperty(value = "父节点id")
-    private Long parentId;
-    @ApiModelProperty(value = "部门编号")
-    private String departmentNumber;
+
+    @ApiModelProperty(value = "部门id")
+    private Long departmentId;
     @ApiModelProperty(value = "部门名称")
     private String departmentName;
-    @ApiModelProperty(value = "部门描述")
-    private String description;
-    @ApiModelProperty(value = "子部门")
-    List<DepartmentDomain> children = new ArrayList<>();
-    @ApiModelProperty(value = "创建时间")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    protected Date createTime;
-    @ApiModelProperty(value = "最后一次修改时间")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date updateTime;
+    @ApiModelProperty(value = "父节点id")
+    private Long parentId;
+
 }

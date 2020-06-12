@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Created by fyh on 2020-6-12.
+ * 用于获取部门树结构
  */
 @Data
 public class DepartmentDomain {

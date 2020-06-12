@@ -44,8 +44,8 @@ public class OrganizationController {
 
     @ApiOperation(value = "查询",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ReturnJsonData<OrganizationDomainV2> organizationList(@Min(1)@ApiParam(value = "pageNumber 起始页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
-                                                                 @Min(1)@ApiParam(value = "pageSize 每页显示数量",required = true) @RequestParam(value = "pageSize") Integer pageSize
+    public ReturnJsonData<OrganizationDomainV2> organizationList(@ApiParam(value = "pageNumber 起始页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
+                                                                 @ApiParam(value = "pageSize 每页显示数量",required = true) @RequestParam(value = "pageSize") Integer pageSize
                                                                 ){
         PageDataDomain<OrganizationDomainV2> organizationList = organizationService.organizationList(pageNumber, pageSize);
         return ReturnJsonData.build(organizationList);

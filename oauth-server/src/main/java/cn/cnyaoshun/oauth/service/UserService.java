@@ -10,7 +10,6 @@ import cn.cnyaoshun.oauth.domain.UserDomainV2;
  * 用户表接口
  */
 public interface UserService {
-//    PageDataDomain<UserDomainV2> organizationList(Integer pageNumber, Integer pageSize, Long organizationId,String name);
     PageDataDomain<UserDomainV2> departmentList(Integer pageNumber, Integer pageSize, Long departmentId,String name);
     Long insertUser(UserDomain userDomain);
     Long updateUser(UserDomainV2 userDomainV2);
