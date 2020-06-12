@@ -14,15 +14,4 @@ import javax.persistence.Query;
 @RequiredArgsConstructor
 public class OrganizationDao {
 
-    private final EntityManager entityManager;
-
-    public void deleteDepartment(Long organizationId){
-        StringBuilder sql = new StringBuilder("DELETE FROM department  WHERE department.organization_id IN (SELECT * FROM department WHERE department.organization_id = ? ");
-        Query nativeQuery = entityManager.createNativeQuery(sql.toString());
-        nativeQuery.setParameter(1,organizationId);
-        String deleteDepmemnt = nativeQuery.getSingleResult().toString();
-    }
-     public void deleteUser(Long organization){
-        
-     }
 }

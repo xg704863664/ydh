@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Parameter;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -49,5 +50,11 @@ public class OrganizationController {
                                                                 ){
         PageDataDomain<OrganizationDomainV2> organizationList = organizationService.organizationList(pageNumber, pageSize);
         return ReturnJsonData.build(organizationList);
+    }
+
+    @ApiOperation(value = "删除组织机构",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/delete",method = RequestMethod.DELETE)
+    public void deleteOrganization(@ApiParam(value = "组织机构id",required = true)@RequestParam(value = "OrganizationId") Long organizationId){
+        organizationService.deleteOrganization(organizationId);
     }
 }
