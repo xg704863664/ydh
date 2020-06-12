@@ -9,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by fyh on 2020-6-12.
@@ -23,19 +20,50 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
 
+    /**
+     * 根据机构id获取部门树结构
+     * @param organizationId
+     * @return
+     */
     @Override
-    public Map<Long ,List<DepartmentDomain>> findByOrganizationId(Long organizationId) {
-
+    public List<DepartmentDomain> findByOrganizationId(Long organizationId) {
         List<Department> departmentList = departmentRepository.findByOrganizationIdOrderBySort(organizationId);
-
-        List<DepartmentDomain> departmentDomain = new ArrayList<DepartmentDomain>();
+        List<DepartmentDomain> departmentDomainList = new ArrayList<>();
+        Map<Long, List<Department>> departmentMap = new HashMap<>();
         departmentList.forEach(department -> {
-            if(department.getParentId()==null){
-
+            if (department.getParentId() == null) {
+                DepartmentDomain departmentDomain = new DepartmentDomain();
+                BeanUtils.copyProperties(department, departmentDomain);
+                departmentDomainList.add(departmentDomain);
+            } else {
+                List<Department> departments = departmentMap.get(department.getParentId());
+                if (departments == null) {
+                    departments = new ArrayList<>();
+                    departmentMap.put(department.getParentId(), departments);
+                }
+                departments.add(department);
             }
         });
-        Map<Long,List<DepartmentDomain>> organizationTree = new HashMap<>();
-        organizationTree.put(organizationId , departmentDomain);
-        return organizationTree;
+        departmentDomainList.forEach(departmentDomain -> {
+            recursiveDepartment(departmentDomain,departmentMap);
+        });
+
+        return departmentDomainList;
+    }
+
+    /**
+     * 递归组装部门树结构
+     * @param departmentDomain
+     * @param departmentMap
+     */
+
+    private void recursiveDepartment(DepartmentDomain departmentDomain,Map<Long, List<Department>> departmentMap){
+        List<Department> departmentList = departmentMap.get(departmentDomain.getId());
+        Optional.ofNullable(departmentList).ifPresent(departments -> departments.forEach(department -> {
+            DepartmentDomain departDomain = new DepartmentDomain();
+            BeanUtils.copyProperties(department, departDomain);
+            departmentDomain.getChildren().add(departDomain);
+            recursiveDepartment(departDomain,departmentMap);
+        }));
     }
 }

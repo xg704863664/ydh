@@ -32,7 +32,6 @@ import static org.springframework.aop.framework.AopContext.currentProxy;
  */
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class OrganizationServiceImpl implements OrganizationService{
 
     private final OrganizationRepository organizationRepository;
