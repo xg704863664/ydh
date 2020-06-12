@@ -25,8 +25,6 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
-@Slf4j
-@RefreshScope
 public class OrganizationServiceImpl implements OrganizationService{
 
     public final OrganizationRepository organizationRepository;
@@ -75,15 +73,19 @@ public class OrganizationServiceImpl implements OrganizationService{
     public PageDataDomain<OrganizationDomainV2> organizationList(Integer pageNumber, Integer pageSize){
         Sort sort = Sort.by(Sort.Direction.DESC,"id");
         Pageable page = PageRequest.of(pageNumber,pageSize,sort);
-        Page<Organization> result = organizationRepository.findAll(page);
-        PageDataDomain pageDataDomain = new PageDataDomain();
+        Page<Organization> organizationPage = organizationRepository.findAll(page);
+        PageDataDomain<OrganizationDomainV2> pageDataDomain = new PageDataDomain();
         //当前页
         pageDataDomain.setCurrent(pageNumber);
         //总页数
         pageDataDomain.setPages(pageSize);
         //总条数
-        pageDataDomain.setTotal(result.getTotalElements());
-        pageDataDomain.getRecords().addAll(result.getContent());
+        pageDataDomain.setTotal(organizationPage.getTotalElements());
+        organizationPage.getContent().forEach(organization -> {
+            OrganizationDomainV2 organizationDomainV2 =  new OrganizationDomainV2();
+            BeanUtils.copyProperties(organization,organizationDomainV2);
+            pageDataDomain.getRecords().add(organizationDomainV2);
+        });
         return pageDataDomain;
     }
 
