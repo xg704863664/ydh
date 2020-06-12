@@ -28,6 +28,6 @@ public class Department extends AbstractEntity{
     @Column(name = "sort")
     private Integer sort;
     @Column(name = "state")
-    private Integer state;
+    private boolean state;
 
 }

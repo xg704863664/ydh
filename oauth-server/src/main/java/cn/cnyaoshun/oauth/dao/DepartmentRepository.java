@@ -12,4 +12,6 @@ import java.util.Set;
 public interface DepartmentRepository extends PagingAndSortingRepository<Department,Long>{
     void deleteAllByOrganizationId(Long organizationId);
     List<Department> findByOrganizationIdOrderBySort(Long organizationId);
+    boolean existsByDepartmentNumber(String departmentNumber);
+    boolean existsByOrganizationId(Long organizationId);
 }
