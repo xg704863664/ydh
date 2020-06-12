@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @Data
 public class OrganizationDomainV2 {
 
-    @NotNull(message = "id不能为空")
     @ApiModelProperty(name = "id")
     private  Long id;
     @ApiModelProperty(name = "公司名称")

@@ -32,7 +32,10 @@ import static org.springframework.aop.framework.AopContext.currentProxy;
  */
 @Service
 @RequiredArgsConstructor
+<<<<<<< HEAD
 @Slf4j
+=======
+>>>>>>> a6ee4905603850e6e50cbf3e22bd2c1c9f6756d2
 public class OrganizationServiceImpl implements OrganizationService{
 
     private final OrganizationRepository organizationRepository;
@@ -86,15 +89,19 @@ public class OrganizationServiceImpl implements OrganizationService{
     public PageDataDomain<OrganizationDomainV2> organizationList(Integer pageNumber, Integer pageSize){
         Sort sort = Sort.by(Sort.Direction.DESC,"id");
         Pageable page = PageRequest.of(pageNumber,pageSize,sort);
-        Page<Organization> result = organizationRepository.findAll(page);
-        PageDataDomain pageDataDomain = new PageDataDomain();
+        Page<Organization> organizationPage = organizationRepository.findAll(page);
+        PageDataDomain<OrganizationDomainV2> pageDataDomain = new PageDataDomain();
         //当前页
         pageDataDomain.setCurrent(pageNumber);
         //总页数
         pageDataDomain.setPages(pageSize);
         //总条数
-        pageDataDomain.setTotal(result.getTotalElements());
-        pageDataDomain.getRecords().addAll(result.getContent());
+        pageDataDomain.setTotal(organizationPage.getTotalElements());
+        organizationPage.getContent().forEach(organization -> {
+            OrganizationDomainV2 organizationDomainV2 =  new OrganizationDomainV2();
+            BeanUtils.copyProperties(organization,organizationDomainV2);
+            pageDataDomain.getRecords().add(organizationDomainV2);
+        });
         return pageDataDomain;
     }
 

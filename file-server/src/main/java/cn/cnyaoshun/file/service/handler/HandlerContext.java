@@ -14,7 +14,7 @@ public class HandlerContext {
     public DownLoadBaseService getInstance(String type){
         Class clazz = handlerMap.get(type);
         if (clazz == null){
-            throw new IllegalArgumentException("not hound handler for type: "+type);
+            throw new IllegalArgumentException("not found handler for type: "+type);
         }
         return (DownLoadBaseService) AppContextAware.getApplicationContext().getBean(clazz);
     }
