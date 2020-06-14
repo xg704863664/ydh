@@ -8,7 +8,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 /**
- * Created by fyh on 2020-6-4.
+ * 描述:新增用户信息
+ * @author :fyh
+ * @date: 2020-6-4
  */
 @Data
 public class UserDomain {

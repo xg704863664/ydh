@@ -4,7 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * Created by fyh on 2020-6-11.
+ *描述:修改组织机构
+ * @author fyh
+ * @date: 202-6-11
  */
 @Data
 public class OrganizationDomainV2 {

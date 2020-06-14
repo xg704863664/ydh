@@ -1,6 +1,5 @@
 package cn.cnyaoshun.oauth.controller;
 
-import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
 import cn.cnyaoshun.oauth.domain.OrganizationDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
@@ -14,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import java.util.List;
 
 /**
  * Created by fyh on 2020-6-11.
@@ -45,7 +44,7 @@ public class OrganizationController {
     @ApiOperation(value = "获取所有的组织机构信息",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ReturnJsonData<OrganizationDomainV2> findAll(){
-        PageDataDomain<OrganizationDomainV2> organizationList = organizationService.findAll();
+        List<OrganizationDomainV2> organizationList = organizationService.findAll();
         return ReturnJsonData.build(organizationList);
     }
 

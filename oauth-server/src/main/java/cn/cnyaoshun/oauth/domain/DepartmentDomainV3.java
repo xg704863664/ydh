@@ -4,8 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * Created by fyh on 2020-6-12.
- * 修改使用
+ * 描述: 修改部门名称
+ * @author fyh
+ * @date: 2020-6-12
  */
 @Data
 public class DepartmentDomainV3 {

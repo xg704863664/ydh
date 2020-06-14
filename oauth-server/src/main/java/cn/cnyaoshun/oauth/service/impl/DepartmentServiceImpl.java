@@ -2,6 +2,7 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.DepartmentRepository;
+import cn.cnyaoshun.oauth.dao.OrganizationRepository;
 import cn.cnyaoshun.oauth.dao.UserDepartmentRepository;
 import cn.cnyaoshun.oauth.dao.UserRepository;
 import cn.cnyaoshun.oauth.domain.DepartmentDomain;
@@ -29,6 +30,8 @@ import java.util.*;
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
+
+    private final OrganizationRepository organizationRepository;
 
     private final UserDepartmentRepository userDepartmentRepository;
 
@@ -80,7 +83,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(depNumber){
             throw new ExceptionValidation(418,"部门编号已存在");
         }
-        boolean organizationIdExt = departmentRepository.existsByOrganizationId(departmentDomainV2.getOrganizationId());
+        //boolean organizationIdExt = departmentRepository.existsByOrganizationId(departmentDomainV2.getOrganizationId());
+        boolean organizationIdExt = organizationRepository.existsById(departmentDomainV2.getOrganizationId());
         if(!organizationIdExt){
             throw new ExceptionValidation(418,"公司不存在请重新输入");
         }
@@ -93,7 +97,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = new Department();
         BeanUtils.copyProperties(departmentDomainV2, department);
         department.setState(true);
-        department.setSort(count == 0L|| count == null ? 1 : count + 1);
+        department.setSort(count == 0L || count == null ? 1 : count + 1);
         departmentRepository.save(department);
         return department.getId();
     }

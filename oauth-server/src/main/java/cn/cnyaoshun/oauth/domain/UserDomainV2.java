@@ -9,7 +9,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * Created by fyh on 2020-6-4.
+ * 描述:修改用户信息
+ * @author fyh
+ * @date: 2020-6-4
  */
 @Data
 public class UserDomainV2 {

@@ -5,7 +5,9 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 /**
- * Created by fyh on 2020-6-11.
+ * 描述:新增组织机构
+ * @author:fyh
+ * @date: 2020-6-11
  */
 
 @Data

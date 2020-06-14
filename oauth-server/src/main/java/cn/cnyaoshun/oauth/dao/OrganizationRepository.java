@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface OrganizationRepository extends JpaRepository<Organization,Long> {
 
+    boolean existsById(Long organizationId);
+
 }

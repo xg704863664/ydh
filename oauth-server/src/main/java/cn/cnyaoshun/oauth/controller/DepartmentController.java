@@ -4,7 +4,6 @@ import cn.cnyaoshun.oauth.common.ReturnJsonData;
 import cn.cnyaoshun.oauth.domain.DepartmentDomain;
 import cn.cnyaoshun.oauth.domain.DepartmentDomainV2;
 import cn.cnyaoshun.oauth.domain.DepartmentDomainV3;
-import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
 import cn.cnyaoshun.oauth.service.DepartmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,7 +32,7 @@ public class DepartmentController {
 
     @ApiOperation(value = "新增部门",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public ReturnJsonData<Long> insertDepartment(@ApiParam(value = "新增部门",required = true) @Valid @RequestBody DepartmentDomainV2 departmentDomainV2){
+    public ReturnJsonData<Long> add(@Valid @RequestBody DepartmentDomainV2 departmentDomainV2){
         Long departmentId = departmentService.add(departmentDomainV2);
         return ReturnJsonData.build(departmentId);
     }

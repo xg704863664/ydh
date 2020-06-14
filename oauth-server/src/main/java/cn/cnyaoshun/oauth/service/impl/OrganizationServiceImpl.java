@@ -1,6 +1,5 @@
 package cn.cnyaoshun.oauth.service.impl;
 
-import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.dao.DepartmentRepository;
 import cn.cnyaoshun.oauth.dao.OrganizationRepository;
 import cn.cnyaoshun.oauth.dao.UserDepartmentRepository;
@@ -11,21 +10,13 @@ import cn.cnyaoshun.oauth.entity.Organization;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-
-import static org.springframework.aop.framework.AopContext.currentProxy;
 
 /**
  * Created by fyh on 2020-6-11.
@@ -80,8 +71,20 @@ public class OrganizationServiceImpl implements OrganizationService{
      * @return
      */
     @Override
-    public PageDataDomain<OrganizationDomainV2> findAll(){
-        PageDataDomain<OrganizationDomainV2> pageDataDomain = new PageDataDomain();
+   public List<OrganizationDomainV2> findAll(){
+
+        List<Organization> organizationList = organizationRepository.findAll();
+        List<OrganizationDomainV2> organizationDaomainList = new ArrayList<>();
+        organizationList.forEach(organization -> {
+            OrganizationDomainV2 organizationDomainV2 = new OrganizationDomainV2();
+            organizationDomainV2.setId(organization.getId());
+            organizationDomainV2.setOrganizationName(organization.getOrganizationName());
+            organizationDomainV2.setDescription(organization.getDescription());
+            organizationDomainV2.setAddress(organization.getAddress());
+            organizationDomainV2.setState(organization.isState());
+            organizationDaomainList.add(organizationDomainV2);
+        });
+//        PageDataDomain<OrganizationDomainV2> pageDataDomain = new PageDataDomain();
 //        Sort sort = Sort.by(Sort.Direction.DESC,"id");
 //        Pageable page = PageRequest.of(pageNumber,pageSize,sort);
 //        Page<Organization> organizationPage = organizationRepository.findAll(page);
@@ -97,7 +100,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 //            BeanUtils.copyProperties(organization,organizationDomainV2);
 //            pageDataDomain.getRecords().add(organizationDomainV2);
 //        });
-        return pageDataDomain;
+       return organizationDaomainList;
     }
 
     /**
