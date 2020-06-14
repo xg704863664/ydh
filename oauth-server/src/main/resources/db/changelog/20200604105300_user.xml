@@ -10,22 +10,22 @@
     <changeSet id="20200604105300" author="fyh">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="crm_user"/>
+                <tableExists tableName="user"/>
             </not>
         </preConditions>
 
-        <createTable tableName="crm_user" remarks="用户登陆表">
+        <createTable tableName="user" remarks="用户信息表">
             <column name="id" type="bigint" remarks="主键" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="user_number" type="INT(10)" remarks="工号"/>
+            <column name="user_nor" type="INT(10)" remarks="工号"/>
             <column name="user_name" type="varchar(10)" remarks="姓名"/>
             <column name="sex" type="varchar(10)" remarks="性别" />
             <column name="age" type="INT(2)"  remarks="年龄"/>
             <column name="phone" type="INT(11)" remarks="电话"/>
             <column name="email" type="varchar(20)" remarks="邮箱"/>
-            <column name="card_type" type="INT(1)" remarks="证件类型"/>
-            <column name="card_no" type="varchar(20)" remarks="证件编号"/>
+            <column name="id_type" type="INT(1)" remarks="证件类型"/>
+            <column name="id_no" type="varchar(20)" remarks="证件编号"/>
             <column name="address" type="varchar(500)" remarks="住址"/>
             <column name="state" type="INT(2)" remarks="状态"/>
             <column name="create_time" type="DATETIME" defaultValueDate="${now}" remarks="创建时间"/>

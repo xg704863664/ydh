@@ -23,7 +23,7 @@ public class DepartmentDomainV2 {
 
     @NotNull(message = "部门编号不能为空")
     @ApiModelProperty(value = "部门编号")
-    private String departmentNumber;
+    private String departmentNo;
 
     @NotNull(message = "部门名称不能为空")
     @ApiModelProperty(value = "部门名称")

@@ -9,12 +9,12 @@ import javax.persistence.Entity;
  * Created by fyh on 2020-6-4.
  * 用户信息表
  */
-@Entity(name = "crm_user")
+@Entity(name = "user")
 @Data
 public class User extends AbstractEntity{
 
-    @Column(name = "user_number")
-    private String userNumber;
+    @Column(name = "user_no")
+    private String userNo;
     @Column(name = "user_name")
     private String userName;
     @Column(name = "sex")
@@ -25,10 +25,10 @@ public class User extends AbstractEntity{
     private String phone;
     @Column(name = "email")
     private String email;
-    @Column(name = "card_type")
-    private Integer cardType;
-    @Column(name = "card_no")
-    private String cardNo;
+    @Column(name = "id_type")
+    private Integer idType;
+    @Column(name = "id_no")
+    private String idNo;
     @Column(name = "address")
     private String address;
     @Column(name = "state")

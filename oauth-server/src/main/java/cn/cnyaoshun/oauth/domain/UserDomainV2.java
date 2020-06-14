@@ -19,7 +19,7 @@ public class UserDomainV2 {
     private Long id;
 
     @ApiModelProperty(value = "工号")
-    private String userNumber;
+    private String userNo;
 
     @ApiModelProperty(value = "姓名")
     private String userName;
@@ -37,10 +37,10 @@ public class UserDomainV2 {
     private String email;
 
     @ApiModelProperty(value = "证件类型,0:身份证;1:驾照;2:护照;3:港澳通行证")
-    private Integer cardType;
+    private Integer idType;
 
     @ApiModelProperty(value = "证件编号")
-    private String cardNo;
+    private String idNo;
 
     @ApiModelProperty(value = "地址")
     private String address;

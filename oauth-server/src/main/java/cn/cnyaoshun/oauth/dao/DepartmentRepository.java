@@ -12,7 +12,7 @@ import java.util.Set;
 public interface DepartmentRepository extends PagingAndSortingRepository<Department,Long>{
     void deleteAllByOrganizationId(Long organizationId);
     List<Department> findByOrganizationIdOrderBySort(Long organizationId);
-    boolean existsByDepartmentNumber(String departmentNumber);
+    boolean existsByDepartmentNumber(String departmentNo);
     boolean existsByOrganizationId(Long organizationId);
     Integer countByOrganizationIdAndParentIdIsNull(Long organizationId);
     Integer countByOrganizationIdAndParentId(Long organizationId, Long parentId);

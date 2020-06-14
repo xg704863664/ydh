@@ -14,13 +14,13 @@
             </not>
         </preConditions>
 
-        <createTable tableName="user_department" remarks="用户部门信息表">
+        <createTable tableName="user_department" remarks="用户部门关系表">
             <column name="id" type="bigint" remarks="主键" autoIncrement="true" >
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="department_id" type="bigint" remarks="部门ID" ></column>
             <column name="user_id" type="bigint" remarks="用户ID" ></column>
-            <column name="organization_id" type="bigint" remarks="组织架构ID" ></column>
+            <column name="organization_id" type="bigint" remarks="组织机构ID" ></column>
         </createTable>
 
     </changeSet>

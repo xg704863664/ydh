@@ -18,8 +18,8 @@ public class Department extends AbstractEntity{
     private Long organizationId;
     @Column(name = "parent_id")
     private Long parentId;
-    @Column(name = "department_number")
-    private String departmentNumber;
+    @Column(name = "department_no")
+    private String departmentNo;
     @Column(name = "department_name")
     private String departmentName;
     @Column(name = "description")

@@ -23,7 +23,7 @@ public class DepartmentDomain {
     private Long parentId;
 
     @ApiModelProperty(value = "部门编号")
-    private String departmentNumber;
+    private String departmentNo;
 
     @ApiModelProperty(value = "部门名称")
     private String departmentName;

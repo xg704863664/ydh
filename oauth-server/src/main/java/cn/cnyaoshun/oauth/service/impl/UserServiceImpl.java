@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long add(UserDomain userDomain) {
-        boolean userNumberExists = userRepository.existsByUserNumber(userDomain.getUserNumber());
+        boolean userNumberExists = userRepository.existsByUserNumber(userDomain.getUserNo());
         if (userNumberExists){
             throw new ExceptionValidation(418,"工号已存在");
         }
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         Account account = new Account();
         account.setUserId(user.getId());
-        account.setAccountName(String.valueOf(user.getUserNumber()));
+        account.setAccountName(String.valueOf(user.getUserNo()));
         account.setState(true);
         account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
         accountRepository.save(account);
