@@ -10,8 +10,10 @@ import cn.cnyaoshun.oauth.domain.UserDomainV2;
  * 用户表接口
  */
 public interface UserService {
-    PageDataDomain<UserDomainV2> departmentList(Integer pageNumber, Integer pageSize, Long departmentId,String name);
-    Long insertUser(UserDomain userDomain);
-    Long updateUser(UserDomainV2 userDomainV2);
-    void deleteUser(Long userId);
+
+    Long add(UserDomain userDomain);
+    void delete(Long userId);
+    Long update(UserDomainV2 userDomainV2);
+    PageDataDomain<UserDomainV2> findAll(Long departmentId, String name, Integer pageNumber, Integer pageSize);
+
 }

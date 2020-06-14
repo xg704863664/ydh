@@ -2,7 +2,6 @@ package cn.cnyaoshun.oauth.entity;
 
 import cn.cnyaoshun.oauth.common.entity.AbstractOnlyIdEntity;
 import lombok.Data;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 

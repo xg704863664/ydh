@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 
 /**
  * Created by fyh on 2020-6-5.
- * 账户信息表
+ * 账户信息
  */
 @Data
 @Entity(name = "account")

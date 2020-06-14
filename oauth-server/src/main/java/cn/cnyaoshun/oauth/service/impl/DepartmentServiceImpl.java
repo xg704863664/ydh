@@ -71,10 +71,10 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return
      */
     @Override
-    public Long insertDepartment(DepartmentDomainV2 departmentDomainV2) {
+    public Long add(DepartmentDomainV2 departmentDomainV2) {
 
         if(departmentDomainV2.getParentId() == 0){
-            throw  new ExceptionValidation(418,"父节点Id不能为0");
+            throw  new ExceptionValidation(418,"父节点ID不能为0");
         }
         boolean depNumber = departmentRepository.existsByDepartmentNumber(departmentDomainV2.getDepartmentNumber());
         if(depNumber){
@@ -84,7 +84,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(!organizationIdExt){
             throw new ExceptionValidation(418,"公司不存在请重新输入");
         }
-        Long count = null;
+        Integer count = null;
         if (departmentDomainV2.getParentId() == null){
             count = departmentRepository.countByOrganizationIdAndParentIdIsNull(departmentDomainV2.getOrganizationId());
         }else {
@@ -93,7 +93,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = new Department();
         BeanUtils.copyProperties(departmentDomainV2, department);
         department.setState(true);
-        department.setSort(Integer.parseInt((count==0L||count==null?1:count+1)+""));
+        department.setSort(count == 0L|| count == null ? 1 : count + 1);
         departmentRepository.save(department);
         return department.getId();
     }
@@ -104,7 +104,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     @Transactional
-    public void deleteDepartment(Long departmentId) {
+    public void delete(Long departmentId) {
 
         Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
 
@@ -126,7 +126,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Long updateDepartment(DepartmentDomainV3 departmentDomainV3) {
+    public Long update(DepartmentDomainV3 departmentDomainV3) {
 
         Optional<Department> departmentOptional = departmentRepository.findById(departmentDomainV3.getDepartmentId());
         departmentOptional.ifPresent(department -> {

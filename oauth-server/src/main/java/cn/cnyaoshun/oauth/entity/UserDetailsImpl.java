@@ -28,7 +28,6 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> list = new ArrayList<>();
-//        list.add(new SimpleGrantedAuthority("ROLE_TRUSTED_CLIENT"));
         return list;
     }
 

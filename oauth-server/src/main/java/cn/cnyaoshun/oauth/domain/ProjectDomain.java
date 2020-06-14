@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class ProjectDomain{
 
-    @ApiModelProperty(value = "项目id")
+    @ApiModelProperty(value = "项目ID")
     private Long id;
 
     @ApiModelProperty(value = "项目名称")

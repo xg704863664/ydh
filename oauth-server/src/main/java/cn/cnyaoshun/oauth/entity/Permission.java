@@ -23,4 +23,5 @@ public class Permission extends AbstractEntity{
     private Integer state;
     @Column(name = "project_id")
     private Long projectId;
+
 }

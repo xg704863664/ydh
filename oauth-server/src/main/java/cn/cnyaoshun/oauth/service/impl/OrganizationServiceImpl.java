@@ -48,7 +48,7 @@ public class OrganizationServiceImpl implements OrganizationService{
      */
     @Override
     @Transactional
-    public Long insertOrganization(OrganizationDomain organizationDomain){
+    public Long add(OrganizationDomain organizationDomain){
         Organization organization = new Organization();
         BeanUtils.copyProperties(organizationDomain, organization);
         organization.setState(true);
@@ -63,7 +63,7 @@ public class OrganizationServiceImpl implements OrganizationService{
      */
     @Override
     @Transactional
-    public Long updateOrganization(OrganizationDomainV2 organizationDomainV2){
+    public Long update(OrganizationDomainV2 organizationDomainV2){
         Optional<Organization> organizationOptional = organizationRepository.findById(organizationDomainV2.getId());
         //满足条件时(organizationOptional为true时)进入下面条件
         organizationOptional.ifPresent(organization -> {
@@ -77,27 +77,26 @@ public class OrganizationServiceImpl implements OrganizationService{
 
     /**
      * 查询
-     * @param pageNumber
-     * @param pageSize
      * @return
      */
     @Override
-    public PageDataDomain<OrganizationDomainV2> organizationList(Integer pageNumber, Integer pageSize){
-        Sort sort = Sort.by(Sort.Direction.DESC,"id");
-        Pageable page = PageRequest.of(pageNumber,pageSize,sort);
-        Page<Organization> organizationPage = organizationRepository.findAll(page);
+    public PageDataDomain<OrganizationDomainV2> findAll(){
         PageDataDomain<OrganizationDomainV2> pageDataDomain = new PageDataDomain();
-        //当前页
-        pageDataDomain.setCurrent(pageNumber);
-        //总页数
-        pageDataDomain.setPages(pageSize);
-        //总条数
-        pageDataDomain.setTotal(organizationPage.getTotalElements());
-        organizationPage.getContent().forEach(organization -> {
-            OrganizationDomainV2 organizationDomainV2 =  new OrganizationDomainV2();
-            BeanUtils.copyProperties(organization,organizationDomainV2);
-            pageDataDomain.getRecords().add(organizationDomainV2);
-        });
+//        Sort sort = Sort.by(Sort.Direction.DESC,"id");
+//        Pageable page = PageRequest.of(pageNumber,pageSize,sort);
+//        Page<Organization> organizationPage = organizationRepository.findAll(page);
+//
+//        //当前页
+//        pageDataDomain.setCurrent(pageNumber);
+//        //总页数
+//        pageDataDomain.setPages(pageSize);
+//        //总条数
+//        pageDataDomain.setTotal(organizationPage.getTotalElements());
+//        organizationPage.getContent().forEach(organization -> {
+//            OrganizationDomainV2 organizationDomainV2 =  new OrganizationDomainV2();
+//            BeanUtils.copyProperties(organization,organizationDomainV2);
+//            pageDataDomain.getRecords().add(organizationDomainV2);
+//        });
         return pageDataDomain;
     }
 
@@ -107,7 +106,7 @@ public class OrganizationServiceImpl implements OrganizationService{
      */
     @Override
     @Transactional
-    public void deleteOrganization(Long organizationId){
+    public void delete(Long organizationId){
         organizationRepository.deleteById(organizationId);
         OrganizationServiceImpl organizationService = (OrganizationServiceImpl) AopContext.currentProxy();
         organizationService.deleteDepartment(organizationId);

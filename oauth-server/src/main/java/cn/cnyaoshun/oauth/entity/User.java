@@ -2,10 +2,8 @@ package cn.cnyaoshun.oauth.entity;
 
 import cn.cnyaoshun.oauth.common.entity.AbstractEntity;
 import lombok.Data;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.util.Date;
 
 /**
  * Created by fyh on 2020-6-4.

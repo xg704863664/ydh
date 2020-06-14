@@ -10,8 +10,10 @@ import java.util.List;
  * Created by fyh on 2020-6-12.
  */
 public interface DepartmentService {
+
+    Long add(DepartmentDomainV2 departmentDomainV2);
+    void delete(Long departmentId);
+    Long update(DepartmentDomainV3 departmentDomainV3);
     List<DepartmentDomain> findByOrganizationId(Long organizationId);
-    Long insertDepartment(DepartmentDomainV2 departmentDomainV2);
-    void deleteDepartment(Long departmentId);
-    Long updateDepartment(DepartmentDomainV3 departmentDomainV3);
+
 }

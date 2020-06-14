@@ -24,9 +24,9 @@ public class DepartmentController {
 
     private final DepartmentService departmentService;
 
-    @ApiOperation(value = "根据机构id获取部门树结构",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据组织机构ID获取部门信息,并进行树形结构展示",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/get/{organizationId}",method = RequestMethod.GET)
-    public ReturnJsonData< List<DepartmentDomain>> getDepartmentTree(@ApiParam(value = "组织机构id",required = true)@PathVariable(value = "organizationId") Long organizationId){
+    public ReturnJsonData< List<DepartmentDomain>> getDepartmentTree(@ApiParam(value = "组织机构ID",required = true)@PathVariable(value = "organizationId") Long organizationId){
         List<DepartmentDomain> departmentDomainList = departmentService.findByOrganizationId(organizationId);
         return ReturnJsonData.build(departmentDomainList);
     }
@@ -34,21 +34,21 @@ public class DepartmentController {
     @ApiOperation(value = "新增部门",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public ReturnJsonData<Long> insertDepartment(@ApiParam(value = "新增部门",required = true) @Valid @RequestBody DepartmentDomainV2 departmentDomainV2){
-        Long departmentId = departmentService.insertDepartment(departmentDomainV2);
+        Long departmentId = departmentService.add(departmentDomainV2);
         return ReturnJsonData.build(departmentId);
     }
 
-    @ApiOperation(value = "删除部门",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据部门ID删除部门",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/delete/{departmentId}",method = RequestMethod.DELETE)
-    public ReturnJsonData<Long> deleteOrganization(@ApiParam(value = "部门id",required = true)@PathVariable(value = "departmentId") Long departmentId){
-        departmentService.deleteDepartment(departmentId);
+    public ReturnJsonData<Long> deleteOrganization(@ApiParam(value = "部门ID",required = true)@PathVariable(value = "departmentId") Long departmentId){
+        departmentService.delete(departmentId);
         return ReturnJsonData.build(departmentId);
     }
 
-    @ApiOperation(value = "修改",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据部门ID修改部门信息",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/update",method = RequestMethod.PUT)
     public ReturnJsonData<Long> updateOrganization(@Valid @RequestBody DepartmentDomainV3 departmentDomainV3){
-        Long departmentId = departmentService.updateDepartment(departmentDomainV3);
+        Long departmentId = departmentService.update(departmentDomainV3);
         return ReturnJsonData.build(departmentId);
     }
 }

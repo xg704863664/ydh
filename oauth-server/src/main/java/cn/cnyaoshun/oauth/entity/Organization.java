@@ -2,13 +2,12 @@ package cn.cnyaoshun.oauth.entity;
 
 import cn.cnyaoshun.oauth.common.entity.AbstractEntity;
 import lombok.Data;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
  * Created by fyh on 2020-6-5.
- * 组织架构表
+ * 组织机构
  */
 @Data
 @Entity(name = "organization")

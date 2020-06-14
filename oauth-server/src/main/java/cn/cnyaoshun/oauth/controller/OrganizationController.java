@@ -21,40 +21,38 @@ import javax.validation.constraints.Min;
  */
 @RestController
 @RequestMapping("/organization")
-@Api(description = "组织操作Api")
+@Api(description = "组织机构操作API")
 @RequiredArgsConstructor
 @Validated
 public class OrganizationController {
 
     private  final  OrganizationService organizationService;
 
-    @ApiOperation(value = "新增组织",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "新增组织机构",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public ReturnJsonData<Long> insertUser(@Valid @RequestBody OrganizationDomain OrganizationDomain){
-        Long id = organizationService.insertOrganization(OrganizationDomain);
+        Long id = organizationService.add(OrganizationDomain);
         return ReturnJsonData.build(id);
     }
 
-    @ApiOperation(value = "修改",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据组织机构ID修改组织机构信息",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/update",method = RequestMethod.PUT)
     public ReturnJsonData<Long> updateOrganization(@Valid @RequestBody OrganizationDomainV2 organizationDomainV2){
-        Long organizationId = organizationService.updateOrganization(organizationDomainV2);
+        Long organizationId = organizationService.update(organizationDomainV2);
         return ReturnJsonData.build(organizationId);
     }
 
-    @ApiOperation(value = "查询",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "获取所有的组织机构信息",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ReturnJsonData<OrganizationDomainV2> organizationList(@ApiParam(value = "pageNumber 起始页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
-                                                                 @ApiParam(value = "pageSize 每页显示数量",required = true) @RequestParam(value = "pageSize") Integer pageSize
-                                                                ){
-        PageDataDomain<OrganizationDomainV2> organizationList = organizationService.organizationList(pageNumber, pageSize);
+    public ReturnJsonData<OrganizationDomainV2> findAll(){
+        PageDataDomain<OrganizationDomainV2> organizationList = organizationService.findAll();
         return ReturnJsonData.build(organizationList);
     }
 
-    @ApiOperation(value = "删除组织",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据组织机构ID删除组织机构",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/delete/{organizationId}",method = RequestMethod.DELETE)
-    public ReturnJsonData<Long> deleteOrganization(@ApiParam(value = "组织机构id",required = true)@PathVariable(value = "organizationId") Long organizationId){
-        organizationService.deleteOrganization(organizationId);
+    public ReturnJsonData<Long> deleteOrganization(@ApiParam(value = "组织机构ID",required = true)@PathVariable(value = "organizationId") Long organizationId){
+        organizationService.delete(organizationId);
         return ReturnJsonData.build(organizationId);
     }
 }

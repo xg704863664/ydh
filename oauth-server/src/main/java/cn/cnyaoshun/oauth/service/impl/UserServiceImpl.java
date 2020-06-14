@@ -58,9 +58,9 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public PageDataDomain<UserDomainV2> departmentList(Integer pageNumber, Integer pageSize, Long departmentId, String name) {
+    public PageDataDomain<UserDomainV2> findAll(Long departmentId, String name, Integer pageNumber, Integer pageSize) {
         Integer startPage = (pageNumber-1)*pageSize;
-        List<UserDomainV2> crmMemberEntityPage = userDao.queryUserEntitiesByDepartmentId(startPage,pageSize,departmentId,name);
+        List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(startPage,pageSize,departmentId,name);
         Long count = userDao.countUserEntitiesByDepartmentId(departmentId,name);
         PageDataDomain<UserDomainV2> pageDataDomain = new PageDataDomain<>();
         pageDataDomain.setCurrent(pageNumber);
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public Long insertUser(UserDomain userDomain) {
+    public Long add(UserDomain userDomain) {
         boolean userNumberExists = userRepository.existsByUserNumber(userDomain.getUserNumber());
         if (userNumberExists){
             throw new ExceptionValidation(418,"工号已存在");
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public Long updateUser(UserDomainV2 userDomainV2){
+    public Long update(UserDomainV2 userDomainV2){
         Optional<User> userOptional = userRepository.findById(userDomainV2.getId());
         userOptional.ifPresent(user -> {
             BeanUtils.copyProperties(userDomainV2,user);
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long userId) {
+    public void delete(Long userId) {
         userRepository.deleteById(userId);
     }
 }
