@@ -1,9 +1,7 @@
 package cn.cnyaoshun.oauth.service;
 
-import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
-
 import java.util.List;
 
 /**

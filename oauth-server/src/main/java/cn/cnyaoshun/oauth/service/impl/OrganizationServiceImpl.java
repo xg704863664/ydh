@@ -84,22 +84,6 @@ public class OrganizationServiceImpl implements OrganizationService{
             organizationDomainV2.setState(organization.isState());
             organizationDaomainList.add(organizationDomainV2);
         });
-//        PageDataDomain<OrganizationDomainV2> pageDataDomain = new PageDataDomain();
-//        Sort sort = Sort.by(Sort.Direction.DESC,"id");
-//        Pageable page = PageRequest.of(pageNumber,pageSize,sort);
-//        Page<Organization> organizationPage = organizationRepository.findAll(page);
-//
-//        //当前页
-//        pageDataDomain.setCurrent(pageNumber);
-//        //总页数
-//        pageDataDomain.setPages(pageSize);
-//        //总条数
-//        pageDataDomain.setTotal(organizationPage.getTotalElements());
-//        organizationPage.getContent().forEach(organization -> {
-//            OrganizationDomainV2 organizationDomainV2 =  new OrganizationDomainV2();
-//            BeanUtils.copyProperties(organization,organizationDomainV2);
-//            pageDataDomain.getRecords().add(organizationDomainV2);
-//        });
        return organizationDaomainList;
     }
 
