@@ -76,7 +76,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(departmentDomainV2.getParentId() == 0){
             throw  new ExceptionValidation(418,"父节点ID不能为0");
         }
-        boolean depNumber = departmentRepository.existsByDepartmentNumber(departmentDomainV2.getDepartmentNo());
+        boolean depNumber = departmentRepository.existsByDepartmentNo(departmentDomainV2.getDepartmentNo());
         if(depNumber){
             throw new ExceptionValidation(418,"部门编号已存在");
         }

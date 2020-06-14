@@ -10,6 +10,6 @@ import java.util.Set;
  * Created by fyh on 2020-6-9.
  */
 public interface UserRepository extends PagingAndSortingRepository<User,Long>{
-    boolean existsByUserNumber(String userNumber);
+    boolean existsByUserNo(String userNumber);
     void deleteAllByIdIn(Set<Long> ids);
 }

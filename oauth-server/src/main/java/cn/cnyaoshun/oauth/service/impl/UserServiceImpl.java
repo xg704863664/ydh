@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long add(UserDomain userDomain) {
-        boolean userNumberExists = userRepository.existsByUserNumber(userDomain.getUserNo());
+        boolean userNumberExists = userRepository.existsByUserNo(userDomain.getUserNo());
         if (userNumberExists){
             throw new ExceptionValidation(418,"工号已存在");
         }

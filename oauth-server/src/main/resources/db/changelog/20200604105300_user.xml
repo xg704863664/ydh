@@ -18,7 +18,7 @@
             <column name="id" type="bigint" remarks="主键" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="user_nor" type="INT(10)" remarks="工号"/>
+            <column name="user_no" type="INT(10)" remarks="工号"/>
             <column name="user_name" type="varchar(10)" remarks="姓名"/>
             <column name="sex" type="varchar(10)" remarks="性别" />
             <column name="age" type="INT(2)"  remarks="年龄"/>
