@@ -12,4 +12,5 @@ import java.util.Set;
 public interface UserRepository extends PagingAndSortingRepository<User,Long>{
     boolean existsByUserNo(String userNumber);
     void deleteAllByIdIn(Set<Long> ids);
+
 }

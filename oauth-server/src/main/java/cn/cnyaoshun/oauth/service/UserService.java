@@ -14,6 +14,6 @@ public interface UserService {
     Long add(UserDomain userDomain);
     void delete(Long userId);
     Long update(UserDomainV2 userDomainV2);
-    PageDataDomain<UserDomainV2> findAll(Long departmentId, String name, Integer pageNumber, Integer pageSize);
-
+    PageDataDomain<UserDomainV2> findAll(Long departmentId, String name, String sex, String phone, String userNo, Integer pageNumber, Integer pageSize);
+    Long countByUserId(Long departmentId);
 }

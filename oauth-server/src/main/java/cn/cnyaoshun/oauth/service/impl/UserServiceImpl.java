@@ -53,11 +53,11 @@ public class UserServiceImpl implements UserService {
      * @param name
      * @return
      */
-    @Override
-    public PageDataDomain<UserDomainV2> findAll(Long departmentId, String name, Integer pageNumber, Integer pageSize) {
+
+    public PageDataDomain<UserDomainV2> findAll(Integer pageNumber, Integer pageSize,Long departmentId, String name, String sex, String phone, String userNo) {
         Integer startPage = (pageNumber-1)*pageSize;
-        List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(startPage,pageSize,departmentId,name);
-        Long count = userDao.countUserEntitiesByDepartmentId(departmentId,name);
+        List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(startPage,pageSize,departmentId,name,sex, phone, userNo);
+        Long count = userDao.countUserEntitiesByDepartmentId(departmentId,name,sex,phone,userNo);
         PageDataDomain<UserDomainV2> pageDataDomain = new PageDataDomain<>();
         pageDataDomain.setCurrent(pageNumber);
         pageDataDomain.setSize(pageSize);
@@ -66,6 +66,17 @@ public class UserServiceImpl implements UserService {
         pageDataDomain.setTotal(count);
         pageDataDomain.getRecords().addAll(crmMemberEntityPage);
         return pageDataDomain;
+    }
+
+    /**
+     * 根据部门ID统计部门下的用户数量
+     * @param departmentId
+     * @return
+     */
+    @Override
+    public Long countByUserId(Long departmentId) {
+        Long countUser = userDepartmentRepository.countByUserId(departmentId);
+        return countUser;
     }
 
     /**
@@ -116,6 +127,21 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
         });
         return userDomainV2.getId();
+    }
+
+    @Override
+    public PageDataDomain<UserDomainV2> findAll(Long departmentId, String name, String sex, String phone, String userNo, Integer pageNumber, Integer pageSize) {
+        Integer startPage = (pageNumber-1)*pageSize;
+        List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(startPage,pageSize,departmentId,name,sex, phone, userNo);
+        Long count = userDao.countUserEntitiesByDepartmentId(departmentId,name,sex,phone,userNo);
+        PageDataDomain<UserDomainV2> pageDataDomain = new PageDataDomain<>();
+        pageDataDomain.setCurrent(pageNumber);
+        pageDataDomain.setSize(pageSize);
+        Integer total=Integer.parseInt(count+"")/pageSize+(Integer.parseInt(count+"")%pageSize>0?1:0);
+        pageDataDomain.setPages(total);
+        pageDataDomain.setTotal(count);
+        pageDataDomain.getRecords().addAll(crmMemberEntityPage);
+        return pageDataDomain;
     }
 
     @Override

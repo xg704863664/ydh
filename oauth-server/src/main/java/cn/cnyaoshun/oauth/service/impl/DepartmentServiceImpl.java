@@ -121,7 +121,6 @@ public class DepartmentServiceImpl implements DepartmentService {
             });
         });
         departmentRepository.deleteById(departmentId);
-
         DepartmentServiceImpl departmentService = (DepartmentServiceImpl) AopContext.currentProxy();
         departmentService.deleteUser(departmentId);
     }
@@ -147,6 +146,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Async
     @Transactional
     public void  deleteUser(Long departmentId){
+
         List<Long> userIdList = userDepartmentRepository.findByUserId(departmentId);
         userIdList.forEach(userId ->{
             userRepository.deleteById(userId);
@@ -158,9 +158,10 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @param departmentDomain
      * @param departmentMap
      */
-
     private void recursiveDepartment(DepartmentDomain departmentDomain,Map<Long, List<Department>> departmentMap){
+
         List<Department> departmentList = departmentMap.get(departmentDomain.getId());
+
         Optional.ofNullable(departmentList).ifPresent(departments -> departments.forEach(department -> {
             DepartmentDomain departDomain = new DepartmentDomain();
             BeanUtils.copyProperties(department, departDomain);

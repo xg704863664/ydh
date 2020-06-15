@@ -7,6 +7,7 @@ import cn.cnyaoshun.oauth.domain.UserDomain;
 import cn.cnyaoshun.oauth.domain.UserDomainV2;
 import cn.cnyaoshun.oauth.service.UserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,13 @@ public class UserController {
                                                            @ApiParam(value = "根据用户名称搜索用户信息")@RequestParam(value = "name",required = false) String name){
 
         return ReturnJsonData.build(userService.findAll(departmentId,name, pageNumber, pageSize));
+    }
+
+    @ApiOperation(value = "根据部门ID获取部门下的用户数量",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/count/{departmentId}",method = RequestMethod.GET)
+    public ReturnJsonData<Long> countUser(@ApiParam(value = "部门ID" , required = true)@PathVariable(value = "departmentId") Long departmentId){
+        Long countUser = userService.countByUserId(departmentId);
+        return  ReturnJsonData.build(countUser);
     }
 
     @ApiOperation(value = "新增用户",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

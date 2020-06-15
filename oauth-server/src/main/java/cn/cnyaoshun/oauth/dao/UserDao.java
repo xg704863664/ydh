@@ -22,11 +22,20 @@ public class UserDao {
     private final EntityManager entityManager;
 
 
-    public List<UserDomainV2> findUserByDepartmentId(Integer pageNumber, Integer pageSize,Long departmentId, String name){
+    public List<UserDomainV2> findUserByDepartmentId(Integer pageNumber, Integer pageSize,Long departmentId, String name, String sex, String phone, String userNo){
         List<UserDomainV2> userDomainList = new ArrayList<>();
         StringBuilder sql =  new StringBuilder("SELECT cu.id,cu.user_no,cu.user_name,cu.sex,cu.age,cu.phone,cu.email,cu.id_type,cu.id_no,cu.address,cu.state,cu.create_time,cu.update_time FROM user AS cu, user_department AS ud  WHERE  ud.department_id = ? AND cu.id = ud.user_id ");
         if (!StringUtils.isEmpty(name)){
             sql.append(" and cu.user_name like '%"+name+"%'");
+        }
+        if(!StringUtils.isEmpty(sex)){
+            sql.append("and cu.sex like '%'"+sex+"'%'");
+        }
+        if(!StringUtils.isEmpty(phone)){
+            sql.append("and cu.phone equal "+sex+"");
+        }
+        if(!StringUtils.isEmpty(userNo)){
+            sql.append("and cu.user_no equal "+userNo+"");
         }
         sql.append(" ORDER BY ud.id DESC LIMIT ?,?");
         Query nativeQuery = entityManager.createNativeQuery(sql.toString());
@@ -59,10 +68,19 @@ public class UserDao {
         return userDomainList;
     }
 
-    public Long countUserEntitiesByDepartmentId(Long organizationId, String name){
+    public Long countUserEntitiesByDepartmentId(Long organizationId, String name, String sex, String phone, String userNo){
         StringBuilder sql =  new StringBuilder("SELECT COUNT(1) FROM user AS cu, user_department AS ud  WHERE  ud.department_id = ? AND cu.id = ud.user_id ");
         if (!StringUtils.isEmpty(name)){
             sql.append(" and cu.user_name like '%"+name+"%'");
+        }
+        if(!StringUtils.isEmpty(sex)){
+            sql.append("and cu.sex like '%'"+sex+"'%'");
+        }
+        if(!StringUtils.isEmpty(phone)){
+            sql.append("and cu.phone equal "+sex+"");
+        }
+        if(!StringUtils.isEmpty(userNo)){
+            sql.append("and cu.user_no equal "+userNo+"");
         }
         Query nativeQuery = entityManager.createNativeQuery(sql.toString());
         nativeQuery.setParameter(1,organizationId);

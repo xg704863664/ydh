@@ -8,4 +8,5 @@ import java.util.List;
 public interface UserDepartmentRepository extends JpaRepository<UserDepartment,Long> {
     List<UserDepartment> findByOrganizationId(Long organizationId);
     List<Long> findByUserId(Long departmentId);
+    Long countByUserId(Long department);
 }
