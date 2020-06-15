@@ -73,7 +73,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Long add(DepartmentDomainV2 departmentDomainV2) {
 
-        if(departmentDomainV2.getParentId() == 0){
+        if(departmentDomainV2.getParentId()!=null &&  departmentDomainV2.getParentId() == 0){
             throw  new ExceptionValidation(418,"父节点ID不能为0");
         }
         boolean depNumber = departmentRepository.existsByDepartmentNo(departmentDomainV2.getDepartmentNo());
