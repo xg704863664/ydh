@@ -21,21 +21,11 @@ public class UserDao {
 
     private final EntityManager entityManager;
 
-
-    public List<UserDomainV2> findUserByDepartmentId(Long departmentId, String name, String sex, String phone, String userNo, Integer pageNumber, Integer pageSize){
+    public List<UserDomainV2> findUserByDepartmentId(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize){
         List<UserDomainV2> userDomainList = new ArrayList<>();
         StringBuilder sql =  new StringBuilder("SELECT cu.id,cu.user_no,cu.user_name,cu.sex,cu.age,cu.phone,cu.email,cu.id_type,cu.id_no,cu.address,cu.state,cu.create_time,cu.update_time FROM user AS cu, user_department AS ud  WHERE  ud.department_id = ? AND cu.id = ud.user_id ");
-        if (!StringUtils.isEmpty(name)){
-            sql.append(" and cu.user_name like '%"+name+"%'");
-        }
-        if(!StringUtils.isEmpty(sex)){
-            sql.append("and cu.sex like '%'"+sex+"'%'");
-        }
-        if(!StringUtils.isEmpty(phone)){
-            sql.append("and cu.phone equal "+sex+"");
-        }
-        if(!StringUtils.isEmpty(userNo)){
-            sql.append("and cu.user_no equal "+userNo+"");
+        if (!StringUtils.isEmpty(keyWord)){
+            sql.append(" and cu.user_name like '%"+keyWord+"%'or cu.user_no like '%" + keyWord +"%'");
         }
         sql.append(" ORDER BY ud.id DESC LIMIT ?,?");
         Query nativeQuery = entityManager.createNativeQuery(sql.toString());
@@ -68,19 +58,10 @@ public class UserDao {
         return userDomainList;
     }
 
-    public Long countUserEntitiesByDepartmentId(Long organizationId, String name, String sex, String phone, String userNo){
+    public Long countUserEntitiesByDepartmentId(Long organizationId, String keyWord){
         StringBuilder sql =  new StringBuilder("SELECT COUNT(1) FROM user AS cu, user_department AS ud  WHERE  ud.department_id = ? AND cu.id = ud.user_id ");
-        if (!StringUtils.isEmpty(name)){
-            sql.append(" and cu.user_name like '%"+name+"%'");
-        }
-        if(!StringUtils.isEmpty(sex)){
-            sql.append("and cu.sex like '%'"+sex+"'%'");
-        }
-        if(!StringUtils.isEmpty(phone)){
-            sql.append("and cu.phone equal "+sex+"");
-        }
-        if(!StringUtils.isEmpty(userNo)){
-            sql.append("and cu.user_no equal "+userNo+"");
+        if (!StringUtils.isEmpty(keyWord)){
+            sql.append(" and cu.user_name like '%"+keyWord+"%' or cu.user_no equal" + keyWord);
         }
         Query nativeQuery = entityManager.createNativeQuery(sql.toString());
         nativeQuery.setParameter(1,organizationId);

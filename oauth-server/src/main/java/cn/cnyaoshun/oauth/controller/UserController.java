@@ -38,12 +38,9 @@ public class UserController {
     public ReturnJsonData<PageDataDomain<UserDomain>> departmentList(@Min (1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber") Integer pageNumber,
                                                            @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")  Integer pageSize,
                                                            @NotNull @ApiParam(value = "部门ID", required = true)@RequestParam(value = "departmentId")  Long departmentId,
-                                                           @ApiParam(value = "根据用户性别搜索用户信息")@RequestParam(value = "sex",required = false) String sex,
-                                                           @ApiParam(value = "根据用户名称搜索用户信息")@RequestParam(value = "name",required = false) String name,
-                                                           @ApiParam(value = "根据用户电话搜索用户信息")@RequestParam(value = "phone",required = false) String phone,
-                                                           @ApiParam(value = "根据用户工号搜索用户信息")@RequestParam(value = "userNo",required = false) String userNo){
+                                                           @ApiParam(value = "搜索用户名或账户用户信息")@RequestParam(value = "keyWord",required = false) String keyWord){
 
-        return ReturnJsonData.build(userService.findAll(departmentId, name, sex, phone, userNo, pageNumber, pageSize));
+        return ReturnJsonData.build(userService.findAll(departmentId, keyWord, pageNumber, pageSize));
     }
 
     @ApiOperation(value = "根据部门ID获取部门下的用户数量",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -70,8 +67,8 @@ public class UserController {
     @ApiOperation(value = "根据用户ID删除用户信息",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/delete/{userId}",method = RequestMethod.DELETE)
     public ReturnJsonData<Long> deleteOrganization(@ApiParam(value = "用户ID",required = true)@PathVariable(value = "userId") Long userId){
-        userService.delete(userId);
-        return ReturnJsonData.build(userId);
+        Long deleteUser = userService.delete(userId);
+        return ReturnJsonData.build(deleteUser);
     }
 
 }
