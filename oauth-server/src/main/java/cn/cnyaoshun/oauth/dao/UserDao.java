@@ -22,7 +22,7 @@ public class UserDao {
     private final EntityManager entityManager;
 
 
-    public List<UserDomainV2> findUserByDepartmentId(Integer pageNumber, Integer pageSize,Long departmentId, String name, String sex, String phone, String userNo){
+    public List<UserDomainV2> findUserByDepartmentId(Long departmentId, String name, String sex, String phone, String userNo, Integer pageNumber, Integer pageSize){
         List<UserDomainV2> userDomainList = new ArrayList<>();
         StringBuilder sql =  new StringBuilder("SELECT cu.id,cu.user_no,cu.user_name,cu.sex,cu.age,cu.phone,cu.email,cu.id_type,cu.id_no,cu.address,cu.state,cu.create_time,cu.update_time FROM user AS cu, user_department AS ud  WHERE  ud.department_id = ? AND cu.id = ud.user_id ");
         if (!StringUtils.isEmpty(name)){
