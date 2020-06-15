@@ -8,6 +8,6 @@
     <property name="now" value="current_timestamp" dbms="postgresql"/>
     <property name="now" value="sysdate" dbms="oracle"/>
     <changeSet id="20200609163300" author="fyh">
-        <modifyDataType tableName="crm_user" columnName="user_number" newDataType="varchar(10)"></modifyDataType>
+        <modifyDataType tableName="user" columnName="user_no" newDataType="varchar(10)"></modifyDataType>
     </changeSet>
 </databaseChangeLog>

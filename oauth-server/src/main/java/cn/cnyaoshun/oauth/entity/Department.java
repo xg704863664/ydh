@@ -3,13 +3,12 @@ package cn.cnyaoshun.oauth.entity;
 
 import cn.cnyaoshun.oauth.common.entity.AbstractEntity;
 import lombok.Data;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
  * Created by fyh on 2020-6-5.
- * 部门信息表
+ * 部门信息
  */
 @Data
 @Entity(name = "department")
@@ -19,8 +18,8 @@ public class Department extends AbstractEntity{
     private Long organizationId;
     @Column(name = "parent_id")
     private Long parentId;
-    @Column(name = "department_number")
-    private String departmentNumber;
+    @Column(name = "department_no")
+    private String departmentNo;
     @Column(name = "department_name")
     private String departmentName;
     @Column(name = "description")
@@ -28,6 +27,6 @@ public class Department extends AbstractEntity{
     @Column(name = "sort")
     private Integer sort;
     @Column(name = "state")
-    private Integer state;
+    private boolean state;
 
 }

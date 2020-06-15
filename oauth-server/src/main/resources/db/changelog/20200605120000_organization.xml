@@ -14,7 +14,7 @@
             </not>
         </preConditions>
 
-        <createTable tableName="organization" remarks="组织架构表">
+        <createTable tableName="organization" remarks="组织机构表">
             <column name="id" type="bigint" remarks="主键" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>

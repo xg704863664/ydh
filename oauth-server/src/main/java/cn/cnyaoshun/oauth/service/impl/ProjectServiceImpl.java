@@ -23,7 +23,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
-    public List<ProjectDomain> list() {
+    public List<ProjectDomain> findAll() {
         List<ProjectDomain> projectDomainList = new ArrayList<>();
         List<Project> projectList = projectRepository.findAll(Sort.by(Sort.Direction.DESC, "createTime"));
         projectList.forEach(project -> {

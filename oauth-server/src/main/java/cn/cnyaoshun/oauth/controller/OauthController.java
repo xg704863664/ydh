@@ -19,14 +19,14 @@ import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/oauth")
-@Api(description = "token操作")
+@Api(description = "TOKEN操作API")
 @RequiredArgsConstructor
 public class OauthController {
 
     private final TokenStore tokenStore;
 
 
-    @ApiOperation(value = "校验token是否有效",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "校验TOKEN是否有效",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/check",method = RequestMethod.GET)
     public ReturnJsonData<String> checkToken(@ApiIgnore OAuth2Authentication oAuth2Authentication){
         if (oAuth2Authentication == null){
@@ -39,7 +39,7 @@ public class OauthController {
         return  ReturnJsonData.build("success");
     }
 
-    @ApiOperation(value = "退出登录清空token",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "退出登录清空TOKEN",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @DeleteMapping("/remove")
     public ReturnJsonData<String> removeToken(@ApiIgnore OAuth2Authentication oAuth2Authentication){
         if (oAuth2Authentication == null){

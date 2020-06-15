@@ -4,9 +4,9 @@ package cn.cnyaoshun.oauth.service.impl;
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.AccountRepository;
-import cn.cnyaoshun.oauth.dao.UserRepository;
 import cn.cnyaoshun.oauth.dao.UserDao;
 import cn.cnyaoshun.oauth.dao.UserDepartmentRepository;
+import cn.cnyaoshun.oauth.dao.UserRepository;
 import cn.cnyaoshun.oauth.domain.UserDomain;
 import cn.cnyaoshun.oauth.domain.UserDomainV2;
 import cn.cnyaoshun.oauth.entity.Account;
@@ -14,15 +14,15 @@ import cn.cnyaoshun.oauth.entity.User;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by fyh on 2020-6-4.
@@ -53,11 +53,11 @@ public class UserServiceImpl implements UserService {
      * @param name
      * @return
      */
-    @Override
-    public PageDataDomain<UserDomainV2> departmentList(Integer pageNumber, Integer pageSize, Long departmentId, String name) {
+
+    public PageDataDomain<UserDomainV2> findAll(Integer pageNumber, Integer pageSize,Long departmentId, String name, String sex, String phone, String userNo) {
         Integer startPage = (pageNumber-1)*pageSize;
-        List<UserDomainV2> crmMemberEntityPage = userDao.queryUserEntitiesByDepartmentId(startPage,pageSize,departmentId,name);
-        Long count = userDao.countUserEntitiesByDepartmentId(departmentId,name);
+        List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(startPage,pageSize,departmentId,name,sex, phone, userNo);
+        Long count = userDao.countUserEntitiesByDepartmentId(departmentId,name,sex,phone,userNo);
         PageDataDomain<UserDomainV2> pageDataDomain = new PageDataDomain<>();
         pageDataDomain.setCurrent(pageNumber);
         pageDataDomain.setSize(pageSize);
@@ -69,14 +69,25 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 根据部门ID统计部门下的用户数量
+     * @param departmentId
+     * @return
+     */
+    @Override
+    public Long countByUserId(Long departmentId) {
+        Long countUser = userDepartmentRepository.countByUserId(departmentId);
+        return countUser;
+    }
+
+    /**
      * 添加用户
      * @param userDomain
      * @return
      */
     @Override
     @Transactional
-    public Long insertUser(UserDomain userDomain) {
-        boolean userNumberExists = userRepository.existsByUserNumber(userDomain.getUserNumber());
+    public Long add(UserDomain userDomain) {
+        boolean userNumberExists = userRepository.existsByUserNo(userDomain.getUserNo());
         if (userNumberExists){
             throw new ExceptionValidation(418,"工号已存在");
         }
@@ -86,7 +97,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         Account account = new Account();
         account.setUserId(user.getId());
-        account.setAccountName(String.valueOf(user.getUserNumber()));
+        account.setAccountName(String.valueOf(user.getUserNo()));
         account.setState(true);
         account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
         accountRepository.save(account);
@@ -98,5 +109,43 @@ public class UserServiceImpl implements UserService {
             userDepartmentRepository.save(userDepartment);
         }
         return user.getId();
+    }
+
+    /**
+     * 修改
+     * @param userDomainV2
+     * @return
+     */
+    @Override
+    @Transactional
+    public Long update(UserDomainV2 userDomainV2){
+        Optional<User> userOptional = userRepository.findById(userDomainV2.getId());
+        userOptional.ifPresent(user -> {
+            BeanUtils.copyProperties(userDomainV2,user);
+            user.setId(user.getId());
+            user.setUpdateTime(new Date());
+            userRepository.save(user);
+        });
+        return userDomainV2.getId();
+    }
+
+    @Override
+    public PageDataDomain<UserDomainV2> findAll(Long departmentId, String name, String sex, String phone, String userNo, Integer pageNumber, Integer pageSize) {
+        Integer startPage = (pageNumber-1)*pageSize;
+        List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(startPage,pageSize,departmentId,name,sex, phone, userNo);
+        Long count = userDao.countUserEntitiesByDepartmentId(departmentId,name,sex,phone,userNo);
+        PageDataDomain<UserDomainV2> pageDataDomain = new PageDataDomain<>();
+        pageDataDomain.setCurrent(pageNumber);
+        pageDataDomain.setSize(pageSize);
+        Integer total=Integer.parseInt(count+"")/pageSize+(Integer.parseInt(count+"")%pageSize>0?1:0);
+        pageDataDomain.setPages(total);
+        pageDataDomain.setTotal(count);
+        pageDataDomain.getRecords().addAll(crmMemberEntityPage);
+        return pageDataDomain;
+    }
+
+    @Override
+    public void delete(Long userId) {
+        userRepository.deleteById(userId);
     }
 }

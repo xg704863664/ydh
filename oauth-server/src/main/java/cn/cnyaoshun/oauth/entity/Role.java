@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 
 /**
  * Created by fyh on 2020-6-5.
- * 角色信息表
+ * 角色信息
  */
 @Data
 @Entity(name = "role")
@@ -24,4 +24,5 @@ public class Role extends AbstractEntity{
     private Integer state;
     @Column(name = "project_id")
     private Long projectId;
+
 }

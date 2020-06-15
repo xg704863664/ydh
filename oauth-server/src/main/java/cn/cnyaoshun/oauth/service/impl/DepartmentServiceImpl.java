@@ -1,13 +1,21 @@
 package cn.cnyaoshun.oauth.service.impl;
 
+import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.DepartmentRepository;
+import cn.cnyaoshun.oauth.dao.OrganizationRepository;
+import cn.cnyaoshun.oauth.dao.UserDepartmentRepository;
+import cn.cnyaoshun.oauth.dao.UserRepository;
 import cn.cnyaoshun.oauth.domain.DepartmentDomain;
+import cn.cnyaoshun.oauth.domain.DepartmentDomainV2;
+import cn.cnyaoshun.oauth.domain.DepartmentDomainV3;
 import cn.cnyaoshun.oauth.entity.Department;
 import cn.cnyaoshun.oauth.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -19,6 +27,12 @@ import java.util.*;
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
+
+    private final OrganizationRepository organizationRepository;
+
+    private final UserDepartmentRepository userDepartmentRepository;
+
+    private final UserRepository userRepository;
 
     /**
      * 根据机构id获取部门树结构
@@ -52,13 +66,102 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     /**
+     * 新增部门
+     * @param departmentDomainV2
+     * @return
+     */
+    @Override
+    public Long add(DepartmentDomainV2 departmentDomainV2) {
+
+        if(departmentDomainV2.getParentId() == 0){
+            throw  new ExceptionValidation(418,"父节点ID不能为0");
+        }
+        boolean depNumber = departmentRepository.existsByDepartmentNo(departmentDomainV2.getDepartmentNo());
+        if(depNumber){
+            throw new ExceptionValidation(418,"部门编号已存在");
+        }
+        //boolean organizationIdExt = departmentRepository.existsByOrganizationId(departmentDomainV2.getOrganizationId());
+        boolean organizationIdExt = organizationRepository.existsById(departmentDomainV2.getOrganizationId());
+        if(!organizationIdExt){
+            throw new ExceptionValidation(418,"公司不存在请重新输入");
+        }
+        Integer count = null;
+        if (departmentDomainV2.getParentId() == null){
+            count = departmentRepository.countByOrganizationIdAndParentIdIsNull(departmentDomainV2.getOrganizationId());
+        }else {
+            count = departmentRepository.countByOrganizationIdAndParentId(departmentDomainV2.getOrganizationId(),departmentDomainV2.getParentId());
+        }
+        Department department = new Department();
+        BeanUtils.copyProperties(departmentDomainV2, department);
+        department.setState(true);
+        department.setSort(count == 0L || count == null ? 1 : count + 1);
+        departmentRepository.save(department);
+        return department.getId();
+    }
+
+    /**
+     * 删除部门
+     * @param departmentId
+     */
+    @Override
+    @Transactional
+    public void delete(Long departmentId) {
+
+        Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
+
+        departmentOptional.ifPresent((department ) -> {
+
+            Integer departmentSort = department.getSort();
+            List<Department> departmentList = departmentRepository.findByParentIdAndIdNotInAndSortGreaterThan(department.getParentId(),departmentId,departmentSort);
+            departmentList.forEach(department1 -> {
+                if(department1.getSort() > departmentSort){
+                    department1.setSort(department1.getSort()-1);
+                    departmentRepository.save(department1);
+                }
+            });
+        });
+        departmentRepository.deleteById(departmentId);
+        DepartmentServiceImpl departmentService = (DepartmentServiceImpl) AopContext.currentProxy();
+        departmentService.deleteUser(departmentId);
+    }
+
+    @Override
+    public Long update(DepartmentDomainV3 departmentDomainV3) {
+
+        Optional<Department> departmentOptional = departmentRepository.findById(departmentDomainV3.getDepartmentId());
+        departmentOptional.ifPresent(department -> {
+            Long parentId = department.getParentId();
+            if(parentId == null){
+                department.setDepartmentName(departmentDomainV3.getDepartmentName());
+                departmentRepository.save(department);
+            }else{
+                department.setParentId(departmentDomainV3.getParentId());
+                department.setDepartmentName(departmentDomainV3.getDepartmentName());
+                departmentRepository.save(department);
+            }
+        });
+        return departmentDomainV3.getDepartmentId();
+    }
+
+    @Async
+    @Transactional
+    public void  deleteUser(Long departmentId){
+
+        List<Long> userIdList = userDepartmentRepository.findByUserId(departmentId);
+        userIdList.forEach(userId ->{
+            userRepository.deleteById(userId);
+        });
+    }
+
+    /**
      * 递归组装部门树结构
      * @param departmentDomain
      * @param departmentMap
      */
-
     private void recursiveDepartment(DepartmentDomain departmentDomain,Map<Long, List<Department>> departmentMap){
+
         List<Department> departmentList = departmentMap.get(departmentDomain.getId());
+
         Optional.ofNullable(departmentList).ifPresent(departments -> departments.forEach(department -> {
             DepartmentDomain departDomain = new DepartmentDomain();
             BeanUtils.copyProperties(department, departDomain);

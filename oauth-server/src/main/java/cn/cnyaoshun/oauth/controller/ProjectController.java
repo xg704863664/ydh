@@ -23,7 +23,7 @@ public class ProjectController {
     @ApiOperation(value = "获取项目列表",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping("/list")
     public ReturnJsonData<List<ProjectDomain>> list(){
-        List<ProjectDomain> projectDomainList = projectService.list();
+        List<ProjectDomain> projectDomainList = projectService.findAll();
         return ReturnJsonData.build(projectDomainList);
     }
 

@@ -14,7 +14,7 @@
             </not>
         </preConditions>
 
-        <createTable tableName="account_role" remarks="账户角色信息表">
+        <createTable tableName="account_role" remarks="账户角色关系表">
             <column name="id" type="bigint" remarks="主键" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
