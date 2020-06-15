@@ -126,20 +126,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional
     public Long update(DepartmentDomainV3 departmentDomainV3) {
 
         Optional<Department> departmentOptional = departmentRepository.findById(departmentDomainV3.getDepartmentId());
-        departmentOptional.ifPresent(department -> {
-            Long parentId = department.getParentId();
-            if(parentId == null){
-                department.setDepartmentName(departmentDomainV3.getDepartmentName());
-                departmentRepository.save(department);
-            }else{
-                department.setParentId(departmentDomainV3.getParentId());
-                department.setDepartmentName(departmentDomainV3.getDepartmentName());
-                departmentRepository.save(department);
-            }
-        });
+       departmentOptional.ifPresent(department -> {
+           department.setDepartmentName(departmentDomainV3.getDepartmentName());
+           departmentRepository.save(department);
+       });
         return departmentDomainV3.getDepartmentId();
     }
 
