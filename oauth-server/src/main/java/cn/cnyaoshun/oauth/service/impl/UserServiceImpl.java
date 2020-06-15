@@ -14,12 +14,15 @@ import cn.cnyaoshun.oauth.entity.User;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -110,14 +113,13 @@ public class UserServiceImpl implements UserService {
      * @param pageNumber
      * @param pageSize
      * @param departmentId
-     * @param name
      * @return
      */
     @Override
-    public PageDataDomain<UserDomainV2> findAll(Long departmentId, String name, String sex, String phone, String userNo, Integer pageNumber, Integer pageSize) {
+    public PageDataDomain<UserDomainV2> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize) {
         Integer startPage = (pageNumber-1)*pageSize;
-        List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(departmentId,name,sex, phone, userNo, startPage,pageSize);
-        Long count = userDao.countUserEntitiesByDepartmentId(departmentId,name,sex,phone,userNo);
+        List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(departmentId, keyWord, startPage,pageSize);
+        Long count = userDao.countUserEntitiesByDepartmentId(departmentId,keyWord);
         PageDataDomain<UserDomainV2> pageDataDomain = new PageDataDomain<>();
         pageDataDomain.setCurrent(pageNumber);
         pageDataDomain.setSize(pageSize);
@@ -129,7 +131,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long userId) {
+    @Transactional
+    public Long delete(Long userId) {
         userRepository.deleteById(userId);
+        UserServiceImpl userService = (UserServiceImpl)AopContext.currentProxy();
+        userService.deleteAccount(userId);
+        return userId;
+    }
+
+    @Async
+    @Transactional
+    public void deleteAccount(Long userId){
+
     }
 }

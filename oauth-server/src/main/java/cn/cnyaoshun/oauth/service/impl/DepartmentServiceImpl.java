@@ -1,10 +1,7 @@
 package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
-import cn.cnyaoshun.oauth.dao.DepartmentRepository;
-import cn.cnyaoshun.oauth.dao.OrganizationRepository;
-import cn.cnyaoshun.oauth.dao.UserDepartmentRepository;
-import cn.cnyaoshun.oauth.dao.UserRepository;
+import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.DepartmentDomain;
 import cn.cnyaoshun.oauth.domain.DepartmentDomainV2;
 import cn.cnyaoshun.oauth.domain.DepartmentDomainV3;
@@ -33,6 +30,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final UserDepartmentRepository userDepartmentRepository;
 
     private final UserRepository userRepository;
+
+    private  final AccountRepository accountRepository;
 
     /**
      * 根据机构id获取部门树结构
@@ -144,6 +143,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         List<Long> userIdList = userDepartmentRepository.findByUserId(departmentId);
         userIdList.forEach(userId ->{
             userRepository.deleteById(userId);
+            accountRepository.deleteAllByUserId(userId);
         });
     }
 

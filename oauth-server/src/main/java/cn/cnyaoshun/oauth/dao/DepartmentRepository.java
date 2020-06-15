@@ -12,7 +12,6 @@ public interface DepartmentRepository extends PagingAndSortingRepository<Departm
     void deleteAllByOrganizationId(Long organizationId);
     List<Department> findByOrganizationIdOrderBySort(Long organizationId);
     boolean existsByDepartmentNo(String departmentNo);
-    //boolean existsByOrganizationId(Long organizationId);
     Integer countByOrganizationIdAndParentIdIsNull(Long organizationId);
     Integer countByOrganizationIdAndParentId(Long organizationId, Long parentId);
     List<Department> findByParentIdAndIdNotInAndSortGreaterThan(Long parentId, Long department, Integer sort);
