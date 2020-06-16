@@ -20,6 +20,9 @@ public class UserDomainV2 {
     @ApiModelProperty(value = "ID")
     private Long id;
 
+    @ApiModelProperty(value = "部门名称")
+    private String departmentName;
+
     @ApiModelProperty(value = "工号")
     private String userNo;
 

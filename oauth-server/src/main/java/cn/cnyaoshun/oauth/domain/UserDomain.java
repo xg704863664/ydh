@@ -16,11 +16,11 @@ import javax.validation.constraints.NotBlank;
 public class UserDomain {
 
     @NotBlank(message = "工号不能为空")
-    @ApiModelProperty(value = "工号")
+    @ApiModelProperty(value = "工号且不能为空")
     private String userNo;
 
     @NotBlank(message = "姓名不能为空")
-    @ApiModelProperty(value = "姓名")
+    @ApiModelProperty(value = "姓名不能为空")
     private String userName;
 
     @ApiModelProperty(value = "性别")
@@ -29,12 +29,12 @@ public class UserDomain {
     @ApiModelProperty(value = "年龄")
     private Integer age;
 
-    @ApiModelProperty(value = "电话")
+    @ApiModelProperty(value = "电话;不能为空并且长度为11位")
     @NotBlank(message = "电话不能为空")
     @Length(min=11,max = 11)
     private String phone;
     @Email
-    @ApiModelProperty(value = "邮箱")
+    @ApiModelProperty(value = "邮箱; 必填")
     private String email;
 
     @ApiModelProperty(value = "证件类型;0:身份证;1:驾照;2:护照;3:港澳通行证")

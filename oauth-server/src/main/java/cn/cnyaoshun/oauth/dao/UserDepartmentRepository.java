@@ -9,4 +9,5 @@ public interface UserDepartmentRepository extends JpaRepository<UserDepartment,L
     List<UserDepartment> findByOrganizationId(Long organizationId);
     List<Long> findByUserId(Long departmentId);
     Long countByUserId(Long department);
+    void deleteByUserId(Long userId);
 }

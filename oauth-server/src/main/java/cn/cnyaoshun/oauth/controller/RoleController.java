@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @ClassName RoleController
@@ -22,7 +23,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/role")
-@Api(value = "角色操作API")
+@Api(description = "角色操作API")
 @AllArgsConstructor
 @Validated
 public class RoleController {
@@ -48,6 +49,13 @@ public class RoleController {
     public ReturnJsonData<Long> delete(@ApiParam(value = "角色ID",required = true) @PathVariable(name = "roleId") Long roleId){
         Long deleteRole = roleService.delete(roleId);
         return ReturnJsonData.build(deleteRole);
+    }
+
+    @ApiOperation(value = "根据项目ID,获取角色信息",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/findAll/{projectId}", method = RequestMethod.GET)
+    public ReturnJsonData<List<RoleDomainV2>> findAllByProjectId(@ApiParam(value = "项目ID",required = true) @PathVariable(name = "projectId") Long projectId){
+        List<RoleDomainV2> roleDomainList = roleService.findAllByProjectId(projectId);
+        return  ReturnJsonData.build(roleDomainList);
     }
 
 }

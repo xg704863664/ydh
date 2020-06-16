@@ -3,11 +3,12 @@ package cn.cnyaoshun.oauth.controller;
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
+import cn.cnyaoshun.oauth.domain.UserDoaminV3;
 import cn.cnyaoshun.oauth.domain.UserDomain;
 import cn.cnyaoshun.oauth.domain.UserDomainV2;
+import cn.cnyaoshun.oauth.domain.UserDomainV4;
 import cn.cnyaoshun.oauth.service.UserService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Created by fyh on 2020-6-4.
@@ -38,7 +40,7 @@ public class UserController {
     public ReturnJsonData<PageDataDomain<UserDomain>> departmentList(@Min (1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber") Integer pageNumber,
                                                            @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")  Integer pageSize,
                                                            @NotNull @ApiParam(value = "部门ID", required = true)@RequestParam(value = "departmentId")  Long departmentId,
-                                                           @ApiParam(value = "搜索用户名或账户用户信息")@RequestParam(value = "keyWord",required = false) String keyWord){
+                                                           @ApiParam(value = "根据用户名或账户搜索用户信息")@RequestParam(value = "keyWord",required = false) String keyWord){
 
         return ReturnJsonData.build(userService.findAll(departmentId, keyWord, pageNumber, pageSize));
     }
@@ -69,6 +71,21 @@ public class UserController {
     public ReturnJsonData<Long> deleteOrganization(@ApiParam(value = "用户ID",required = true)@PathVariable(value = "userId") Long userId){
         Long deleteUser = userService.delete(userId);
         return ReturnJsonData.build(deleteUser);
+    }
+
+    @ApiOperation(value = "获取所有用户名称",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value="/findAllUserName",method = RequestMethod.GET)
+    public ReturnJsonData<List<UserDoaminV3>> findAllByUserName(){
+        List<UserDoaminV3> allUserName = userService.findAllUserName();
+        return  ReturnJsonData.build(allUserName);
+    }
+
+
+    @ApiOperation(value = "用户调整部门",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/revise",method = RequestMethod.PUT)
+    public ReturnJsonData<Boolean> reviseDepartment(@Valid @RequestBody UserDomainV4 userDomainV4){
+        boolean b = userService.reviseDepartment(userDomainV4);
+        return ReturnJsonData.build(b);
     }
 
 }

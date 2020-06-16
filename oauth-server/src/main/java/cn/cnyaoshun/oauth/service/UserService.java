@@ -2,8 +2,12 @@ package cn.cnyaoshun.oauth.service;
 
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
+import cn.cnyaoshun.oauth.domain.UserDoaminV3;
 import cn.cnyaoshun.oauth.domain.UserDomain;
 import cn.cnyaoshun.oauth.domain.UserDomainV2;
+import cn.cnyaoshun.oauth.domain.UserDomainV4;
+
+import java.util.List;
 
 /**
  * Created by fyh on 2020-6-4.
@@ -16,4 +20,6 @@ public interface UserService {
     Long update(UserDomainV2 userDomainV2);
     PageDataDomain<UserDomainV2> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize);
     Long countByUserId(Long departmentId);
+    List<UserDoaminV3> findAllUserName();
+    boolean reviseDepartment(UserDomainV4 userDomainV4);
 }

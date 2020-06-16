@@ -1,11 +1,9 @@
 package cn.cnyaoshun.oauth.service.impl;
 
-import cn.cnyaoshun.oauth.dao.DepartmentRepository;
-import cn.cnyaoshun.oauth.dao.OrganizationRepository;
-import cn.cnyaoshun.oauth.dao.UserDepartmentRepository;
-import cn.cnyaoshun.oauth.dao.UserRepository;
+import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.OrganizationDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
+import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.Organization;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.OrganizationService;
@@ -32,6 +30,10 @@ public class OrganizationServiceImpl implements OrganizationService{
     private final UserDepartmentRepository userDepartmentRepository;
 
     private final UserRepository userRepository;
+
+    private final AccountRepository accountRepository;
+
+    private final AccountRoleRepository accountRoleRepository;
     /**
      * 新增
      * @param organizationDomain
@@ -116,6 +118,18 @@ public class OrganizationServiceImpl implements OrganizationService{
         });
         if (!userIds.isEmpty()){
             userRepository.deleteAllByIdIn(userIds);
+            //根据用户信息删除账户信息
+            List<Account> accountList = new ArrayList<>();
+            userIds.forEach(userId ->{
+                List<Account> byUserId = accountRepository.findByUserId(userId);
+                accountList.addAll(byUserId);
+            });
+            if(!accountList.isEmpty()){
+                accountList.forEach(account -> {
+                    accountRepository.deleteAllByIdIn(account.getId());
+                    accountRoleRepository.deleteAllByAccountId(account.getId());
+                });
+            }
         }
     }
 }

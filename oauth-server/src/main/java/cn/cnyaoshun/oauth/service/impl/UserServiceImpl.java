@@ -3,13 +3,13 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
-import cn.cnyaoshun.oauth.dao.AccountRepository;
-import cn.cnyaoshun.oauth.dao.UserDao;
-import cn.cnyaoshun.oauth.dao.UserDepartmentRepository;
-import cn.cnyaoshun.oauth.dao.UserRepository;
+import cn.cnyaoshun.oauth.dao.*;
+import cn.cnyaoshun.oauth.domain.UserDoaminV3;
 import cn.cnyaoshun.oauth.domain.UserDomain;
 import cn.cnyaoshun.oauth.domain.UserDomainV2;
+import cn.cnyaoshun.oauth.domain.UserDomainV4;
 import cn.cnyaoshun.oauth.entity.Account;
+import cn.cnyaoshun.oauth.entity.Department;
 import cn.cnyaoshun.oauth.entity.User;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.UserService;
@@ -23,9 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by fyh on 2020-6-4.
@@ -47,6 +45,10 @@ public class UserServiceImpl implements UserService {
 
     private final UserDepartmentRepository userDepartmentRepository;
 
+    private final AccountRoleRepository accountRoleRepository;
+    private final DepartmentRepository departmentRepository;
+
+
     /**
      * 根据部门ID统计部门下的用户数量
      * @param departmentId
@@ -56,6 +58,41 @@ public class UserServiceImpl implements UserService {
     public Long countByUserId(Long departmentId) {
         Long countUser = userDepartmentRepository.countByUserId(departmentId);
         return countUser;
+    }
+
+    @Override
+    public List<UserDoaminV3> findAllUserName() {
+        Iterable<User> users = userRepository.findAll();
+        List<UserDoaminV3> userDoaminV3List = new ArrayList<>();
+        users.forEach(user -> {
+            UserDoaminV3 userDoaminV3 = new UserDoaminV3();
+            userDoaminV3.setUserName(user.getUserName());
+            userDoaminV3List.add(userDoaminV3);
+        });
+        return userDoaminV3List;
+    }
+
+    @Override
+    @Transactional
+    public boolean reviseDepartment(UserDomainV4 userDomainV4) {
+        Set<Long> departmentIds = userDomainV4.getDepartmentIds();
+        Set<Long> userIds = userDomainV4.getUserIds();
+        if(userIds !=null){
+            userIds.forEach(userId->{
+                userDepartmentRepository.deleteByUserId(userId);
+                if(departmentIds != null){
+                    departmentIds.forEach(departmentId ->{
+                        UserDepartment userDepartment = new UserDepartment();
+                        userDepartment.setDepartmentId(departmentId);
+                        userDepartment.setUserId(userId);
+                        userDepartmentRepository.save(userDepartment);
+                    });
+                }
+            });
+        }
+
+
+        return false;
     }
 
     /**
@@ -117,16 +154,21 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public PageDataDomain<UserDomainV2> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize) {
-        Integer startPage = (pageNumber-1)*pageSize;
-        List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(departmentId, keyWord, startPage,pageSize);
-        Long count = userDao.countUserEntitiesByDepartmentId(departmentId,keyWord);
+        Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
         PageDataDomain<UserDomainV2> pageDataDomain = new PageDataDomain<>();
-        pageDataDomain.setCurrent(pageNumber);
-        pageDataDomain.setSize(pageSize);
-        Integer total=Integer.parseInt(count+"")/pageSize+(Integer.parseInt(count+"")%pageSize>0?1:0);
-        pageDataDomain.setPages(total);
-        pageDataDomain.setTotal(count);
-        pageDataDomain.getRecords().addAll(crmMemberEntityPage);
+        departmentOptional.ifPresent(department -> {
+            Integer startPage = (pageNumber-1)*pageSize;
+            List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(departmentId, keyWord, startPage,pageSize);
+            Long count = userDao.countUserEntitiesByDepartmentId(departmentId,keyWord);
+            pageDataDomain.setCurrent(pageNumber);
+            pageDataDomain.setSize(pageSize);
+            Integer total=Integer.parseInt(count+"")/pageSize+(Integer.parseInt(count+"")%pageSize>0?1:0);
+            pageDataDomain.setPages(total);
+            pageDataDomain.setTotal(count);
+
+            pageDataDomain.getRecords().addAll(crmMemberEntityPage);
+        });
+
         return pageDataDomain;
     }
 
@@ -142,6 +184,11 @@ public class UserServiceImpl implements UserService {
     @Async
     @Transactional
     public void deleteAccount(Long userId){
-
+        accountRepository.deleteAllByUserId(userId);
+        //将账户与角色关联表中的数据也删除
+        List<Account> accountList = accountRepository.findByUserId(userId);
+        accountList.forEach(account -> {
+            accountRoleRepository.deleteAllByAccountId(account.getId());
+        });
     }
 }

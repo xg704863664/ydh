@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -42,6 +44,18 @@ public class RoleServiceImpl implements RoleService {
     public Long delete(Long roleId) {
         roleRepository.deleteById(roleId);
         return roleId;
+    }
+
+    @Override
+    public List<RoleDomainV2> findAllByProjectId(Long projectId) {
+        List<Role> roleList = roleRepository.findByProjectId(projectId);
+        List<RoleDomainV2> roleDomainList = new ArrayList<>();
+        roleList.forEach(role -> {
+            RoleDomainV2 roleDomain = new RoleDomainV2();
+            BeanUtils.copyProperties(role, roleDomain);
+            roleDomainList.add(roleDomain);
+        });
+        return roleDomainList;
     }
 
     @Override

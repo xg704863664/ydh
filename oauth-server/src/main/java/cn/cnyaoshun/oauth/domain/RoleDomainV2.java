@@ -24,9 +24,9 @@ import java.util.Date;
 public class RoleDomainV2 {
 
     @ApiModelProperty(value = "角色ID")
-    private long id;
+    private Long id;
 
-    @ApiModelProperty(value = "项目")
+    @ApiModelProperty(value = "项目ID")
     private Long projectId;
 
     @ApiModelProperty(value = "角色名称")

@@ -10,5 +10,7 @@ import java.util.List;
  */
 public interface AccountRepository extends PagingAndSortingRepository<Account, Long>{
     Account findByAccountName(String accountName);
-    void deleteAllByUserId(long userId);
+    void deleteAllByUserId(Long userId);
+    List<Account> findByUserId(Long userId);
+    void deleteAllByIdIn(Long id);
 }
