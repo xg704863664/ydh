@@ -90,8 +90,6 @@ public class UserServiceImpl implements UserService {
                 }
             });
         }
-
-
         return false;
     }
 
@@ -159,6 +157,9 @@ public class UserServiceImpl implements UserService {
         departmentOptional.ifPresent(department -> {
             Integer startPage = (pageNumber-1)*pageSize;
             List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(departmentId, keyWord, startPage,pageSize);
+            crmMemberEntityPage.forEach(crm -> {
+                crm.setDepartmentName(department.getDepartmentName());
+            });
             Long count = userDao.countUserEntitiesByDepartmentId(departmentId,keyWord);
             pageDataDomain.setCurrent(pageNumber);
             pageDataDomain.setSize(pageSize);
