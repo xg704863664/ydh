@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  * 描述:新增用户信息
@@ -46,9 +47,6 @@ public class UserDomain {
     @ApiModelProperty(value = "地址")
     private String address;
 
-    @ApiModelProperty(value = "部门ID")
-    private Long departmentId;
-
-    @ApiModelProperty(value = "机构ID")
-    private Long organizationId;
+    @ApiModelProperty(value = "部门集合")
+    private List<Long> departmentIdList;
 }

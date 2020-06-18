@@ -3,6 +3,8 @@ package cn.cnyaoshun.oauth.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 根据角色和用户添加账户
  * @author yonghong.fan
@@ -11,11 +13,8 @@ import lombok.Data;
 @Data
 public class AccountDomainV3 {
 
-    @ApiModelProperty(name = "角色ID")
-    private Long roleId;
-
-    @ApiModelProperty(name = "用户名称")
-    private String userName;
+    @ApiModelProperty(name = "用户ID")
+    private Long userId;
 
     @ApiModelProperty(name = "账号")
     private String accountName;
@@ -23,7 +22,9 @@ public class AccountDomainV3 {
     @ApiModelProperty(name = "密码")
     private  String password;
 
-    @ApiModelProperty(name = "状态")
-    private boolean state;
+    @ApiModelProperty(name = "分配角色列表")
+    private List<Long> roleIdList;
+
+
 
 }

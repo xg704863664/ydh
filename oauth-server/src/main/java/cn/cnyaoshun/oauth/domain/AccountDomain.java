@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * 描述账户信息,用于添加账户
+ * 描述账户信息,用于添加账户,新建账户得时候默认添加一个账户
  * @author yonghong.fan
  * @date 2020-6-9
  */

@@ -12,4 +12,5 @@ public interface AccountRoleRepository extends JpaRepository<AccountRole, Long> 
 
     void deleteAllByAccountId(Long accountId);
     List<AccountRole> findAllByAccountId(Long accountId);
+    List<AccountRole> findAllByRoleId(Long roleId);
 }

@@ -3,7 +3,6 @@ package cn.cnyaoshun.oauth.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,8 +15,9 @@ import java.util.Set;
 public class UserDomainV4 {
 
     @ApiModelProperty(value = "调整后的部门集合")
-    Set<Long> departmentIds;
+    private Set<Long> departmentIds;
 
     @ApiModelProperty(value = "需要调整的人集合")
-    Set<Long> userIds;
+    private Set<Long> userIds;
+
 }

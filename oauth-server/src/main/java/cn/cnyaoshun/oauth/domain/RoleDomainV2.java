@@ -3,16 +3,10 @@ package cn.cnyaoshun.oauth.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName RoleDomainV2
@@ -39,15 +33,19 @@ public class RoleDomainV2 {
     private Integer roleType;
 
     @ApiModelProperty(value = "状态;0:冻结;1:开启")
-    private Integer state;
+    private boolean state;
 
     @ApiModelProperty(value = "创建时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    protected Date createTime = new Date();
+    private Date createTime = new Date();
 
     @ApiModelProperty(value = "最后一次修改时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    protected Date updateTime;
+    private Date updateTime;
+
+    @ApiModelProperty(value = "权限ID集合")
+    private List<Long> permissionIds;
+
 }

@@ -21,7 +21,7 @@ public class Role extends AbstractEntity{
     @Column(name = "role_type")
     private Integer roleType;
     @Column(name = "state")
-    private Integer state;
+    private boolean state;
     @Column(name = "project_id")
     private Long projectId;
 

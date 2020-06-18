@@ -3,6 +3,7 @@ package cn.cnyaoshun.oauth.controller;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
 import cn.cnyaoshun.oauth.domain.RoleDomain;
 import cn.cnyaoshun.oauth.domain.RoleDomainV2;
+import cn.cnyaoshun.oauth.domain.RoleDomainV3;
 import cn.cnyaoshun.oauth.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +31,7 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    @ApiOperation(value = "新增角色",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "新增角色并为其赋予权限",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public ReturnJsonData<Long> add(@ApiParam(value = "新增角色对象",required = true) @Valid @RequestBody RoleDomain roleDomain){
         Long roleAdd = roleService.add(roleDomain);
@@ -56,6 +57,13 @@ public class RoleController {
     public ReturnJsonData<List<RoleDomainV2>> findAllByProjectId(@ApiParam(value = "项目ID",required = true) @PathVariable(name = "projectId") Long projectId){
         List<RoleDomainV2> roleDomainList = roleService.findAllByProjectId(projectId);
         return  ReturnJsonData.build(roleDomainList);
+    }
+
+    @ApiOperation(value = "获取所有的角色名称和ID",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/findAllRoleNameAndId", method = RequestMethod.GET)
+    public ReturnJsonData<List<RoleDomainV3>> findAllRoleNameAndId(){
+        List<RoleDomainV3> all = roleService.findAll();
+        return ReturnJsonData.build(all);
     }
 
 }

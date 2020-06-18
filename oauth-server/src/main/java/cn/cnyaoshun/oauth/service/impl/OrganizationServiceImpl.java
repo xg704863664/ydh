@@ -3,6 +3,7 @@ package cn.cnyaoshun.oauth.service.impl;
 import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.OrganizationDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
+import cn.cnyaoshun.oauth.domain.OrganizationDomainV3;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.Organization;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
@@ -69,27 +70,6 @@ public class OrganizationServiceImpl implements OrganizationService{
     }
 
     /**
-     * 查询
-     * @return
-     */
-    @Override
-   public List<OrganizationDomainV2> findAll(){
-
-        List<Organization> organizationList = organizationRepository.findAll();
-        List<OrganizationDomainV2> organizationDaomainList = new ArrayList<>();
-        organizationList.forEach(organization -> {
-            OrganizationDomainV2 organizationDomainV2 = new OrganizationDomainV2();
-            organizationDomainV2.setId(organization.getId());
-            organizationDomainV2.setOrganizationName(organization.getOrganizationName());
-            organizationDomainV2.setDescription(organization.getDescription());
-            organizationDomainV2.setAddress(organization.getAddress());
-            organizationDomainV2.setState(organization.isState());
-            organizationDaomainList.add(organizationDomainV2);
-        });
-       return organizationDaomainList;
-    }
-
-    /**
      * 删除
      * @param organizationId
      */
@@ -100,6 +80,28 @@ public class OrganizationServiceImpl implements OrganizationService{
         OrganizationServiceImpl organizationService = (OrganizationServiceImpl) AopContext.currentProxy();
         organizationService.deleteDepartment(organizationId);
 
+    }
+
+    /**
+     * 查询
+     * @return
+     */
+    @Override
+    public List<OrganizationDomainV3> findAll(){
+
+        List<Organization> organizationList = organizationRepository.findAll();
+        List<OrganizationDomainV3> organizationDaomainList = new ArrayList<>();
+        organizationList.forEach(organization -> {
+            OrganizationDomainV3 organizationDomainV3 = new OrganizationDomainV3();
+            organizationDomainV3.setId(organization.getId());
+            organizationDomainV3.setOrganizationName(organization.getOrganizationName());
+            organizationDomainV3.setDescription(organization.getDescription());
+            organizationDomainV3.setAddress(organization.getAddress());
+            organizationDomainV3.setState(organization.isState());
+            organizationDomainV3.setType(1);
+            organizationDaomainList.add(organizationDomainV3);
+        });
+        return organizationDaomainList;
     }
 
     @Async

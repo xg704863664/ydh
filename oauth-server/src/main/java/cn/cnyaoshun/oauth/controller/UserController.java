@@ -3,7 +3,7 @@ package cn.cnyaoshun.oauth.controller;
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
-import cn.cnyaoshun.oauth.domain.UserDoaminV3;
+import cn.cnyaoshun.oauth.domain.UserDomainV3;
 import cn.cnyaoshun.oauth.domain.UserDomain;
 import cn.cnyaoshun.oauth.domain.UserDomainV2;
 import cn.cnyaoshun.oauth.domain.UserDomainV4;
@@ -75,8 +75,8 @@ public class UserController {
 
     @ApiOperation(value = "获取所有用户名称",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value="/findAllUserName",method = RequestMethod.GET)
-    public ReturnJsonData<List<UserDoaminV3>> findAllByUserName(){
-        List<UserDoaminV3> allUserName = userService.findAllUserName();
+    public ReturnJsonData<List<UserDomainV3>> findAllByUserName(){
+        List<UserDomainV3> allUserName = userService.findAllUserName();
         return  ReturnJsonData.build(allUserName);
     }
 

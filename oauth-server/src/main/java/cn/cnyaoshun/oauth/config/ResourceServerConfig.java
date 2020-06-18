@@ -23,6 +23,7 @@ public class ResourceServerConfig implements ResourceServerConfigurer {
                          .mvcMatchers("/project/**").authenticated()
                          .mvcMatchers("/department/**").authenticated()
                          .mvcMatchers("/role/**").authenticated()
-                         .mvcMatchers("/account/**").authenticated();
+                         .mvcMatchers("/account/**").authenticated()
+                         .mvcMatchers("/permission/**").authenticated();
     }
 }

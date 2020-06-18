@@ -3,6 +3,8 @@ package cn.cnyaoshun.oauth.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @ClassName RoleDomain
  * @Description I根据项目ID,新增角色
@@ -25,6 +27,9 @@ public class RoleDomain {
     private Integer roleType;
 
     @ApiModelProperty(value = "状态;0:冻结;1:开启")
-    private Integer state;
+    private boolean state;
+
+    @ApiModelProperty(value = "权限ID")
+    private List<Long> permissionIdList;
 
 }

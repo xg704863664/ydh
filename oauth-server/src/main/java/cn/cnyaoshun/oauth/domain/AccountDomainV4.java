@@ -6,10 +6,11 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName AccountDomainV4
- * @Description DOTO
+ * @Description 修改账户信息
  * @Author fyh
  * Date 2020/6/1616:00
  */
@@ -43,4 +44,7 @@ public class AccountDomainV4 {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
+
+    @ApiModelProperty(value = "角色ID集合")
+    private List<Long> roleIdList;
 }

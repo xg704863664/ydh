@@ -4,9 +4,9 @@ package cn.cnyaoshun.oauth.service.impl;
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.*;
-import cn.cnyaoshun.oauth.domain.UserDoaminV3;
 import cn.cnyaoshun.oauth.domain.UserDomain;
 import cn.cnyaoshun.oauth.domain.UserDomainV2;
+import cn.cnyaoshun.oauth.domain.UserDomainV3;
 import cn.cnyaoshun.oauth.domain.UserDomainV4;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.Department;
@@ -15,7 +15,6 @@ import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.aop.framework.AopContext;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.scheduling.annotation.Async;
@@ -35,6 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Value("${modify.password}")
     private String modifyPassword;
+
     private final UserDao userDao;
 
     private final UserRepository userRepository;
@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
     private final UserDepartmentRepository userDepartmentRepository;
 
     private final AccountRoleRepository accountRoleRepository;
+
     private final DepartmentRepository departmentRepository;
 
 
@@ -60,16 +61,21 @@ public class UserServiceImpl implements UserService {
         return countUser;
     }
 
+    /**
+     * 获取所有用户名称以及其ID
+     * @return
+     */
     @Override
-    public List<UserDoaminV3> findAllUserName() {
+    public List<UserDomainV3> findAllUserName() {
         Iterable<User> users = userRepository.findAll();
-        List<UserDoaminV3> userDoaminV3List = new ArrayList<>();
+        List<UserDomainV3> userDomainV3List = new ArrayList<>();
         users.forEach(user -> {
-            UserDoaminV3 userDoaminV3 = new UserDoaminV3();
-            userDoaminV3.setUserName(user.getUserName());
-            userDoaminV3List.add(userDoaminV3);
+            UserDomainV3 userDomainV3 = new UserDomainV3();
+            userDomainV3.setId(user.getId());
+            userDomainV3.setUserName(user.getUserName());
+            userDomainV3List.add(userDomainV3);
         });
-        return userDoaminV3List;
+        return userDomainV3List;
     }
 
     @Override
@@ -82,10 +88,14 @@ public class UserServiceImpl implements UserService {
                 userDepartmentRepository.deleteByUserId(userId);
                 if(departmentIds != null){
                     departmentIds.forEach(departmentId ->{
-                        UserDepartment userDepartment = new UserDepartment();
-                        userDepartment.setDepartmentId(departmentId);
-                        userDepartment.setUserId(userId);
-                        userDepartmentRepository.save(userDepartment);
+                        Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
+                        departmentOptional.ifPresent(department -> {
+                            UserDepartment userDepartment = new UserDepartment();
+                            userDepartment.setDepartmentId(departmentId);
+                            userDepartment.setUserId(userId);
+                            userDepartment.setOrganizationId(department.getOrganizationId());
+                            userDepartmentRepository.save(userDepartment);
+                        });
                     });
                 }
             });
@@ -106,21 +116,32 @@ public class UserServiceImpl implements UserService {
             throw new ExceptionValidation(418,"工号已存在");
         }
         User user = new User();
-        BeanUtils.copyProperties(userDomain, user);
+        user.setIdNo(userDomain.getIdNo());
+        user.setUserName(userDomain.getUserName());
+        user.setAddress(userDomain.getAddress());
+        user.setAge(userDomain.getAge());
+        user.setEmail(userDomain.getEmail());
+        user.setIdType(userDomain.getIdType());
+        user.setIdNo(userDomain.getIdNo());
+        user.setPhone(userDomain.getPhone());
         user.setState(true);
         userRepository.save(user);
+
         Account account = new Account();
         account.setUserId(user.getId());
         account.setAccountName(String.valueOf(user.getUserNo()));
         account.setState(true);
         account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
         accountRepository.save(account);
-        if (userDomain.getDepartmentId() != null && userDomain.getDepartmentId() > 0){
-            UserDepartment userDepartment = new UserDepartment();
-            userDepartment.setDepartmentId(userDomain.getDepartmentId());
-            userDepartment.setOrganizationId(userDomain.getOrganizationId());
-            userDepartment.setUserId(user.getId());
-            userDepartmentRepository.save(userDepartment);
+
+        if (userDomain.getDepartmentIdList() != null && userDomain.getDepartmentIdList().size() > 0){
+            List<Long> departmentIdList = userDomain.getDepartmentIdList();
+            departmentIdList.forEach(departmentId ->{
+                UserDepartment userDepartment = new UserDepartment();
+                userDepartment.setUserId(user.getId());
+                userDepartment.setDepartmentId(departmentId);
+                userDepartmentRepository.save(userDepartment);
+            });
         }
         return user.getId();
     }
@@ -135,10 +156,32 @@ public class UserServiceImpl implements UserService {
     public Long update(UserDomainV2 userDomainV2){
         Optional<User> userOptional = userRepository.findById(userDomainV2.getId());
         userOptional.ifPresent(user -> {
-            BeanUtils.copyProperties(userDomainV2,user);
-            user.setId(user.getId());
-            user.setUpdateTime(new Date());
-            userRepository.save(user);
+            User userR = new User();
+            userR.setId(user.getId());
+            userR.setUserNo(userDomainV2.getUserNo());
+            userR.setUserName(userDomainV2.getUserName());
+            userR.setPhone(userDomainV2.getPhone());
+            userR.setIdType(userDomainV2.getIdType());
+            userR.setIdNo(userDomainV2.getIdNo());
+            userR.setEmail(userDomainV2.getEmail());
+            userR.setSex(userDomainV2.getSex());
+            userR.setAddress(userDomainV2.getAddress());
+            userR.setUpdateTime(new Date());
+            userR.setState(userDomainV2.isState());
+            userR.setAge(userDomainV2.getAge());
+            userRepository.save(userR);
+
+            List<UserDepartment> userDepartmentList = userDepartmentRepository.findAllByUserId(userR.getId());
+            userDepartmentList.forEach(userDepartment -> {
+                userDepartmentRepository.deleteById(userDepartment.getId());
+            });
+            List<Long> departmentIdList = userDomainV2.getDepartmentIdList();
+            departmentIdList.forEach(departmentId ->{
+                UserDepartment userDepartment = new UserDepartment();
+                userDepartment.setDepartmentId(departmentId);
+                userDepartment.setUserId(userR.getId());
+                userDepartmentRepository.save(userDepartment);
+            });
         });
         return userDomainV2.getId();
     }

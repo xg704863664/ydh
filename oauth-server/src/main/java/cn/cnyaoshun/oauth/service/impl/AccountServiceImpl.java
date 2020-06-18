@@ -6,6 +6,7 @@ import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.AccountDomainV2;
 import cn.cnyaoshun.oauth.domain.AccountDomainV3;
 import cn.cnyaoshun.oauth.domain.AccountDomainV4;
+import cn.cnyaoshun.oauth.domain.AccountDomainV5;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.AccountRole;
 import cn.cnyaoshun.oauth.entity.Role;
@@ -20,6 +21,7 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @ClassName AccountServiceImpl
@@ -63,6 +65,49 @@ public class AccountServiceImpl implements AccountService{
         return pageDataDomain;
     }
 
+    /**
+     * 分配账户
+     * @param accountDomainV5
+     * @return
+     */
+    @Override
+    @org.springframework.transaction.annotation.Transactional
+    public Long assignAccount(AccountDomainV5 accountDomainV5) {
+        Long roleId = accountDomainV5.getRoleId();
+        Set<String> accountNameList = accountDomainV5.getAccountName();
+        List<AccountRole> accountRoleList = accountRoleRepository.findAllByRoleId(roleId);
+        if(accountRoleList.isEmpty()){
+            accountNameList.forEach(accountName -> {
+                AccountRole accountRole = new AccountRole();
+                Account account = accountRepository.findByAccountName(accountName);
+                accountRole.setRoleId(account.getId());
+                accountRole.setRoleId(roleId);
+                accountRoleRepository.save(accountRole);
+            });
+        }else{
+            //合并去重
+            accountRoleList.forEach(accountRole -> {
+                Optional<Account> accountOptional = accountRepository.findById(accountRole.getAccountId());
+                accountOptional.ifPresent(account -> {
+                    accountNameList.add(account.getAccountName());
+                });
+            });
+            accountNameList.forEach(accountName ->{
+                Account byAccountName = accountRepository.findByAccountName(accountName);
+                List<AccountRole> allByAccountId = accountRoleRepository.findAllByAccountId(byAccountName.getId());
+                allByAccountId.forEach(accountRole -> {
+                    if(accountRole == null){
+                        AccountRole accountRoleNew = new AccountRole();
+                        accountRoleNew.setRoleId(accountRole.getRoleId());
+                        accountRoleNew.setAccountId(byAccountName.getId());
+                        accountRoleRepository.save(accountRoleNew);
+                    }
+                });
+            });
+        }
+        return roleId;
+    }
+
     @Override
     @Transactional
     public Long update(AccountDomainV4 accountDomainV4) {
@@ -78,6 +123,18 @@ public class AccountServiceImpl implements AccountService{
             User user = userRepository.findByUserName(accountDomainV4.getUserName());
             accountU.setUserId(user.getId());
             accountRepository.save(accountU);
+
+            List<AccountRole> allByAccountId = accountRoleRepository.findAllByAccountId(accountU.getId());
+            allByAccountId.forEach(roleAccount ->{
+                accountRoleRepository.deleteAllByAccountId(roleAccount.getAccountId());
+            });
+            List<Long> roleIdList = accountDomainV4.getRoleIdList();
+            roleIdList.forEach(roleId ->{
+                AccountRole accountRole = new AccountRole();
+                accountRole.setAccountId(accountU.getId());
+                accountRole.setRoleId(roleId);
+                accountRoleRepository.save(accountRole);
+            });
         });
         return accountDomainV4.getId();
     }
@@ -90,27 +147,20 @@ public class AccountServiceImpl implements AccountService{
     @Override
     @Transactional
     public Long add(AccountDomainV3 accountDomainV3) {
-        if(accountDomainV3.getRoleId() == null){
-            throw new ExceptionValidation(418,"选择角色不能为空");
-        }
-        if(accountDomainV3.getUserName() == null){
-            throw new ExceptionValidation(418,"请选择关联用户");
-        }
-        User user = userRepository.findByUserName(accountDomainV3.getUserName());
-        if(user == null){
-            throw new ExceptionValidation(418,"请选择用户名称");
-        }
+
         Account account = new Account();
         account.setAccountName(accountDomainV3.getAccountName());
         account.setPassword(accountDomainV3.getPassword());
-        account.setState(accountDomainV3.isState());
-        account.setUserId(user.getId());
+        account.setUserId(accountDomainV3.getUserId());
         accountRepository.save(account);
         //新建账户角色关联关系
-        AccountRole accountRole = new AccountRole();
-        accountRole.setRoleId(accountDomainV3.getRoleId());
-        accountRole.setAccountId(account.getId());
-        accountRoleRepository.save(accountRole);
+        List<Long> roleIdList = accountDomainV3.getRoleIdList();
+        roleIdList.forEach(roleId ->{
+            AccountRole accountRole = new AccountRole();
+            accountRole.setRoleId(roleId);
+            accountRole.setAccountId(account.getId());
+            accountRoleRepository.save(accountRole);
+        });
         return account.getId();
     }
 
