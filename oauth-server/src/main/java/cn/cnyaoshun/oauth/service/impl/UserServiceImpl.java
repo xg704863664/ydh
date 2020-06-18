@@ -134,12 +134,14 @@ public class UserServiceImpl implements UserService {
         account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
         accountRepository.save(account);
 
-        if (userDomain.getDepartmentIdList() != null && userDomain.getDepartmentIdList().size() > 0){
-            List<Long> departmentIdList = userDomain.getDepartmentIdList();
-            departmentIdList.forEach(departmentId ->{
+        if (userDomain.getDepartmentId() != null && userDomain.getDepartmentId() > 0){
+               Long departmentId1 = userDomain.getDepartmentId();
+            Optional<Department> departmentOptional = departmentRepository.findById(departmentId1);
+            departmentOptional.ifPresent(department -> {
                 UserDepartment userDepartment = new UserDepartment();
                 userDepartment.setUserId(user.getId());
-                userDepartment.setDepartmentId(departmentId);
+                userDepartment.setDepartmentId(departmentId1);
+                userDepartment.setOrganizationId(department.getOrganizationId());
                 userDepartmentRepository.save(userDepartment);
             });
         }
