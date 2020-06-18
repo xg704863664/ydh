@@ -18,21 +18,21 @@ import java.util.List;
 @Data
 public class AccountDomainV4 {
 
-    @ApiModelProperty(name = "账号ID")
+    @ApiModelProperty(value = "账号ID")
     private Long id;
 
-    @ApiModelProperty(name = "用户名称")
+    @ApiModelProperty(value = "用户名称")
     private String userName;
 
-    @ApiModelProperty(name = "账号,不能为空")
+    @ApiModelProperty(value = "账号,不能为空")
     @NotNull(message = "账号不能为空")
     private String accountName;
 
-    @ApiModelProperty(name = "密码")
+    @ApiModelProperty(value = "密码")
     @NotNull(message = "密码不能为空")
     private  String password;
 
-    @ApiModelProperty(name = "状态")
+    @ApiModelProperty(value = "状态")
     private boolean state;
 
     @ApiModelProperty(value = "创建时间")

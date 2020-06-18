@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public class UserDomain {
     @ApiModelProperty(value = "部门ID")
     private Long departmentId;
 
-    @NotBlank(message = "姓名不能为空")
+    @NotNull(message = "姓名不能为空")
     @ApiModelProperty(value = "姓名不能为空")
     private String userName;
 
@@ -38,7 +39,8 @@ public class UserDomain {
     @ApiModelProperty(value = "邮箱; 必填")
     private String email;
 
-    @ApiModelProperty(value = "证件编号")
+    @NotNull(message = "身份证号码不能为空")
+    @ApiModelProperty(value = "身份证号")
     private String idNo;
 
 }

@@ -17,17 +17,17 @@ import java.util.Date;
 @Data
 public class PermissionDomainV3 {
 
-    @ApiModelProperty(name = "ID")
+    @ApiModelProperty(value = "ID")
     private Long id;
 
-    @ApiModelProperty(name = "权限名称非空")
+    @ApiModelProperty(value = "权限名称非空")
     @NotNull(message = "权限名称不能为空")
     private String permissionName;
 
-    @ApiModelProperty(name = "权限编码")
+    @ApiModelProperty(value = "权限编码")
     private Integer permissionType;
 
-    @ApiModelProperty(name = "项目ID")
+    @ApiModelProperty(value = "项目ID")
     private Long projectId;
 
     @ApiModelProperty(value = "最后一次修改时间")

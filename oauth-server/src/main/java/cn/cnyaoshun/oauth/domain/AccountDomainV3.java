@@ -14,18 +14,18 @@ import java.util.List;
 @Data
 public class AccountDomainV3 {
 
-    @ApiModelProperty(name = "用户ID")
+    @ApiModelProperty(value = "用户ID")
     private Long userId;
 
-    @ApiModelProperty(name = "账号,不能为空")
+    @ApiModelProperty(value = "账号,不能为空")
     @NotNull(message = "账号不能为空")
     private String accountName;
 
-    @ApiModelProperty(name = "密码,不能为空")
+    @ApiModelProperty(value = "密码,不能为空")
     @NotNull(message = "密码不能为空")
     private  String password;
 
-    @ApiModelProperty(name = "分配角色列表")
+    @ApiModelProperty(value = "分配角色列表")
     private List<Long> roleIdList;
 
 

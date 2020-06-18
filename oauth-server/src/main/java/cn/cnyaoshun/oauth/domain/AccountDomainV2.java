@@ -11,19 +11,19 @@ import lombok.Data;
 @Data
 public class AccountDomainV2 {
 
-    @ApiModelProperty(name = "账户ID")
+    @ApiModelProperty(value = "账户ID")
     private Long id;
 
-    @ApiModelProperty(name = "账号")
+    @ApiModelProperty(value = "账号")
     private String accountName;
 
-    @ApiModelProperty(name = "用户名称")
+    @ApiModelProperty(value = "用户名称")
     private String userName;
 
-    @ApiModelProperty(name = "状态")
+    @ApiModelProperty(value = "状态")
     private boolean state;
 
-    @ApiModelProperty(name = "角色名称")
+    @ApiModelProperty(value = "角色名称")
     private String RoleName;
 
 

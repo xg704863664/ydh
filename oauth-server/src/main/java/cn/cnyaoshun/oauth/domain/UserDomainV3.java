@@ -12,9 +12,9 @@ import lombok.Data;
 @Data
 public class UserDomainV3 {
 
-    @ApiModelProperty(name = "用户名称")
+    @ApiModelProperty(value = "用户名称")
     private Long id;
 
-    @ApiModelProperty(name = "用户名称")
+    @ApiModelProperty(value = "用户名称")
     private String userName;
 }
