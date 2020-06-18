@@ -13,5 +13,5 @@ public class RolePermission extends AbstractOnlyIdEntity {
     private Long roleId;
 
     @Column(name = "permission_id")
-    private Long permissiond;
+    private Long permissionId;
 }

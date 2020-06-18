@@ -20,7 +20,7 @@ public class Permission extends AbstractEntity{
     @Column(name = "permission_type")
     private Integer permissionType;
     @Column(name = "state")
-    private Integer state;
+    private boolean state;
     @Column(name = "project_id")
     private Long projectId;
 

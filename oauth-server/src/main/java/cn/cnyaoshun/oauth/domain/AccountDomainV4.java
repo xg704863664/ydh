@@ -9,43 +9,42 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @ClassName RoleDomainV2
- * @Description 根据角色ID,编辑角色信息
+ * @ClassName AccountDomainV4
+ * @Description 修改账户信息
  * @Author fyh
- * Date 2020-6-1515:02
+ * Date 2020/6/1616:00
  */
 @Data
-public class RoleDomainV2 {
+public class AccountDomainV4 {
 
-    @ApiModelProperty(value = "角色ID")
+    @ApiModelProperty(name = "账号ID")
     private Long id;
 
-    @ApiModelProperty(value = "项目ID")
-    private Long projectId;
+    @ApiModelProperty(name = "角色ID")
+    private Long roleId;
 
-    @ApiModelProperty(value = "角色名称")
-    private String roleName;
+    @ApiModelProperty(name = "用户名称")
+    private String userName;
 
-    @ApiModelProperty(value = "描述")
-    private String description;
+    @ApiModelProperty(name = "账号")
+    private String accountName;
 
-    @ApiModelProperty(value = "角色类型;0:超级用户;1:管理员;2:项目负责人;3:一般用户;4:其他")
-    private Integer roleType;
+    @ApiModelProperty(name = "密码")
+    private  String password;
 
-    @ApiModelProperty(value = "状态;0:冻结;1:开启")
+    @ApiModelProperty(name = "状态")
     private boolean state;
 
     @ApiModelProperty(value = "创建时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date createTime = new Date();
+    protected Date createTime;
 
     @ApiModelProperty(value = "最后一次修改时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
-    @ApiModelProperty(value = "权限ID集合")
-    private List<Long> permissionIds;
-
+    @ApiModelProperty(value = "角色ID集合")
+    private List<Long> roleIdList;
 }

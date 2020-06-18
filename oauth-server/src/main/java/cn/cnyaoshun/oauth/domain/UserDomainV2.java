@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 描述:修改用户信息
@@ -50,14 +51,14 @@ public class UserDomainV2 {
     @ApiModelProperty(value = "用户状态,true:开启;false:关闭")
     private boolean state;
 
-    @ApiModelProperty(value = "创建时间")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    protected Date createTime;
+    @ApiModelProperty(value = "部门名称")
+    private String departmentName;
 
     @ApiModelProperty(value = "最后一次修改时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
+    @ApiModelProperty(value = "部门ID集合")
+    private List<Long> departmentIdList;
 }

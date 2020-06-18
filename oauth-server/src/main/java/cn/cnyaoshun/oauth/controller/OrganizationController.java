@@ -3,6 +3,7 @@ package cn.cnyaoshun.oauth.controller;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
 import cn.cnyaoshun.oauth.domain.OrganizationDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
+import cn.cnyaoshun.oauth.domain.OrganizationDomainV3;
 import cn.cnyaoshun.oauth.service.OrganizationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,8 +44,8 @@ public class OrganizationController {
 
     @ApiOperation(value = "获取所有的组织机构信息",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ReturnJsonData<OrganizationDomainV2> findAll(){
-        List<OrganizationDomainV2> organizationList = organizationService.findAll();
+    public ReturnJsonData<OrganizationDomainV3> findAll(){
+        List<OrganizationDomainV3> organizationList = organizationService.findAll();
         return ReturnJsonData.build(organizationList);
     }
 
