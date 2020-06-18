@@ -44,8 +44,6 @@ public class AspectRequestAop {
             HttpServletRequest request = servletRequestAttributes.getRequest();
             String ip = request.getHeader("X-Real-IP");
             log.info("X-Real-IP:"+ip);
-            String Remote_Addr = request.getHeader("Remote_Addr");
-            log.info("Remote_Addr:"+Remote_Addr);
             log.info("ip: {} url: {} class_method:{} args:{} time:{}", request.getRemoteAddr(), request.getRequestURL().toString(), signature.getDeclaringTypeName() + "." + signature.getName(), proceedingJoinPoint.getArgs(),(endTime-startTime)/1000+"s");
         }
         return o;
