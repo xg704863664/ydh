@@ -1,11 +1,10 @@
 package cn.cnyaoshun.oauth.service.impl;
 
-import cn.cnyaoshun.oauth.dao.DepartmentRepository;
-import cn.cnyaoshun.oauth.dao.OrganizationRepository;
-import cn.cnyaoshun.oauth.dao.UserDepartmentRepository;
-import cn.cnyaoshun.oauth.dao.UserRepository;
+import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.OrganizationDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
+import cn.cnyaoshun.oauth.domain.OrganizationDomainV3;
+import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.Organization;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.OrganizationService;
@@ -32,6 +31,10 @@ public class OrganizationServiceImpl implements OrganizationService{
     private final UserDepartmentRepository userDepartmentRepository;
 
     private final UserRepository userRepository;
+
+    private final AccountRepository accountRepository;
+
+    private final AccountRoleRepository accountRoleRepository;
     /**
      * 新增
      * @param organizationDomain
@@ -67,27 +70,6 @@ public class OrganizationServiceImpl implements OrganizationService{
     }
 
     /**
-     * 查询
-     * @return
-     */
-    @Override
-   public List<OrganizationDomainV2> findAll(){
-
-        List<Organization> organizationList = organizationRepository.findAll();
-        List<OrganizationDomainV2> organizationDaomainList = new ArrayList<>();
-        organizationList.forEach(organization -> {
-            OrganizationDomainV2 organizationDomainV2 = new OrganizationDomainV2();
-            organizationDomainV2.setId(organization.getId());
-            organizationDomainV2.setOrganizationName(organization.getOrganizationName());
-            organizationDomainV2.setDescription(organization.getDescription());
-            organizationDomainV2.setAddress(organization.getAddress());
-            organizationDomainV2.setState(organization.isState());
-            organizationDaomainList.add(organizationDomainV2);
-        });
-       return organizationDaomainList;
-    }
-
-    /**
      * 删除
      * @param organizationId
      */
@@ -98,6 +80,28 @@ public class OrganizationServiceImpl implements OrganizationService{
         OrganizationServiceImpl organizationService = (OrganizationServiceImpl) AopContext.currentProxy();
         organizationService.deleteDepartment(organizationId);
 
+    }
+
+    /**
+     * 查询
+     * @return
+     */
+    @Override
+    public List<OrganizationDomainV3> findAll(){
+
+        List<Organization> organizationList = organizationRepository.findAll();
+        List<OrganizationDomainV3> organizationDaomainList = new ArrayList<>();
+        organizationList.forEach(organization -> {
+            OrganizationDomainV3 organizationDomainV3 = new OrganizationDomainV3();
+            organizationDomainV3.setId(organization.getId());
+            organizationDomainV3.setOrganizationName(organization.getOrganizationName());
+            organizationDomainV3.setDescription(organization.getDescription());
+            organizationDomainV3.setAddress(organization.getAddress());
+            organizationDomainV3.setState(organization.isState());
+            organizationDomainV3.setType(1);
+            organizationDaomainList.add(organizationDomainV3);
+        });
+        return organizationDaomainList;
     }
 
     @Async
@@ -116,6 +120,18 @@ public class OrganizationServiceImpl implements OrganizationService{
         });
         if (!userIds.isEmpty()){
             userRepository.deleteAllByIdIn(userIds);
+            //根据用户信息删除账户信息
+            List<Account> accountList = new ArrayList<>();
+            userIds.forEach(userId ->{
+                List<Account> byUserId = accountRepository.findByUserId(userId);
+                accountList.addAll(byUserId);
+            });
+            if(!accountList.isEmpty()){
+                accountList.forEach(account -> {
+                    accountRepository.deleteAllByIdIn(account.getId());
+                    accountRoleRepository.deleteAllByAccountId(account.getId());
+                });
+            }
         }
     }
 }

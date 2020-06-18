@@ -2,6 +2,8 @@ package cn.cnyaoshun.oauth.service;
 
 import cn.cnyaoshun.oauth.domain.OrganizationDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
+import cn.cnyaoshun.oauth.domain.OrganizationDomainV3;
+
 import java.util.List;
 
 /**
@@ -12,6 +14,6 @@ public interface OrganizationService {
     Long add(OrganizationDomain organizationDomain);
     void delete(Long organizationId);
     Long update(OrganizationDomainV2 organizationDomainV2);
-    List<OrganizationDomainV2> findAll();
+    List<OrganizationDomainV3> findAll();
 
 }

@@ -18,4 +18,6 @@
     <include file="classpath:db/changelog/20200609184100_user_update_phone.xml" relativeToChangelogFile="false"></include>
     <include file="classpath:db/changelog/20200611135000_project.xml" relativeToChangelogFile="false"></include>
     <include file="classpath:db/changelog/20200611120100_organization_update_name.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200615163100_permission_update.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200617101400_permission_update_state.xml" relativeToChangelogFile="false"></include>
 </databaseChangeLog>
