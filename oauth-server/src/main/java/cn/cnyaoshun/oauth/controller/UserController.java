@@ -3,10 +3,7 @@ package cn.cnyaoshun.oauth.controller;
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
-import cn.cnyaoshun.oauth.domain.UserDomainV3;
-import cn.cnyaoshun.oauth.domain.UserDomain;
-import cn.cnyaoshun.oauth.domain.UserDomainV2;
-import cn.cnyaoshun.oauth.domain.UserDomainV4;
+import cn.cnyaoshun.oauth.domain.*;
 import cn.cnyaoshun.oauth.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,10 +34,10 @@ public class UserController {
 
     @ApiOperation(value = "根据部门ID获取用户信息",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping("/department/list")
-    public ReturnJsonData<PageDataDomain<UserDomain>> departmentList(@Min (1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber") Integer pageNumber,
-                                                           @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")  Integer pageSize,
-                                                           @NotNull @ApiParam(value = "部门ID", required = true)@RequestParam(value = "departmentId")  Long departmentId,
-                                                           @ApiParam(value = "根据用户名或账户搜索用户信息")@RequestParam(value = "keyWord",required = false) String keyWord){
+    public ReturnJsonData<PageDataDomain<UserDomainV5>> departmentList(@Min (1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber") Integer pageNumber,
+                                                                       @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")  Integer pageSize,
+                                                                       @NotNull @ApiParam(value = "部门ID", required = true)@RequestParam(value = "departmentId")  Long departmentId,
+                                                                       @ApiParam(value = "根据用户名或账户搜索用户信息")@RequestParam(value = "keyWord",required = false) String keyWord){
 
         return ReturnJsonData.build(userService.findAll(departmentId, keyWord, pageNumber, pageSize));
     }
