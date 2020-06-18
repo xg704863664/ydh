@@ -45,7 +45,6 @@ public class OrganizationServiceImpl implements OrganizationService{
     public Long add(OrganizationDomain organizationDomain){
         Organization organization = new Organization();
         BeanUtils.copyProperties(organizationDomain, organization);
-        organization.setState(true);
         Organization SaveOrganization = organizationRepository.save(organization);
         return SaveOrganization.getId();
     }
@@ -95,9 +94,7 @@ public class OrganizationServiceImpl implements OrganizationService{
             OrganizationDomainV3 organizationDomainV3 = new OrganizationDomainV3();
             organizationDomainV3.setId(organization.getId());
             organizationDomainV3.setOrganizationName(organization.getOrganizationName());
-            organizationDomainV3.setDescription(organization.getDescription());
             organizationDomainV3.setAddress(organization.getAddress());
-            organizationDomainV3.setState(organization.isState());
             organizationDomainV3.setType(1);
             organizationDaomainList.add(organizationDomainV3);
         });

@@ -24,7 +24,7 @@ public class UserDao {
 
     public List<UserDomainV5> findUserByDepartmentId(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize){
         List<UserDomainV5> userDomainList = new ArrayList<>();
-        StringBuilder sql =  new StringBuilder("SELECT cu.id,cu.user_no,cu.user_name,cu.sex,cu.age,cu.phone,cu.email,cu.id_type,cu.id_no,cu.address,cu.state,cu.create_time,cu.update_time, ud.department_id FROM user AS cu, user_department AS ud  WHERE  ud.department_id = ? AND cu.id = ud.user_id ");
+        StringBuilder sql =  new StringBuilder("SELECT cu.id,cu.user_name,cu.sex,cu.age,cu.phone,cu.email,cu.id_no,cu.create_time,cu.update_time, ud.department_id FROM user AS cu, user_department AS ud  WHERE  ud.department_id = ? AND cu.id = ud.user_id ");
         if (!StringUtils.isEmpty(keyWord)){
             sql.append(" and cu.user_name like '%"+ keyWord +"%'or cu.user_no like '%" + keyWord +"%'");
         }

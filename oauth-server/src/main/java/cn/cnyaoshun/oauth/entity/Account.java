@@ -20,8 +20,6 @@ public class Account extends AbstractEntity {
     private String accountName;
     @Column(name = "password")
     private  String password;
-    @Column(name = "avatar")
-    private String avatar;
     @Column(name = "state")
     private boolean state;
 

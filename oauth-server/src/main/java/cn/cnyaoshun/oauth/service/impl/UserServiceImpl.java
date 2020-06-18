@@ -108,25 +108,18 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long add(UserDomain userDomain) {
-        boolean userNumberExists = userRepository.existsByUserNo(userDomain.getUserNo());
-        if (userNumberExists){
-            throw new ExceptionValidation(418,"工号已存在");
-        }
+
         User user = new User();
         user.setIdNo(userDomain.getIdNo());
         user.setUserName(userDomain.getUserName());
-        user.setAddress(userDomain.getAddress());
         user.setAge(userDomain.getAge());
         user.setEmail(userDomain.getEmail());
-        user.setIdType(userDomain.getIdType());
         user.setIdNo(userDomain.getIdNo());
         user.setPhone(userDomain.getPhone());
-        user.setState(true);
         userRepository.save(user);
 
         Account account = new Account();
         account.setUserId(user.getId());
-        account.setAccountName(String.valueOf(user.getUserNo()));
         account.setState(true);
         account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
         accountRepository.save(account);
@@ -157,16 +150,12 @@ public class UserServiceImpl implements UserService {
         userOptional.ifPresent(user -> {
             User userR = new User();
             userR.setId(user.getId());
-            userR.setUserNo(userDomainV2.getUserNo());
             userR.setUserName(userDomainV2.getUserName());
             userR.setPhone(userDomainV2.getPhone());
-            userR.setIdType(userDomainV2.getIdType());
             userR.setIdNo(userDomainV2.getIdNo());
             userR.setEmail(userDomainV2.getEmail());
             userR.setSex(userDomainV2.getSex());
-            userR.setAddress(userDomainV2.getAddress());
             userR.setUpdateTime(new Date());
-            userR.setState(userDomainV2.isState());
             userR.setAge(userDomainV2.getAge());
             userRepository.save(userR);
 
@@ -183,7 +172,6 @@ public class UserServiceImpl implements UserService {
                 userDepartment.setOrganizationId(department.getOrganizationId());
                 userDepartmentRepository.save(userDepartment);
             });
-
         });
         return userDomainV2.getId();
     }
@@ -230,6 +218,12 @@ public class UserServiceImpl implements UserService {
     @Async
     @Transactional
     public void deleteAccount(Long userId){
+        //删除部门用户关联表关系
+        List<UserDepartment> allByUserId = userDepartmentRepository.findAllByUserId(userId);
+        allByUserId.forEach(userDepartment -> {
+            userDepartmentRepository.deleteById(userDepartment.getId());
+        });
+
         accountRepository.deleteAllByUserId(userId);
         //将账户与角色关联表中的数据也删除
         List<Account> accountList = accountRepository.findByUserId(userId);

@@ -28,9 +28,6 @@ public class DepartmentDomain {
     @ApiModelProperty(value = "部门名称")
     private String departmentName;
 
-    @ApiModelProperty(value = "部门描述")
-    private String description;
-
     @ApiModelProperty(value = "子部门")
     List<DepartmentDomain> children = new ArrayList<>();
 }
