@@ -16,6 +16,9 @@ import java.util.List;
 @Data
 public class UserDomain {
 
+    @ApiModelProperty(value = "部门ID")
+    private Long departmentId;
+
     @NotBlank(message = "工号不能为空")
     @ApiModelProperty(value = "工号且不能为空")
     private String userNo;
@@ -47,6 +50,4 @@ public class UserDomain {
     @ApiModelProperty(value = "地址")
     private String address;
 
-    @ApiModelProperty(value = "部门集合")
-    private List<Long> departmentIdList;
 }

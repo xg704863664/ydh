@@ -4,10 +4,7 @@ package cn.cnyaoshun.oauth.service.impl;
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.*;
-import cn.cnyaoshun.oauth.domain.UserDomain;
-import cn.cnyaoshun.oauth.domain.UserDomainV2;
-import cn.cnyaoshun.oauth.domain.UserDomainV3;
-import cn.cnyaoshun.oauth.domain.UserDomainV4;
+import cn.cnyaoshun.oauth.domain.*;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.Department;
 import cn.cnyaoshun.oauth.entity.User;
@@ -134,12 +131,14 @@ public class UserServiceImpl implements UserService {
         account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
         accountRepository.save(account);
 
-        if (userDomain.getDepartmentIdList() != null && userDomain.getDepartmentIdList().size() > 0){
-            List<Long> departmentIdList = userDomain.getDepartmentIdList();
-            departmentIdList.forEach(departmentId ->{
+        if (userDomain.getDepartmentId() != null && userDomain.getDepartmentId() > 0){
+               Long departmentId1 = userDomain.getDepartmentId();
+            Optional<Department> departmentOptional = departmentRepository.findById(departmentId1);
+            departmentOptional.ifPresent(department -> {
                 UserDepartment userDepartment = new UserDepartment();
                 userDepartment.setUserId(user.getId());
-                userDepartment.setDepartmentId(departmentId);
+                userDepartment.setDepartmentId(departmentId1);
+                userDepartment.setOrganizationId(department.getOrganizationId());
                 userDepartmentRepository.save(userDepartment);
             });
         }
@@ -175,13 +174,16 @@ public class UserServiceImpl implements UserService {
             userDepartmentList.forEach(userDepartment -> {
                 userDepartmentRepository.deleteById(userDepartment.getId());
             });
-            List<Long> departmentIdList = userDomainV2.getDepartmentIdList();
-            departmentIdList.forEach(departmentId ->{
+            Long departmentId = userDomainV2.getDepartmentId();
+            Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
+            departmentOptional.ifPresent(department -> {
                 UserDepartment userDepartment = new UserDepartment();
                 userDepartment.setDepartmentId(departmentId);
                 userDepartment.setUserId(userR.getId());
+                userDepartment.setOrganizationId(department.getOrganizationId());
                 userDepartmentRepository.save(userDepartment);
             });
+
         });
         return userDomainV2.getId();
     }
@@ -194,14 +196,14 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public PageDataDomain<UserDomainV2> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize) {
+    public PageDataDomain<UserDomainV5> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize) {
         Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
-        PageDataDomain<UserDomainV2> pageDataDomain = new PageDataDomain<>();
+        PageDataDomain<UserDomainV5> pageDataDomain = new PageDataDomain<>();
         departmentOptional.ifPresent(department -> {
             Integer startPage = (pageNumber-1)*pageSize;
-            List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(departmentId, keyWord, startPage,pageSize);
+            List<UserDomainV5> crmMemberEntityPage = userDao.findUserByDepartmentId(departmentId, keyWord, startPage,pageSize);
             crmMemberEntityPage.forEach(crm -> {
-                crm.setDepartmentName(department.getDepartmentName());
+                crm.setDepartmentId(department.getId());
             });
             Long count = userDao.countUserEntitiesByDepartmentId(departmentId,keyWord);
             pageDataDomain.setCurrent(pageNumber);
