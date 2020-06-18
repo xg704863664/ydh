@@ -230,6 +230,12 @@ public class UserServiceImpl implements UserService {
     @Async
     @Transactional
     public void deleteAccount(Long userId){
+        //删除部门用户关联表关系
+        List<UserDepartment> allByUserId = userDepartmentRepository.findAllByUserId(userId);
+        allByUserId.forEach(userDepartment -> {
+            userDepartmentRepository.deleteById(userDepartment.getId());
+        });
+
         accountRepository.deleteAllByUserId(userId);
         //将账户与角色关联表中的数据也删除
         List<Account> accountList = accountRepository.findByUserId(userId);
