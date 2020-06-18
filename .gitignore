@@ -8,6 +8,7 @@ api-gateway-server/api-gateway-server.iml
 oauth-server/target/
 oauth-server/target/**
 oauth-server/oauth-server.iml
+oauth-server/src/main/resources/bootstrap.yml
 
 
 file-server/target/
