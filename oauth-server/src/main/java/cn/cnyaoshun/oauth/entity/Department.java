@@ -21,12 +21,6 @@ public class Department extends AbstractEntity{
     @Column(name = "department_no")
     private String departmentNo;
     @Column(name = "department_name")
-    private String departmentName;
-    @Column(name = "description")
-    private String description;
-    @Column(name = "sort")
-    private Integer sort;
-    @Column(name = "state")
-    private boolean state;
+    private String departmentName;;
 
 }

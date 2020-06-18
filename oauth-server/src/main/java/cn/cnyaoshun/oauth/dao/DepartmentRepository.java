@@ -10,10 +10,8 @@ import java.util.List;
  */
 public interface DepartmentRepository extends PagingAndSortingRepository<Department,Long>{
     void deleteAllByOrganizationId(Long organizationId);
-    List<Department> findByOrganizationIdOrderBySort(Long organizationId);
+    List<Department> findByOrganizationIdOrderByIdDesc(Long organizationId);
     boolean existsByDepartmentNo(String departmentNo);
-    Integer countByOrganizationIdAndParentIdIsNull(Long organizationId);
-    Integer countByOrganizationIdAndParentId(Long organizationId, Long parentId);
-    List<Department> findByParentIdAndIdNotInAndSortGreaterThan(Long parentId, Long department, Integer sort);
+    List<Department> findByParentIdAndIdNotIn(Long parentId, Long department);
 
 }

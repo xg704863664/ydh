@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="now" value="sysdate" dbms="oracle"/>
+    <changeSet id="20200618162100" author="fyh">
+        <dropColumn tableName="user" columnName="user_no"></dropColumn>
+        <dropColumn tableName="user" columnName="id_type"></dropColumn>
+        <dropColumn tableName="user" columnName="address"></dropColumn>
+        <dropColumn tableName="user" columnName="state"></dropColumn>
+        <dropColumn tableName="account" columnName="avatar"></dropColumn>
+        <dropColumn tableName="role" columnName="description"></dropColumn>
+        <dropColumn tableName="role" columnName="role_type"></dropColumn>
+        <dropColumn tableName="role" columnName="state"></dropColumn>
+        <dropColumn tableName="permission" columnName="description"></dropColumn>
+        <dropColumn tableName="permission" columnName="state"></dropColumn>
+        <dropColumn tableName="organization" columnName="description"></dropColumn>
+        <dropColumn tableName="organization" columnName="state"></dropColumn>
+        <addColumn tableName="organization">
+            <column name="organization_phone" type="INT(11)"></column>
+        </addColumn>
+        <dropColumn tableName="department" columnName="description"></dropColumn>
+        <dropColumn tableName="department" columnName="sort"></dropColumn>
+        <dropColumn tableName="department" columnName="state"></dropColumn>
+    </changeSet>
+</databaseChangeLog>

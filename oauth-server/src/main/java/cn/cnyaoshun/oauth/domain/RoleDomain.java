@@ -20,15 +20,6 @@ public class RoleDomain {
     @ApiModelProperty(value = "角色名称")
     private String roleName;
 
-    @ApiModelProperty(value = "描述")
-    private String description;
-
-    @ApiModelProperty(value = "角色类型;0:超级管理员;1:普通管理员;2:一般用户")
-    private Integer roleType;
-
-    @ApiModelProperty(value = "状态;0:冻结;1:开启")
-    private boolean state;
-
     @ApiModelProperty(value = "权限ID")
     private List<Long> permissionIdList;
 

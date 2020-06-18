@@ -20,10 +20,7 @@ public class OrganizationDomainV2 {
     @ApiModelProperty(name="公司地址")
     private String address;
 
-    @ApiModelProperty(name = "公司描述")
-    private String description;
-
-    @ApiModelProperty(name = "状态")
-    private boolean state;
+    @ApiModelProperty(name = "电话")
+    private String organizationPhone;
 
 }

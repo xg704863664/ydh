@@ -1,7 +1,6 @@
 package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
-import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.AccountDomainV2;
 import cn.cnyaoshun.oauth.domain.AccountDomainV3;
@@ -15,6 +14,7 @@ import cn.cnyaoshun.oauth.service.AccountService;
 import lombok.AllArgsConstructor;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -43,6 +43,16 @@ public class AccountServiceImpl implements AccountService{
 
     private final RoleRepository roleRepository;
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    /**
+     * 根据角色ID去获取账户信息
+     * @param roleId
+     * @param keyWord
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
     @Override
     public PageDataDomain<AccountDomainV2> findAllByRoleId(Long roleId, String keyWord, Integer pageNumber, Integer pageSize) {
         PageDataDomain<AccountDomainV2> pageDataDomain = new PageDataDomain<>();
@@ -60,7 +70,6 @@ public class AccountServiceImpl implements AccountService{
                 accountDomainV2.setRoleName(role.getRoleName());
                 pageDataDomain.getRecords().add(accountDomainV2);
             }
-
         });
         return pageDataDomain;
     }
@@ -71,7 +80,7 @@ public class AccountServiceImpl implements AccountService{
      * @return
      */
     @Override
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public Long assignAccount(AccountDomainV5 accountDomainV5) {
         Long roleId = accountDomainV5.getRoleId();
         Set<String> accountNameList = accountDomainV5.getAccountName();
@@ -115,10 +124,9 @@ public class AccountServiceImpl implements AccountService{
         accountD.ifPresent(account -> {
             Account accountU = new Account();
             accountU.setId(account.getId());
-            accountU.setState(account.isState());
-            accountU.setAccountName(account.getAccountName());
-            accountU.setPassword(account.getPassword());
-            accountU.setAvatar(account.getAvatar());
+            accountU.setState(accountDomainV4.isState());
+            accountU.setAccountName(accountDomainV4.getAccountName());
+            accountU.setPassword(bCryptPasswordEncoder.encode(accountDomainV4.getPassword())); //密码修改后进行加密处理
             accountU.setUpdateTime(new Date());
             User user = userRepository.findByUserName(accountDomainV4.getUserName());
             accountU.setUserId(user.getId());
@@ -150,7 +158,7 @@ public class AccountServiceImpl implements AccountService{
 
         Account account = new Account();
         account.setAccountName(accountDomainV3.getAccountName());
-        account.setPassword(accountDomainV3.getPassword());
+        account.setPassword(bCryptPasswordEncoder.encode(accountDomainV3.getPassword()));
         account.setUserId(accountDomainV3.getUserId());
         accountRepository.save(account);
         //新建账户角色关联关系

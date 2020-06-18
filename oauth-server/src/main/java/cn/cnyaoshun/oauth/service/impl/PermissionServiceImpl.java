@@ -2,8 +2,6 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.PermissionRepository;
-import cn.cnyaoshun.oauth.dao.RolePermissionRepository;
-import cn.cnyaoshun.oauth.dao.RoleRepository;
 import cn.cnyaoshun.oauth.domain.PermissionDomain;
 import cn.cnyaoshun.oauth.domain.PermissionDomainV2;
 import cn.cnyaoshun.oauth.domain.PermissionDomainV3;
@@ -14,7 +12,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @ClassName PermissionServiceImpl
@@ -28,10 +29,6 @@ public class PermissionServiceImpl implements PermissionService{
 
     private final PermissionRepository permissionRepository;
 
-    private final RoleRepository roleRepository;
-
-    private final RolePermissionRepository rolePermissionRepository;
-
     @Override
     @Transactional
     public Long add(PermissionDomain permissionDomain) {
@@ -42,7 +39,6 @@ public class PermissionServiceImpl implements PermissionService{
         }
         Permission permission = new Permission();
         BeanUtils.copyProperties(permissionDomain, permission);
-        permission.setState(true);
         permissionRepository.save(permission);
         return permission.getId();
     }

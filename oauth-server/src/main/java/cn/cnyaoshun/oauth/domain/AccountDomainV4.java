@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -20,16 +21,15 @@ public class AccountDomainV4 {
     @ApiModelProperty(name = "账号ID")
     private Long id;
 
-    @ApiModelProperty(name = "角色ID")
-    private Long roleId;
-
     @ApiModelProperty(name = "用户名称")
     private String userName;
 
-    @ApiModelProperty(name = "账号")
+    @ApiModelProperty(name = "账号,不能为空")
+    @NotNull(message = "账号不能为空")
     private String accountName;
 
     @ApiModelProperty(name = "密码")
+    @NotNull(message = "密码不能为空")
     private  String password;
 
     @ApiModelProperty(name = "状态")

@@ -20,7 +20,4 @@ public class AccountDomain {
     @ApiModelProperty(name = "密码")
     private  String password;
 
-    @ApiModelProperty(name = "头像")
-    private String avatar;
-
 }
