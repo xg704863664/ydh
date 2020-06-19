@@ -68,10 +68,11 @@ public class ExcelImportController {
     @ApiOperation(value = "excel导入", httpMethod = "POST")
     public ReturnJsonData<String> importOrgDepartmentExcel(@NotNull @ApiParam(value = "file 文件") @RequestParam("file")MultipartFile file,
                                            @NotBlank(message = "operationToken 不能为空") @ApiParam(value ="operationToken 操作token 防重复提交",required = true) @RequestParam(value = "operationToken") String operationToken,
-                                           @NotBlank(message = "dealType处理类型不能为空") @ApiParam(value ="dealType处理类型",required = true) @RequestParam(value = "dealType") String dealType) {
+                                           @NotBlank(message = "dealType处理类型不能为空") @ApiParam(value ="dealType处理类型 org_department_deal:组织机构批量导入",required = true) @RequestParam(value = "dealType") String dealType) {
         if (!redisTokenUtil.checkToken(operationToken)){
             throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"operationToken 无效token");
         }
+        redisTokenUtil.clearToken(operationToken);
         excelImportService.dealExcel(dealType,file);
         return ReturnJsonData.build("success");
     }

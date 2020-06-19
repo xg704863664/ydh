@@ -16,13 +16,18 @@ public class RedisTokenUtil {
 
     private final RedisTemplate<String,String> redisTemplate;
 
+    private String dir = "operation:token:";
     public String createToken(){
         String uuid = UUID.randomUUID().toString().replaceAll("-","");
-        redisTemplate.opsForValue().set(uuid,uuid,60, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(dir+uuid,uuid,60*5, TimeUnit.SECONDS);
         return uuid;
     }
 
     public boolean checkToken(String token){
-        return redisTemplate.hasKey(token);
+        return redisTemplate.hasKey(dir+token);
+    }
+
+    public void clearToken(String token){
+        redisTemplate.delete(dir+token);
     }
 }
