@@ -45,9 +45,9 @@ public class ExcelImportController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         try {
-            File file = ResourceUtils.getFile("classpath:organization_template.xls");
+            File file = ResourceUtils.getFile("classpath:organization_template.xlsx");
             bytes = FileUtils.readFileToByteArray(file);
-            httpHeaders.setContentDispositionFormData("attachment", "organization_template.xls");
+            httpHeaders.setContentDispositionFormData("attachment", "organization_template.xlsx");
             httpHeaders.set("Content-Type", "application/octet-stream");
         } catch (IOException e) {
             e.printStackTrace();
