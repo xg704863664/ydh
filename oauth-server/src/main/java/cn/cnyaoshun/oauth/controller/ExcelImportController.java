@@ -26,6 +26,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 
 @RestController
 @RequestMapping("/import")
@@ -47,7 +48,7 @@ public class ExcelImportController {
         try {
             File file = ResourceUtils.getFile("classpath:organization_template.xlsx");
             bytes = FileUtils.readFileToByteArray(file);
-            httpHeaders.setContentDispositionFormData("attachment", "organization_template.xlsx");
+            httpHeaders.setContentDispositionFormData("attachment", URLEncoder.encode("organization_template.xlsx","utf-8"));
             httpHeaders.set("Content-Type", "application/octet-stream");
         } catch (IOException e) {
             e.printStackTrace();
