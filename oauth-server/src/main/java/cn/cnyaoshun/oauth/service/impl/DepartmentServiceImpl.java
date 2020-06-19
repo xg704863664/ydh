@@ -34,8 +34,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private  final AccountRepository accountRepository;
 
-    private final AccountRoleRepository accountRoleRepository;
-
     /**
      * 根据机构id获取部门树结构
      * @param organizationId
@@ -63,7 +61,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentDomainList.forEach(departmentDomain -> {
             recursiveDepartment(departmentDomain,departmentMap);
         });
-
         return departmentDomainList;
     }
 
@@ -82,7 +79,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(depNumber){
             throw new ExceptionValidation(418,"部门编号已存在");
         }
-        //boolean organizationIdExt = departmentRepository.existsByOrganizationId(departmentDomainV2.getOrganizationId());
         boolean organizationIdExt = organizationRepository.existsById(departmentDomainV2.getOrganizationId());
         if(!organizationIdExt){
             throw new ExceptionValidation(418,"公司不存在请重新输入");
@@ -120,8 +116,10 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Long update(DepartmentDomainV3 departmentDomainV3) {
 
         Optional<Department> departmentOptional = departmentRepository.findById(departmentDomainV3.getDepartmentId());
-       departmentOptional.ifPresent(department -> {
+        departmentOptional.ifPresent(department -> {
+           department.setId(department.getId());
            department.setDepartmentName(departmentDomainV3.getDepartmentName());
+           department.setUpdateTime(new Date());
            departmentRepository.save(department);
        });
         return departmentDomainV3.getDepartmentId();

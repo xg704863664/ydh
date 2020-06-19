@@ -2,6 +2,8 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.OauthUserListDomain;
+import cn.cnyaoshun.oauth.domain.PermissionDomainOauthList;
+import cn.cnyaoshun.oauth.domain.RoleDomainV3;
 import cn.cnyaoshun.oauth.entity.*;
 import cn.cnyaoshun.oauth.service.OauthService;
 import lombok.RequiredArgsConstructor;
@@ -44,18 +46,25 @@ public class OauthServiceImpl implements OauthService {
         
         Account account = accountRepository.findByAccountName(accountName);
         List<Permission> permissionList = permissionRepository.findByProjectId(projectId);
-        List<Long> permissionIDList = new ArrayList<>();
-        List<Long> roleIDList = new ArrayList<>();
+        List<PermissionDomainOauthList> permissionIDList = new ArrayList<>();
+        List<RoleDomainV3> role1List = new ArrayList<>();
         permissionList.forEach(permission -> {
-            permissionIDList.add(permission.getId());
+            PermissionDomainOauthList permissionDomainOauthList = new PermissionDomainOauthList();
+            permissionDomainOauthList.setId(permission.getId());
+            permissionDomainOauthList.setPermissionName(permission.getPermissionName());
+            permissionDomainOauthList.setPermissionType(permission.getPermissionType());
+            permissionIDList.add(permissionDomainOauthList);
         });
         List<Role> roleList = roleRepository.findByProjectId(projectId);
         roleList.forEach(role -> {
-            roleIDList.add(role.getId());
+            RoleDomainV3 roleDomainV3 = new RoleDomainV3();
+            roleDomainV3.setId(role.getId());
+            roleDomainV3.setRoleName(role.getRoleName());
+            role1List.add(roleDomainV3);
         });
 
-        oauthUserListDomain.setPermissionIdList(permissionIDList);
-        oauthUserListDomain.setRoleIdList(roleIDList);
+        oauthUserListDomain.setPermissionList(permissionIDList);
+        oauthUserListDomain.setRoleList(role1List);
         oauthUserListDomain.setAccountId(accountId);
 
         Optional<User> userOptional = userRepository.findById(account.getId());

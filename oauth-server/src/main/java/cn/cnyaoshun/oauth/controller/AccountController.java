@@ -5,7 +5,6 @@ import cn.cnyaoshun.oauth.common.ReturnJsonData;
 import cn.cnyaoshun.oauth.domain.AccountDomainV2;
 import cn.cnyaoshun.oauth.domain.AccountDomainV3;
 import cn.cnyaoshun.oauth.domain.AccountDomainV4;
-import cn.cnyaoshun.oauth.domain.AccountDomainV5;
 import cn.cnyaoshun.oauth.service.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -65,10 +64,4 @@ public class AccountController {
         return ReturnJsonData.build(id);
     }
 
-    @ApiOperation(value = "根据角色ID分配账户" ,httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @RequestMapping(value = "/assign", method = RequestMethod.POST)
-    public  ReturnJsonData<Long> assignAccount(@Validated @RequestBody AccountDomainV5 accountDomainV5){
-        Long roleId = accountService.assignAccount(accountDomainV5);
-        return ReturnJsonData.build(roleId);
-    }
 }

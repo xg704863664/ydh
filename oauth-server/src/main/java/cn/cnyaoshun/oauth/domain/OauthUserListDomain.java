@@ -24,8 +24,8 @@ public class OauthUserListDomain {
     private String userName;
 
     @ApiModelProperty(value = "角色ID的集合")
-    private List<Long> roleIdList;
+    private List<RoleDomainV3> roleList;
 
     @ApiModelProperty(value = "权限ID集合")
-    private List<Long> permissionIdList;
+    private List<PermissionDomainOauthList> permissionList;
 }
