@@ -13,8 +13,7 @@ import javax.persistence.Entity;
 @Data
 public class User extends AbstractEntity{
 
-    @Column(name = "user_no")
-    private String userNo;
+
     @Column(name = "user_name")
     private String userName;
     @Column(name = "sex")
@@ -25,13 +24,7 @@ public class User extends AbstractEntity{
     private String phone;
     @Column(name = "email")
     private String email;
-    @Column(name = "id_type")
-    private Integer idType;
     @Column(name = "id_no")
     private String idNo;
-    @Column(name = "address")
-    private String address;
-    @Column(name = "state")
-    private boolean state;
 
 }

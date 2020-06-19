@@ -7,44 +7,47 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
 
 /**
- * @ClassName AccountDomainV4
- * @Description 修改账户信息
- * @Author fyh
- * Date 2020/6/1616:00
+ * 描述:用于获取用户信息
+ * @author fyh
+ * @date: 2020-6-4
  */
 @Data
-public class AccountDomainV4 {
+public class UserDomainV5 {
 
-    @ApiModelProperty(value = "账号ID")
+    @NotNull(message = "ID不能为空")
+    @ApiModelProperty(value = "ID")
     private Long id;
 
-    @ApiModelProperty(value = "用户名称")
+    @ApiModelProperty(value = "姓名")
     private String userName;
 
-    @ApiModelProperty(value = "账号,不能为空")
-    @NotNull(message = "账号不能为空")
-    private String accountName;
+    @ApiModelProperty(value = "性别")
+    private String sex;
 
-    @ApiModelProperty(value = "密码")
-    @NotNull(message = "密码不能为空")
-    private  String password;
+    @ApiModelProperty(value = "年龄")
+    private Integer age;
 
-    @ApiModelProperty(value = "状态")
-    private boolean state;
+    @ApiModelProperty(value = "电话")
+    private String phone;
+
+    @ApiModelProperty(value = "邮箱")
+    private String email;
+
+    @ApiModelProperty(value = "证件编号")
+    private String idNo;
 
     @ApiModelProperty(value = "创建时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    protected Date createTime;
+    private Date createTime;
 
     @ApiModelProperty(value = "最后一次修改时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
-    @ApiModelProperty(value = "角色ID集合")
-    private List<Long> roleIdList;
+    @ApiModelProperty(value = "部门名称")
+    private Long departmentId;
 }

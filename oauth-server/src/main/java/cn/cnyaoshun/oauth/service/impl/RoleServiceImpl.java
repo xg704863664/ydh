@@ -14,8 +14,12 @@ import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @ClassName RoleServiceImpl
@@ -40,9 +44,6 @@ public class RoleServiceImpl implements RoleService {
         Role role = new Role();
         role.setProjectId(roleDomain.getProjectId());
         role.setRoleName(roleDomain.getRoleName());
-        role.setDescription(roleDomain.getDescription());
-        role.setRoleType(roleDomain.getRoleType());
-        role.setState(roleDomain.isState());
         roleRepository.save(role);
         List<Long> permissionIdList = roleDomain.getPermissionIdList();
         permissionIdList.forEach(permissionId ->{
@@ -97,10 +98,7 @@ public class RoleServiceImpl implements RoleService {
             Role roleR = new Role();
             roleR.setId(role.getId());
             roleR.setRoleName(roleDomainV2.getRoleName());
-            roleR.setDescription(roleDomainV2.getDescription());
             roleR.setProjectId(roleDomainV2.getProjectId());
-            roleR.setRoleType(roleDomainV2.getRoleType());
-            roleR.setState(roleDomainV2.isState());
             roleR.setUpdateTime(new Date());
             roleR.setCreateTime(roleDomainV2.getCreateTime());
             roleRepository.save(role);

@@ -33,7 +33,7 @@ public class ExceptionHandle {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Exception.class)
     public ReturnJsonData doRequiredExceptionHandle(Exception e) {
-        return createReturnJsonData(400,"服务器错误,联系后端开发");
+        return createReturnJsonData(400,e.getMessage());
     }
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)

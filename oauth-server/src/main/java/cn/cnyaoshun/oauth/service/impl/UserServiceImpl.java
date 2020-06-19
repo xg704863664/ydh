@@ -4,10 +4,7 @@ package cn.cnyaoshun.oauth.service.impl;
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.*;
-import cn.cnyaoshun.oauth.domain.UserDomain;
-import cn.cnyaoshun.oauth.domain.UserDomainV2;
-import cn.cnyaoshun.oauth.domain.UserDomainV3;
-import cn.cnyaoshun.oauth.domain.UserDomainV4;
+import cn.cnyaoshun.oauth.domain.*;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.Department;
 import cn.cnyaoshun.oauth.entity.User;
@@ -111,35 +108,30 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long add(UserDomain userDomain) {
-        boolean userNumberExists = userRepository.existsByUserNo(userDomain.getUserNo());
-        if (userNumberExists){
-            throw new ExceptionValidation(418,"工号已存在");
-        }
+
         User user = new User();
         user.setIdNo(userDomain.getIdNo());
         user.setUserName(userDomain.getUserName());
-        user.setAddress(userDomain.getAddress());
         user.setAge(userDomain.getAge());
         user.setEmail(userDomain.getEmail());
-        user.setIdType(userDomain.getIdType());
         user.setIdNo(userDomain.getIdNo());
         user.setPhone(userDomain.getPhone());
-        user.setState(true);
         userRepository.save(user);
 
         Account account = new Account();
         account.setUserId(user.getId());
-        account.setAccountName(String.valueOf(user.getUserNo()));
         account.setState(true);
         account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
         accountRepository.save(account);
 
-        if (userDomain.getDepartmentIdList() != null && userDomain.getDepartmentIdList().size() > 0){
-            List<Long> departmentIdList = userDomain.getDepartmentIdList();
-            departmentIdList.forEach(departmentId ->{
+        if (userDomain.getDepartmentId() != null && userDomain.getDepartmentId() > 0){
+               Long departmentId1 = userDomain.getDepartmentId();
+            Optional<Department> departmentOptional = departmentRepository.findById(departmentId1);
+            departmentOptional.ifPresent(department -> {
                 UserDepartment userDepartment = new UserDepartment();
                 userDepartment.setUserId(user.getId());
-                userDepartment.setDepartmentId(departmentId);
+                userDepartment.setDepartmentId(departmentId1);
+                userDepartment.setOrganizationId(department.getOrganizationId());
                 userDepartmentRepository.save(userDepartment);
             });
         }
@@ -158,16 +150,12 @@ public class UserServiceImpl implements UserService {
         userOptional.ifPresent(user -> {
             User userR = new User();
             userR.setId(user.getId());
-            userR.setUserNo(userDomainV2.getUserNo());
             userR.setUserName(userDomainV2.getUserName());
             userR.setPhone(userDomainV2.getPhone());
-            userR.setIdType(userDomainV2.getIdType());
             userR.setIdNo(userDomainV2.getIdNo());
             userR.setEmail(userDomainV2.getEmail());
             userR.setSex(userDomainV2.getSex());
-            userR.setAddress(userDomainV2.getAddress());
             userR.setUpdateTime(new Date());
-            userR.setState(userDomainV2.isState());
             userR.setAge(userDomainV2.getAge());
             userRepository.save(userR);
 
@@ -175,11 +163,13 @@ public class UserServiceImpl implements UserService {
             userDepartmentList.forEach(userDepartment -> {
                 userDepartmentRepository.deleteById(userDepartment.getId());
             });
-            List<Long> departmentIdList = userDomainV2.getDepartmentIdList();
-            departmentIdList.forEach(departmentId ->{
+            Long departmentId = userDomainV2.getDepartmentId();
+            Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
+            departmentOptional.ifPresent(department -> {
                 UserDepartment userDepartment = new UserDepartment();
                 userDepartment.setDepartmentId(departmentId);
                 userDepartment.setUserId(userR.getId());
+                userDepartment.setOrganizationId(department.getOrganizationId());
                 userDepartmentRepository.save(userDepartment);
             });
         });
@@ -194,14 +184,14 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public PageDataDomain<UserDomainV2> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize) {
+    public PageDataDomain<UserDomainV5> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize) {
         Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
-        PageDataDomain<UserDomainV2> pageDataDomain = new PageDataDomain<>();
+        PageDataDomain<UserDomainV5> pageDataDomain = new PageDataDomain<>();
         departmentOptional.ifPresent(department -> {
             Integer startPage = (pageNumber-1)*pageSize;
-            List<UserDomainV2> crmMemberEntityPage = userDao.findUserByDepartmentId(departmentId, keyWord, startPage,pageSize);
+            List<UserDomainV5> crmMemberEntityPage = userDao.findUserByDepartmentId(departmentId, keyWord, startPage,pageSize);
             crmMemberEntityPage.forEach(crm -> {
-                crm.setDepartmentName(department.getDepartmentName());
+                crm.setDepartmentId(department.getId());
             });
             Long count = userDao.countUserEntitiesByDepartmentId(departmentId,keyWord);
             pageDataDomain.setCurrent(pageNumber);
@@ -228,6 +218,12 @@ public class UserServiceImpl implements UserService {
     @Async
     @Transactional
     public void deleteAccount(Long userId){
+        //删除部门用户关联表关系
+        List<UserDepartment> allByUserId = userDepartmentRepository.findAllByUserId(userId);
+        allByUserId.forEach(userDepartment -> {
+            userDepartmentRepository.deleteById(userDepartment.getId());
+        });
+
         accountRepository.deleteAllByUserId(userId);
         //将账户与角色关联表中的数据也删除
         List<Account> accountList = accountRepository.findByUserId(userId);

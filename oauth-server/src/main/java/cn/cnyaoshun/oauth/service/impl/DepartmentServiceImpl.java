@@ -5,6 +5,7 @@ import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.DepartmentDomain;
 import cn.cnyaoshun.oauth.domain.DepartmentDomainV2;
 import cn.cnyaoshun.oauth.domain.DepartmentDomainV3;
+import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.Department;
 import cn.cnyaoshun.oauth.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private  final AccountRepository accountRepository;
 
+    private final AccountRoleRepository accountRoleRepository;
+
     /**
      * 根据机构id获取部门树结构
      * @param organizationId
@@ -40,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public List<DepartmentDomain> findByOrganizationId(Long organizationId) {
-        List<Department> departmentList = departmentRepository.findByOrganizationIdOrderBySort(organizationId);
+        List<Department> departmentList = departmentRepository.findByOrganizationIdOrderByIdDesc(organizationId);
         List<DepartmentDomain> departmentDomainList = new ArrayList<>();
         Map<Long, List<Department>> departmentMap = new HashMap<>();
         departmentList.forEach(department -> {
@@ -84,16 +87,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(!organizationIdExt){
             throw new ExceptionValidation(418,"公司不存在请重新输入");
         }
-        Integer count = null;
-        if (departmentDomainV2.getParentId() == null){
-            count = departmentRepository.countByOrganizationIdAndParentIdIsNull(departmentDomainV2.getOrganizationId());
-        }else {
-            count = departmentRepository.countByOrganizationIdAndParentId(departmentDomainV2.getOrganizationId(),departmentDomainV2.getParentId());
-        }
         Department department = new Department();
         BeanUtils.copyProperties(departmentDomainV2, department);
-        department.setState(true);
-        department.setSort(count == 0L || count == null ? 1 : count + 1);
         departmentRepository.save(department);
         return department.getId();
     }
@@ -110,13 +105,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         departmentOptional.ifPresent((department ) -> {
 
-            Integer departmentSort = department.getSort();
-            List<Department> departmentList = departmentRepository.findByParentIdAndIdNotInAndSortGreaterThan(department.getParentId(),departmentId,departmentSort);
+            List<Department> departmentList = departmentRepository.findByParentIdAndIdNotIn(department.getParentId(),departmentId);
             departmentList.forEach(department1 -> {
-                if(department1.getSort() > departmentSort){
-                    department1.setSort(department1.getSort()-1);
                     departmentRepository.save(department1);
-                }
             });
         });
         departmentRepository.deleteById(departmentId);
@@ -144,6 +135,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         userIdList.forEach(userId ->{
             userRepository.deleteById(userId);
             accountRepository.deleteAllByUserId(userId);
+            List<Account> accountList = accountRepository.findByUserId(userId);
+            accountList.forEach(account -> {
+                accountRepository.deleteById(account.getId());
+            });
         });
     }
 

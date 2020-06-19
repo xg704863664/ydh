@@ -17,9 +17,7 @@ public class Organization extends AbstractEntity{
     private String organizationName;
     @Column(name = "address")
     private String address;
-    @Column(name = "description")
-    private String description;
-    @Column(name = "state")
-    private boolean state;
+    @Column(name = "organization_phone")
+    private Integer organizationPhone;
 
 }

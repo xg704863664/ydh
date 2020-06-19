@@ -14,20 +14,14 @@ import javax.validation.constraints.NotNull;
 @Data
 public class PermissionDomainV2 {
 
-    @ApiModelProperty(name = "项目ID")
+    @ApiModelProperty(value = "项目ID")
     private Long projectId;
 
-    @ApiModelProperty(name = "权限名称非空")
+    @ApiModelProperty(value = "权限名称非空")
     @NotNull(message = "权限名称不能为空")
     private String permissionName;
 
-    @ApiModelProperty(name = "权限描述")
-    private String description;
-
-    @ApiModelProperty(name = "权限类型")
+    @ApiModelProperty(value = "权限编码")
     private Integer permissionType;
-
-    @ApiModelProperty(name = "权限状态")
-    private boolean state;
 
 }
