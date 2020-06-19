@@ -12,4 +12,5 @@ import java.util.Set;
 public interface UserRepository extends PagingAndSortingRepository<User,Long>{
     void deleteAllByIdIn(Set<Long> ids);
     User findByUserName(String userName);
+    User findByPhone(String phone);
 }

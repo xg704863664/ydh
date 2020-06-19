@@ -11,4 +11,5 @@ public interface UserDepartmentRepository extends JpaRepository<UserDepartment,L
     List<UserDepartment> findAllByUserId(Long userId);
     Long countByUserId(Long department);
     void deleteByUserId(Long userId);
+    UserDepartment findByDepartmentIdAndUserId(Long departmentId,Long userId);
 }
