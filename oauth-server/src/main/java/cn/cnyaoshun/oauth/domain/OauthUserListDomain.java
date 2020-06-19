@@ -17,15 +17,15 @@ public class OauthUserListDomain {
     @ApiModelProperty(value = "账户ID")
     private Long accountId;
 
+    @ApiModelProperty(value = "角色集合")
+    private List<RoleDomainV3> roleList;
+
+    @ApiModelProperty(value = "权限集合")
+    private List<PermissionDomainOauthList> permissionList;
+
     @ApiModelProperty(value = "用户ID")
     private Long userId;
 
     @ApiModelProperty(value = "用户名称")
     private String userName;
-
-    @ApiModelProperty(value = "角色ID的集合")
-    private List<RoleDomainV3> roleList;
-
-    @ApiModelProperty(value = "权限ID集合")
-    private List<PermissionDomainOauthList> permissionList;
 }

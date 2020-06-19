@@ -25,7 +25,7 @@ public class PermissionDomainV3 {
     private String permissionName;
 
     @ApiModelProperty(value = "权限编码")
-    private Integer permissionType;
+    private String permissionType;
 
     @ApiModelProperty(value = "项目ID")
     private Long projectId;

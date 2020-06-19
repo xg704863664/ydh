@@ -21,6 +21,6 @@ public class PermissionDomainOauthList {
     private String permissionName;
 
     @ApiModelProperty(value = "权限编码")
-    private Integer permissionType;
+    private String permissionType;
 
 }
