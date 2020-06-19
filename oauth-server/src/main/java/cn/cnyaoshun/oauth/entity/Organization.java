@@ -18,6 +18,6 @@ public class Organization extends AbstractEntity{
     @Column(name = "address")
     private String address;
     @Column(name = "organization_phone")
-    private Integer organizationPhone;
+    private String organizationPhone;
 
 }
