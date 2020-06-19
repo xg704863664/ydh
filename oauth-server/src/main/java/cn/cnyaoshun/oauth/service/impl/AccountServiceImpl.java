@@ -5,7 +5,6 @@ import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.AccountDomainV2;
 import cn.cnyaoshun.oauth.domain.AccountDomainV3;
 import cn.cnyaoshun.oauth.domain.AccountDomainV4;
-import cn.cnyaoshun.oauth.domain.AccountDomainV5;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.AccountRole;
 import cn.cnyaoshun.oauth.entity.Role;
@@ -21,7 +20,6 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * @ClassName AccountServiceImpl
@@ -72,49 +70,6 @@ public class AccountServiceImpl implements AccountService{
             }
         });
         return pageDataDomain;
-    }
-
-    /**
-     * 分配账户
-     * @param accountDomainV5
-     * @return
-     */
-    @Override
-    @Transactional
-    public Long assignAccount(AccountDomainV5 accountDomainV5) {
-        Long roleId = accountDomainV5.getRoleId();
-        Set<String> accountNameList = accountDomainV5.getAccountName();
-        List<AccountRole> accountRoleList = accountRoleRepository.findAllByRoleId(roleId);
-        if(accountRoleList.isEmpty()){
-            accountNameList.forEach(accountName -> {
-                AccountRole accountRole = new AccountRole();
-                Account account = accountRepository.findByAccountName(accountName);
-                accountRole.setRoleId(account.getId());
-                accountRole.setRoleId(roleId);
-                accountRoleRepository.save(accountRole);
-            });
-        }else{
-            //合并去重
-            accountRoleList.forEach(accountRole -> {
-                Optional<Account> accountOptional = accountRepository.findById(accountRole.getAccountId());
-                accountOptional.ifPresent(account -> {
-                    accountNameList.add(account.getAccountName());
-                });
-            });
-            accountNameList.forEach(accountName ->{
-                Account byAccountName = accountRepository.findByAccountName(accountName);
-                List<AccountRole> allByAccountId = accountRoleRepository.findAllByAccountId(byAccountName.getId());
-                allByAccountId.forEach(accountRole -> {
-                    if(accountRole == null){
-                        AccountRole accountRoleNew = new AccountRole();
-                        accountRoleNew.setRoleId(accountRole.getRoleId());
-                        accountRoleNew.setAccountId(byAccountName.getId());
-                        accountRoleRepository.save(accountRoleNew);
-                    }
-                });
-            });
-        }
-        return roleId;
     }
 
     @Override
