@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +28,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 
 @RestController
@@ -50,12 +52,10 @@ public class ExcelImportController {
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         log.info("2");
         try {
-            File file = ResourceUtils.getFile("classpath:organization_template.xlsx");
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("organization_template.xlsx");
             log.info("3");
-            bytes = FileUtils.readFileToByteArray(file);
-            log.info("file size:"+file.length());
+            bytes = IOUtils.toByteArray(inputStream);
             httpHeaders.setContentDispositionFormData("attachment", URLEncoder.encode("organization_template.xlsx","utf-8"));
-//            httpHeaders.set("Content-Type", "application/octet-stream");
         } catch (IOException e) {
             e.printStackTrace();
         }
