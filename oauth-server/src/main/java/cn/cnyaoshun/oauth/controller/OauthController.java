@@ -7,16 +7,16 @@ import cn.cnyaoshun.oauth.domain.OauthUserListDomain;
 import cn.cnyaoshun.oauth.service.OauthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.validation.constraints.NotNull;
 
 
 @RestController
@@ -55,8 +55,8 @@ public class OauthController {
     }
 
     @ApiOperation(value = "根据TOKEN和ProjectId,获取账号信息",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @RequestMapping(value = "/getAllUserInfo",method = RequestMethod.GET)
-    public ReturnJsonData<OauthUserListDomain> getAllUserInfo(@ApiIgnore OAuth2Authentication oAuth2Authentication, Long projectId){
+    @RequestMapping(value = "/getAllUserInfo/{projectId}",method = RequestMethod.GET)
+    public ReturnJsonData<OauthUserListDomain> getAllUserInfo(@ApiIgnore OAuth2Authentication oAuth2Authentication, @NotNull @ApiParam(value = "项目ID",required = true) @PathVariable(name = "projectId") Long projectId){
         OauthUserListDomain allUserInfo = oauthService.getAllUserInfo(oAuth2Authentication, projectId);
         return ReturnJsonData.build(allUserInfo);
     }
