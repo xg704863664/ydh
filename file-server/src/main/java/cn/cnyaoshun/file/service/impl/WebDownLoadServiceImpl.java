@@ -27,8 +27,8 @@ public class WebDownLoadServiceImpl implements DownLoadBaseService {
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         File file = new File(fileRecord.getPath());
         try {
-            httpHeaders.setContentDispositionFormData("attachment", URLEncoder.encode(fileRecord.getName(), "UTF-8"));
-            httpHeaders.set("Content-Type", "application/octet-stream;charset=utf-8");
+            httpHeaders.setContentDispositionFormData("attachment", fileRecord.getName());
+            httpHeaders.set("Content-Type", "application/octet-stream");
             bytes = FileUtils.readFileToByteArray(file);
         } catch (IOException e) {
             throw new ExceptionValidation(ApiCode.DOWNLOAD_File_FAIL.getCode(), ApiCode.DOWNLOAD_File_FAIL.getMsg());

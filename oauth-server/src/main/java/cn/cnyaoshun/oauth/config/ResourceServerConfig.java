@@ -9,9 +9,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig implements ResourceServerConfigurer {
-
     @Override
     public void configure(ResourceServerSecurityConfigurer resourceServerSecurityConfigurer) throws Exception {
+
     }
 
     @Override
@@ -24,6 +24,7 @@ public class ResourceServerConfig implements ResourceServerConfigurer {
                          .mvcMatchers("/department/**").authenticated()
                          .mvcMatchers("/role/**").authenticated()
                          .mvcMatchers("/account/**").authenticated()
-                         .mvcMatchers("/permission/**").authenticated();
+                         .mvcMatchers("/permission/**").authenticated()
+                         .mvcMatchers("/import/**").authenticated();
     }
 }
