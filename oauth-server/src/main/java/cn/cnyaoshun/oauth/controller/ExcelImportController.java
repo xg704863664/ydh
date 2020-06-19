@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ import java.net.URLEncoder;
 @Api(description = "excel导入操作API")
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class ExcelImportController {
 
     private final ExcelImportService excelImportService;
@@ -48,6 +50,7 @@ public class ExcelImportController {
         try {
             File file = ResourceUtils.getFile("classpath:organization_template.xlsx");
             bytes = FileUtils.readFileToByteArray(file);
+            log.info("file size:"+file.length());
             httpHeaders.setContentDispositionFormData("attachment", URLEncoder.encode("organization_template.xlsx","utf-8"));
             httpHeaders.set("Content-Type", "application/octet-stream");
         } catch (IOException e) {
