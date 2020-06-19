@@ -1,5 +1,9 @@
 package cn.cnyaoshun.oauth.controller;
 
+import cn.cnyaoshun.oauth.common.ApiCode;
+import cn.cnyaoshun.oauth.common.ReturnJsonData;
+import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
+import cn.cnyaoshun.oauth.common.util.RedisTokenUtil;
 import cn.cnyaoshun.oauth.service.ExcelImportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +36,8 @@ public class ExcelImportController {
 
     private final ExcelImportService excelImportService;
 
+    private final RedisTokenUtil redisTokenUtil;
+
     @RequestMapping(value = "/org/department/download", method = RequestMethod.GET)
     @ApiOperation(value = "下载组织机构模版", httpMethod = "GET")
     public ResponseEntity<byte[]> downloadOrgDepartmentExcel() {
@@ -50,10 +56,23 @@ public class ExcelImportController {
     }
 
 
+    @RequestMapping(value = "/excel/token", method = RequestMethod.GET)
+    @ApiOperation(value = "获取excel操作token", httpMethod = "GET")
+    public ReturnJsonData<String> getOperationExcelToken() {
+        String token = redisTokenUtil.createToken();
+        return ReturnJsonData.build(token);
+    }
+
+
     @RequestMapping(value = "/excel/upload", method = RequestMethod.POST)
     @ApiOperation(value = "excel导入", httpMethod = "POST")
-    public String importOrgDepartmentExcel(@NotNull @ApiParam(value = "file 文件") @RequestParam("file")MultipartFile file, @NotBlank(message = "dealType处理类型不能为空") @ApiParam(value ="dealType处理类型" ) @RequestParam(value = "dealType") String dealType) {
+    public ReturnJsonData<String> importOrgDepartmentExcel(@NotNull @ApiParam(value = "file 文件") @RequestParam("file")MultipartFile file,
+                                           @NotBlank(message = "operationToken 不能为空") @ApiParam(value ="operationToken 操作token 防重复提交",required = true) @RequestParam(value = "operationToken") String operationToken,
+                                           @NotBlank(message = "dealType处理类型不能为空") @ApiParam(value ="dealType处理类型",required = true) @RequestParam(value = "dealType") String dealType) {
+        if (!redisTokenUtil.checkToken(operationToken)){
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"operationToken 无效token");
+        }
         excelImportService.dealExcel(dealType,file);
-        return "success";
+        return ReturnJsonData.build("success");
     }
 }
