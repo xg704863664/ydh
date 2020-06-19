@@ -1,5 +1,6 @@
 package cn.cnyaoshun.oauth.domain;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Set;
@@ -13,7 +14,9 @@ import java.util.Set;
 @Data
 public class AccountDomainV5 {
 
+    @ApiModelProperty(value = "角色ID")
     private Long roleId;
 
+    @ApiModelProperty(value = "账户名称")
     private Set<String> accountName;
 }

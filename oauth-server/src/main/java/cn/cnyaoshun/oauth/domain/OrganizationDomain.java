@@ -13,14 +13,14 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class OrganizationDomain {
 
-    @ApiModelProperty(name = "公司名称")
+    @ApiModelProperty(value = "公司名称")
     @NotBlank(message = "公司名称不能为空")
     private String organizationName;
 
-    @ApiModelProperty(name="公司地址")
+    @ApiModelProperty(value="公司地址")
     private String address;
 
-    @ApiModelProperty(name = "电话")
+    @ApiModelProperty(value = "电话")
     private String organizationPhone;
 
 }

@@ -11,16 +11,16 @@ import lombok.Data;
 @Data
 public class OrganizationDomainV2 {
 
-    @ApiModelProperty(name = "ID")
+    @ApiModelProperty(value = "ID")
     private  Long id;
 
-    @ApiModelProperty(name = "公司名称")
+    @ApiModelProperty(value = "公司名称")
     private String organizationName;
 
-    @ApiModelProperty(name="公司地址")
+    @ApiModelProperty(value="公司地址")
     private String address;
 
-    @ApiModelProperty(name = "电话")
+    @ApiModelProperty(value = "电话")
     private String organizationPhone;
 
 }

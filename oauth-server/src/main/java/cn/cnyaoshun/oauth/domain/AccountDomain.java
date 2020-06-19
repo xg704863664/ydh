@@ -11,13 +11,13 @@ import lombok.Data;
 @Data
 public class AccountDomain {
 
-    @ApiModelProperty(name = "用户ID")
+    @ApiModelProperty(value = "用户ID")
     private Long userId;
 
-    @ApiModelProperty(name = "账号")
+    @ApiModelProperty(value = "账号")
     private String accountName;
 
-    @ApiModelProperty(name = "密码")
+    @ApiModelProperty(value = "密码")
     private  String password;
 
 }
