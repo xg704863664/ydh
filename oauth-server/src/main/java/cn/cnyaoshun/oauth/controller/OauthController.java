@@ -3,6 +3,8 @@ package cn.cnyaoshun.oauth.controller;
 import cn.cnyaoshun.oauth.common.ApiCode;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
 import cn.cnyaoshun.oauth.common.exception.ExceptionAuth;
+import cn.cnyaoshun.oauth.domain.OauthUserListDomain;
+import cn.cnyaoshun.oauth.service.OauthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,8 @@ import springfox.documentation.annotations.ApiIgnore;
 public class OauthController {
 
     private final TokenStore tokenStore;
+
+    private final OauthService oauthService;
 
 
     @ApiOperation(value = "校验TOKEN是否有效",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -48,5 +52,12 @@ public class OauthController {
         OAuth2AccessToken accessToken = tokenStore.getAccessToken(oAuth2Authentication);
         tokenStore.removeAccessToken(accessToken);
         return  ReturnJsonData.build("success");
+    }
+
+    @ApiOperation(value = "根据TOKEN和ProjectId,获取账号信息",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/getAllUserInfo",method = RequestMethod.GET)
+    public ReturnJsonData<OauthUserListDomain> getAllUserInfo(@ApiIgnore OAuth2Authentication oAuth2Authentication, Long projectId){
+        OauthUserListDomain allUserInfo = oauthService.getAllUserInfo(oAuth2Authentication, projectId);
+        return ReturnJsonData.build(allUserInfo);
     }
 }
