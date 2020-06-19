@@ -44,15 +44,18 @@ public class ExcelImportController {
     @RequestMapping(value = "/org/department/download", method = RequestMethod.GET)
     @ApiOperation(value = "下载组织机构模版", httpMethod = "GET")
     public ResponseEntity<byte[]> downloadOrgDepartmentExcel() {
+        log.info("1");
         byte[] bytes = null;
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        log.info("2");
         try {
             File file = ResourceUtils.getFile("classpath:organization_template.xlsx");
+            log.info("3");
             bytes = FileUtils.readFileToByteArray(file);
             log.info("file size:"+file.length());
             httpHeaders.setContentDispositionFormData("attachment", URLEncoder.encode("organization_template.xlsx","utf-8"));
-            httpHeaders.set("Content-Type", "application/octet-stream");
+//            httpHeaders.set("Content-Type", "application/octet-stream");
         } catch (IOException e) {
             e.printStackTrace();
         }
