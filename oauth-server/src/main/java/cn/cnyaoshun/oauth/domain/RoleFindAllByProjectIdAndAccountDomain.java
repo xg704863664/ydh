@@ -14,7 +14,7 @@ import java.util.Date;
  * Date 2020-6-1515:02
  */
 @Data
-public class RoleDomainV3 {
+public class RoleFindAllByProjectIdAndAccountDomain {
 
     @ApiModelProperty(value = "角色ID")
     private Long id;

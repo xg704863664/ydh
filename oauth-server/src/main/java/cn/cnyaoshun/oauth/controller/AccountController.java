@@ -2,9 +2,9 @@ package cn.cnyaoshun.oauth.controller;
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
-import cn.cnyaoshun.oauth.domain.AccountDomainV2;
-import cn.cnyaoshun.oauth.domain.AccountDomainV3;
-import cn.cnyaoshun.oauth.domain.AccountDomainV4;
+import cn.cnyaoshun.oauth.domain.AccountFindAllByRoleIdDomain;
+import cn.cnyaoshun.oauth.domain.AccountAddDomain;
+import cn.cnyaoshun.oauth.domain.AccountUpdateDomain;
 import cn.cnyaoshun.oauth.service.AccountService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,18 +35,18 @@ public class AccountController {
 
     @ApiOperation(value = "根据角色ID获取账户列表",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/findAll/{roleId}", method = RequestMethod.GET)
-    public ReturnJsonData<PageDataDomain<AccountDomainV2>> findAllByRoleId(@NotNull @ApiParam(value = "角色ID",required = true) @PathVariable(name = "roleId") Long roleId,
-                                                           @ApiParam(value = "根据账号搜索账户信息") @RequestParam(value = "keyWord",required = false) String keyWord,
-                                                           @Min(1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber")Integer pageNumber,
-                                                           @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")Integer pageSize ){
-        PageDataDomain<AccountDomainV2> accountList = accountService.findAllByRoleId(roleId, keyWord, pageNumber, pageSize);
+    public ReturnJsonData<PageDataDomain<AccountFindAllByRoleIdDomain>> findAllByRoleId(@NotNull @ApiParam(value = "角色ID",required = true) @PathVariable(name = "roleId") Long roleId,
+                                                                                        @ApiParam(value = "根据账号搜索账户信息") @RequestParam(value = "keyWord",required = false) String keyWord,
+                                                                                        @Min(1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber")Integer pageNumber,
+                                                                                        @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")Integer pageSize ){
+        PageDataDomain<AccountFindAllByRoleIdDomain> accountList = accountService.findAllByRoleId(roleId, keyWord, pageNumber, pageSize);
         return ReturnJsonData.build(accountList);
     }
 
     @ApiOperation(value = "新增账户为其赋予角色",httpMethod = "POST",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public ReturnJsonData<Long> add(@Valid @RequestBody AccountDomainV3 accountDomainV3){
-        Long accountId = accountService.add(accountDomainV3);
+    public ReturnJsonData<Long> add(@Valid @RequestBody AccountAddDomain accountAddDomain){
+        Long accountId = accountService.add(accountAddDomain);
         return ReturnJsonData.build(accountId);
     }
 
@@ -59,8 +59,8 @@ public class AccountController {
 
     @ApiOperation(value = "根据账户ID,修改账户信息",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/update",method = RequestMethod.PUT)
-    public ReturnJsonData<Long> update(@Valid @RequestBody AccountDomainV4 accountDomainV4){
-        Long id = accountService.update(accountDomainV4);
+    public ReturnJsonData<Long> update(@Valid @RequestBody AccountUpdateDomain accountUpdateDomain){
+        Long id = accountService.update(accountUpdateDomain);
         return ReturnJsonData.build(id);
     }
 

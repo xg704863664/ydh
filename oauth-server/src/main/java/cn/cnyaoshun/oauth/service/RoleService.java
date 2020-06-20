@@ -1,8 +1,8 @@
 package cn.cnyaoshun.oauth.service;
 
-import cn.cnyaoshun.oauth.domain.RoleDomain;
-import cn.cnyaoshun.oauth.domain.RoleDomainV2;
-import cn.cnyaoshun.oauth.domain.RoleDomainV3;
+import cn.cnyaoshun.oauth.domain.RoleAddDomain;
+import cn.cnyaoshun.oauth.domain.RoleUpdateDomain;
+import cn.cnyaoshun.oauth.domain.RoleFindAllByProjectIdAndAccountDomain;
 
 import java.util.List;
 
@@ -11,10 +11,10 @@ import java.util.List;
  */
 public interface RoleService {
 
-    Long add(RoleDomain roleDomain);
+    Long add(RoleAddDomain roleAddDomain);
     Long delete(Long roleId);
-    List<RoleDomainV2> findAllByProjectId(Long projectId);
-    Long update(RoleDomainV2 roleDomainV2);
-    List<RoleDomainV3> findAll();
+    List<RoleUpdateDomain> findAllByProjectId(Long projectId);
+    Long update(RoleUpdateDomain roleUpdateDomain);
+    List<RoleFindAllByProjectIdAndAccountDomain> findAll();
 
 }

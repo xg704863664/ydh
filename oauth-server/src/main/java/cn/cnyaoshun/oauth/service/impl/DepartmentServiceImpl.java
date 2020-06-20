@@ -2,9 +2,9 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.*;
-import cn.cnyaoshun.oauth.domain.DepartmentDomain;
-import cn.cnyaoshun.oauth.domain.DepartmentDomainV2;
-import cn.cnyaoshun.oauth.domain.DepartmentDomainV3;
+import cn.cnyaoshun.oauth.domain.DepartmentTreeDomain;
+import cn.cnyaoshun.oauth.domain.DepartmentAddDomain;
+import cn.cnyaoshun.oauth.domain.DepartmentUpdateDomain;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.Department;
 import cn.cnyaoshun.oauth.service.DepartmentService;
@@ -34,21 +34,23 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private  final AccountRepository accountRepository;
 
+    private final AccountRoleRepository accountRoleRepository;
+
     /**
      * 根据机构id获取部门树结构
      * @param organizationId
      * @return
      */
     @Override
-    public List<DepartmentDomain> findByOrganizationId(Long organizationId) {
+    public List<DepartmentTreeDomain> findByOrganizationId(Long organizationId) {
         List<Department> departmentList = departmentRepository.findByOrganizationIdOrderByIdDesc(organizationId);
-        List<DepartmentDomain> departmentDomainList = new ArrayList<>();
+        List<DepartmentTreeDomain> departmentTreeDomainList = new ArrayList<>();
         Map<Long, List<Department>> departmentMap = new HashMap<>();
         departmentList.forEach(department -> {
             if (department.getParentId() == null) {
-                DepartmentDomain departmentDomain = new DepartmentDomain();
-                BeanUtils.copyProperties(department, departmentDomain);
-                departmentDomainList.add(departmentDomain);
+                DepartmentTreeDomain departmentTreeDomain = new DepartmentTreeDomain();
+                BeanUtils.copyProperties(department, departmentTreeDomain);
+                departmentTreeDomainList.add(departmentTreeDomain);
             } else {
                 List<Department> departments = departmentMap.get(department.getParentId());
                 if (departments == null) {
@@ -58,33 +60,33 @@ public class DepartmentServiceImpl implements DepartmentService {
                 departmentMap.put(department.getParentId(), departments);
             }
         });
-        departmentDomainList.forEach(departmentDomain -> {
-            recursiveDepartment(departmentDomain,departmentMap);
+        departmentTreeDomainList.forEach(departmentTreeDomain -> {
+            recursiveDepartment(departmentTreeDomain,departmentMap);
         });
-        return departmentDomainList;
+        return departmentTreeDomainList;
     }
 
     /**
      * 新增部门
-     * @param departmentDomainV2
+     * @param departmentAddDomain
      * @return
      */
     @Override
-    public Long add(DepartmentDomainV2 departmentDomainV2) {
+    public Long add(DepartmentAddDomain departmentAddDomain) {
 
-        if(departmentDomainV2.getParentId()!=null &&  departmentDomainV2.getParentId() == 0){
+        if(departmentAddDomain.getParentId()!=null &&  departmentAddDomain.getParentId() == 0){
             throw  new ExceptionValidation(418,"父节点ID不能为0");
         }
-        boolean depNumber = departmentRepository.existsByDepartmentNo(departmentDomainV2.getDepartmentNo());
+        boolean depNumber = departmentRepository.existsByDepartmentNo(departmentAddDomain.getDepartmentNo());
         if(depNumber){
             throw new ExceptionValidation(418,"部门编号已存在");
         }
-        boolean organizationIdExt = organizationRepository.existsById(departmentDomainV2.getOrganizationId());
+        boolean organizationIdExt = organizationRepository.existsById(departmentAddDomain.getOrganizationId());
         if(!organizationIdExt){
             throw new ExceptionValidation(418,"公司不存在请重新输入");
         }
         Department department = new Department();
-        BeanUtils.copyProperties(departmentDomainV2, department);
+        BeanUtils.copyProperties(departmentAddDomain, department);
         departmentRepository.save(department);
         return department.getId();
     }
@@ -113,16 +115,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional
-    public Long update(DepartmentDomainV3 departmentDomainV3) {
+    public Long update(DepartmentUpdateDomain departmentUpdateDomain) {
 
-        Optional<Department> departmentOptional = departmentRepository.findById(departmentDomainV3.getDepartmentId());
+        Optional<Department> departmentOptional = departmentRepository.findById(departmentUpdateDomain.getDepartmentId());
         departmentOptional.ifPresent(department -> {
            department.setId(department.getId());
-           department.setDepartmentName(departmentDomainV3.getDepartmentName());
+           department.setDepartmentName(departmentUpdateDomain.getDepartmentName());
            department.setUpdateTime(new Date());
            departmentRepository.save(department);
        });
-        return departmentDomainV3.getDepartmentId();
+        return departmentUpdateDomain.getDepartmentId();
     }
 
     @Async
@@ -135,24 +137,24 @@ public class DepartmentServiceImpl implements DepartmentService {
             accountRepository.deleteAllByUserId(userId);
             List<Account> accountList = accountRepository.findByUserId(userId);
             accountList.forEach(account -> {
-                accountRepository.deleteById(account.getId());
+                accountRoleRepository.deleteAllByAccountId(account.getId());
             });
         });
     }
 
     /**
      * 递归组装部门树结构
-     * @param departmentDomain
+     * @param departmentTreeDomain
      * @param departmentMap
      */
-    private void recursiveDepartment(DepartmentDomain departmentDomain,Map<Long, List<Department>> departmentMap){
+    private void recursiveDepartment(DepartmentTreeDomain departmentTreeDomain, Map<Long, List<Department>> departmentMap){
 
-        List<Department> departmentList = departmentMap.get(departmentDomain.getId());
+        List<Department> departmentList = departmentMap.get(departmentTreeDomain.getId());
 
         Optional.ofNullable(departmentList).ifPresent(departments -> departments.forEach(department -> {
-            DepartmentDomain departDomain = new DepartmentDomain();
+            DepartmentTreeDomain departDomain = new DepartmentTreeDomain();
             BeanUtils.copyProperties(department, departDomain);
-            departmentDomain.getChildren().add(departDomain);
+            departmentTreeDomain.getChildren().add(departDomain);
             recursiveDepartment(departDomain,departmentMap);
         }));
     }

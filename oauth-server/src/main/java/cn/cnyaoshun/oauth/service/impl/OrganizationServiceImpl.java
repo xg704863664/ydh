@@ -1,9 +1,9 @@
 package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.dao.*;
-import cn.cnyaoshun.oauth.domain.OrganizationDomain;
-import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
-import cn.cnyaoshun.oauth.domain.OrganizationDomainV3;
+import cn.cnyaoshun.oauth.domain.OrganizationAddDomain;
+import cn.cnyaoshun.oauth.domain.OrganizationUpdateDomain;
+import cn.cnyaoshun.oauth.domain.OrganizationFindAllDomain;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.Organization;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
@@ -37,35 +37,35 @@ public class OrganizationServiceImpl implements OrganizationService{
     private final AccountRoleRepository accountRoleRepository;
     /**
      * 新增
-     * @param organizationDomain
+     * @param organizationAddDomain
      * @return
      */
     @Override
     @Transactional
-    public Long add(OrganizationDomain organizationDomain){
+    public Long add(OrganizationAddDomain organizationAddDomain){
         Organization organization = new Organization();
-        BeanUtils.copyProperties(organizationDomain, organization);
+        BeanUtils.copyProperties(organizationAddDomain, organization);
         Organization SaveOrganization = organizationRepository.save(organization);
         return SaveOrganization.getId();
     }
 
     /**
      * 修改
-     * @param organizationDomainV2
+     * @param organizationUpdateDomain
      * @return
      */
     @Override
     @Transactional
-    public Long update(OrganizationDomainV2 organizationDomainV2){
-        Optional<Organization> organizationOptional = organizationRepository.findById(organizationDomainV2.getId());
+    public Long update(OrganizationUpdateDomain organizationUpdateDomain){
+        Optional<Organization> organizationOptional = organizationRepository.findById(organizationUpdateDomain.getId());
         //满足条件时(organizationOptional为true时)进入下面条件
         organizationOptional.ifPresent(organization -> {
-            BeanUtils.copyProperties(organizationDomainV2,organization);
+            BeanUtils.copyProperties(organizationUpdateDomain,organization);
             organization.setId(organization.getId());
             organization.setUpdateTime(new Date());
             organizationRepository.save(organization);
         });
-        return organizationDomainV2.getId();
+        return organizationUpdateDomain.getId();
     }
 
     /**
@@ -86,17 +86,17 @@ public class OrganizationServiceImpl implements OrganizationService{
      * @return
      */
     @Override
-    public List<OrganizationDomainV3> findAll(){
+    public List<OrganizationFindAllDomain> findAll(){
 
         List<Organization> organizationList = organizationRepository.findAll();
-        List<OrganizationDomainV3> organizationDaomainList = new ArrayList<>();
+        List<OrganizationFindAllDomain> organizationDaomainList = new ArrayList<>();
         organizationList.forEach(organization -> {
-            OrganizationDomainV3 organizationDomainV3 = new OrganizationDomainV3();
-            organizationDomainV3.setId(organization.getId());
-            organizationDomainV3.setOrganizationName(organization.getOrganizationName());
-            organizationDomainV3.setAddress(organization.getAddress());
-            organizationDomainV3.setType(1);
-            organizationDaomainList.add(organizationDomainV3);
+            OrganizationFindAllDomain organizationFindAllDomain = new OrganizationFindAllDomain();
+            organizationFindAllDomain.setId(organization.getId());
+            organizationFindAllDomain.setOrganizationName(organization.getOrganizationName());
+            organizationFindAllDomain.setAddress(organization.getAddress());
+            organizationFindAllDomain.setType(1);
+            organizationDaomainList.add(organizationFindAllDomain);
         });
         return organizationDaomainList;
     }

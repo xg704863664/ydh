@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 @Data
-public class ProjectDomain{
+public class ProjectListDomain {
 
     @ApiModelProperty(value = "项目ID")
     private Long id;

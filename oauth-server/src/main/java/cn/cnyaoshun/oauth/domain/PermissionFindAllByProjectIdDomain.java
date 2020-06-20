@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Date 2020/6/179:57
  */
 @Data
-public class PermissionDomainV2 {
+public class PermissionFindAllByProjectIdDomain {
 
     @ApiModelProperty(value = "项目ID")
     private Long projectId;

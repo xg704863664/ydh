@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * Date 2020/6/179:57
  */
 @Data
-public class PermissionDomainOauthList {
+public class PermissionOauthUserListDomain {
 
     @ApiModelProperty(value = "权限ID")
     private Long id;

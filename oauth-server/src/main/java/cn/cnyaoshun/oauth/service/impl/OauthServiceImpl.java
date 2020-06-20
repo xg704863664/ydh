@@ -4,8 +4,8 @@ import cn.cnyaoshun.oauth.dao.AccountRepository;
 import cn.cnyaoshun.oauth.dao.OauthUserListDao;
 import cn.cnyaoshun.oauth.dao.UserRepository;
 import cn.cnyaoshun.oauth.domain.OauthUserListDomain;
-import cn.cnyaoshun.oauth.domain.PermissionDomainOauthList;
-import cn.cnyaoshun.oauth.domain.RoleDomainV3;
+import cn.cnyaoshun.oauth.domain.PermissionOauthUserListDomain;
+import cn.cnyaoshun.oauth.domain.RoleFindAllByProjectIdAndAccountDomain;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.User;
 import cn.cnyaoshun.oauth.entity.UserDetailsImpl;
@@ -43,13 +43,13 @@ public class OauthServiceImpl implements OauthService {
         UserDetailsImpl userAuthenticationPrincipal = (UserDetailsImpl)userAuthentication.getPrincipal();
         String accountName = userAuthenticationPrincipal.getUsername();
         Long accountId = userAuthenticationPrincipal.getId();
-        List<RoleDomainV3> roleList = oauthUserListDao.getAllRoleDomain(accountId, projectId);
+        List<RoleFindAllByProjectIdAndAccountDomain> roleList = oauthUserListDao.getAllRoleDomain(accountId, projectId);
         List<Long> roleIdList = new ArrayList<>();
         roleList.forEach(roleDomainV3 -> {
             roleIdList.add(roleDomainV3.getId());
         });
         if(!roleIdList.isEmpty()){
-            List<PermissionDomainOauthList> permissionList = oauthUserListDao.getAllPermissionList(roleIdList);
+            List<PermissionOauthUserListDomain> permissionList = oauthUserListDao.getAllPermissionList(roleIdList);
             oauthUserListDomain.setPermissionList(permissionList);
         }
         Account account = accountRepository.findByAccountName(accountName);

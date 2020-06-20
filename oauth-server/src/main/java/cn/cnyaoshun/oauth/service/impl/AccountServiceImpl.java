@@ -2,9 +2,9 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.dao.*;
-import cn.cnyaoshun.oauth.domain.AccountDomainV2;
-import cn.cnyaoshun.oauth.domain.AccountDomainV3;
-import cn.cnyaoshun.oauth.domain.AccountDomainV4;
+import cn.cnyaoshun.oauth.domain.AccountFindAllByRoleIdDomain;
+import cn.cnyaoshun.oauth.domain.AccountAddDomain;
+import cn.cnyaoshun.oauth.domain.AccountUpdateDomain;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.AccountRole;
 import cn.cnyaoshun.oauth.entity.Role;
@@ -52,21 +52,21 @@ public class AccountServiceImpl implements AccountService{
      * @return
      */
     @Override
-    public PageDataDomain<AccountDomainV2> findAllByRoleId(Long roleId, String keyWord, Integer pageNumber, Integer pageSize) {
-        PageDataDomain<AccountDomainV2> pageDataDomain = new PageDataDomain<>();
+    public PageDataDomain<AccountFindAllByRoleIdDomain> findAllByRoleId(Long roleId, String keyWord, Integer pageNumber, Integer pageSize) {
+        PageDataDomain<AccountFindAllByRoleIdDomain> pageDataDomain = new PageDataDomain<>();
         Optional<Role> roleOptional = roleRepository.findById(roleId);
         roleOptional.ifPresent(role -> {
             Integer startPage = (pageNumber-1)*pageSize;
-            List<AccountDomainV2> accountDomainV2List = accountDao.findAllByRoleId(roleId, keyWord, startPage, pageSize);
+            List<AccountFindAllByRoleIdDomain> accountFindAllByRoleIdDomainList = accountDao.findAllByRoleId(roleId, keyWord, startPage, pageSize);
             Long countAccountByRoleId = accountDao.countAccountByRoleId(roleId, keyWord);
             pageDataDomain.setCurrent(pageNumber);
             pageDataDomain.setSize(pageSize);
             Integer total=Integer.parseInt(countAccountByRoleId+"")/pageSize+(Integer.parseInt(countAccountByRoleId+"")%pageSize>0?1:0);
             pageDataDomain.setTotal(countAccountByRoleId);
             pageDataDomain.setPages(total);
-            for (AccountDomainV2 accountDomainV2 : accountDomainV2List) {
-                accountDomainV2.setRoleName(role.getRoleName());
-                pageDataDomain.getRecords().add(accountDomainV2);
+            for (AccountFindAllByRoleIdDomain accountFindAllByRoleIdDomain : accountFindAllByRoleIdDomainList) {
+                accountFindAllByRoleIdDomain.setRoleName(role.getRoleName());
+                pageDataDomain.getRecords().add(accountFindAllByRoleIdDomain);
             }
         });
         return pageDataDomain;
@@ -74,16 +74,16 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     @Transactional
-    public Long update(AccountDomainV4 accountDomainV4) {
-        Optional<Account> accountD = accountRepository.findById(accountDomainV4.getId());
+    public Long update(AccountUpdateDomain accountUpdateDomain) {
+        Optional<Account> accountD = accountRepository.findById(accountUpdateDomain.getId());
         accountD.ifPresent(account -> {
             Account accountU = new Account();
             accountU.setId(account.getId());
-            accountU.setState(accountDomainV4.isState());
-            accountU.setAccountName(accountDomainV4.getAccountName());
-            accountU.setPassword(bCryptPasswordEncoder.encode(accountDomainV4.getPassword())); //密码修改后进行加密处理
+            accountU.setState(accountUpdateDomain.isState());
+            accountU.setAccountName(accountUpdateDomain.getAccountName());
+            accountU.setPassword(bCryptPasswordEncoder.encode(accountUpdateDomain.getPassword())); //密码修改后进行加密处理
             accountU.setUpdateTime(new Date());
-            User user = userRepository.findByUserName(accountDomainV4.getUserName());
+            User user = userRepository.findByUserName(accountUpdateDomain.getUserName());
             accountU.setUserId(user.getId());
             accountRepository.save(accountU);
 
@@ -91,7 +91,7 @@ public class AccountServiceImpl implements AccountService{
             allByAccountId.forEach(roleAccount ->{
                 accountRoleRepository.deleteAllByAccountId(roleAccount.getAccountId());
             });
-            List<Long> roleIdList = accountDomainV4.getRoleIdList();
+            List<Long> roleIdList = accountUpdateDomain.getRoleIdList();
             roleIdList.forEach(roleId ->{
                 AccountRole accountRole = new AccountRole();
                 accountRole.setAccountId(accountU.getId());
@@ -99,25 +99,25 @@ public class AccountServiceImpl implements AccountService{
                 accountRoleRepository.save(accountRole);
             });
         });
-        return accountDomainV4.getId();
+        return accountUpdateDomain.getId();
     }
 
     /**
      * 新增
-     * @param accountDomainV3
+     * @param accountAddDomain
      * @return
      */
     @Override
     @Transactional
-    public Long add(AccountDomainV3 accountDomainV3) {
+    public Long add(AccountAddDomain accountAddDomain) {
 
         Account account = new Account();
-        account.setAccountName(accountDomainV3.getAccountName());
-        account.setPassword(bCryptPasswordEncoder.encode(accountDomainV3.getPassword()));
-        account.setUserId(accountDomainV3.getUserId());
+        account.setAccountName(accountAddDomain.getAccountName());
+        account.setPassword(bCryptPasswordEncoder.encode(accountAddDomain.getPassword()));
+        account.setUserId(accountAddDomain.getUserId());
         accountRepository.save(account);
         //新建账户角色关联关系
-        List<Long> roleIdList = accountDomainV3.getRoleIdList();
+        List<Long> roleIdList = accountAddDomain.getRoleIdList();
         roleIdList.forEach(roleId ->{
             AccountRole accountRole = new AccountRole();
             accountRole.setRoleId(roleId);

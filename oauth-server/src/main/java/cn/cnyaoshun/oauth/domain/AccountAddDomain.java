@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2020-6-9
  */
 @Data
-public class AccountDomainV3 {
+public class AccountAddDomain {
 
     @ApiModelProperty(value = "用户ID")
     private Long userId;

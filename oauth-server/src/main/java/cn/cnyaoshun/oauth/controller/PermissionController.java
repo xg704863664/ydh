@@ -1,9 +1,9 @@
 package cn.cnyaoshun.oauth.controller;
 
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
-import cn.cnyaoshun.oauth.domain.PermissionDomain;
-import cn.cnyaoshun.oauth.domain.PermissionDomainV2;
-import cn.cnyaoshun.oauth.domain.PermissionDomainV3;
+import cn.cnyaoshun.oauth.domain.PermissionAddDomain;
+import cn.cnyaoshun.oauth.domain.PermissionFindAllByProjectIdDomain;
+import cn.cnyaoshun.oauth.domain.PermissionUpdateDomain;
 import cn.cnyaoshun.oauth.service.PermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,8 +33,8 @@ public class PermissionController {
 
     @ApiOperation(value = "根据项目ID,新增权限", httpMethod = "POST",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ReturnJsonData<Long> add(@Validated @RequestBody PermissionDomain permissionDomain){
-        Long permissionId = permissionService.add(permissionDomain);
+    public ReturnJsonData<Long> add(@Validated @RequestBody PermissionAddDomain permissionAddDomain){
+        Long permissionId = permissionService.add(permissionAddDomain);
         return ReturnJsonData.build(permissionId);
     }
 
@@ -47,15 +47,15 @@ public class PermissionController {
 
     @ApiOperation(value = "根据项目ID,获取权限列表",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/findAllByProject/{projectId}" ,method = RequestMethod.GET)
-    public ReturnJsonData<List<PermissionDomainV2>> findAllByProjectId(@NotNull @ApiParam(value = "项目ID",required = true) @PathVariable(name = "projectId") Long projectId){
-        List<PermissionDomainV2> allByProjectId = permissionService.findAllByProjectId(projectId);
+    public ReturnJsonData<List<PermissionFindAllByProjectIdDomain>> findAllByProjectId(@NotNull @ApiParam(value = "项目ID",required = true) @PathVariable(name = "projectId") Long projectId){
+        List<PermissionFindAllByProjectIdDomain> allByProjectId = permissionService.findAllByProjectId(projectId);
         return ReturnJsonData.build(allByProjectId);
     }
 
     @ApiOperation(value = "修改权限信息",httpMethod = "PUT", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/update",method = RequestMethod.PUT)
-    public ReturnJsonData<Long> update(@Validated @RequestBody PermissionDomainV3 permissionDomainV3){
-        Long update = permissionService.update(permissionDomainV3);
+    public ReturnJsonData<Long> update(@Validated @RequestBody PermissionUpdateDomain permissionUpdateDomain){
+        Long update = permissionService.update(permissionUpdateDomain);
         return ReturnJsonData.build(update);
     }
 }
