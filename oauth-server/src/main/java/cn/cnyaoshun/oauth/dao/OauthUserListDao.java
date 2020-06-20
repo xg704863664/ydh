@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * @ClassName OauthUserListDao
- * @Description DOTO
+ * @Description 根据项目ID和账号和TOKEN查询角色和用户
  * @Author fyh
  * Date 2020/6/1917:19
  */

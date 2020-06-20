@@ -19,7 +19,7 @@ import java.util.Optional;
 
 /**
  * @ClassName PermissionServiceImpl
- * @Description DOTO
+ * @Description 权限service实现类
  * @Author fyh
  * Date 2020/6/1710:04
  */

@@ -19,8 +19,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * Created by fyh on 2020-6-4.
- * 用户表
+ * @ClassName UserController
+ * @Description 用户操作
+ * @Author fyh
+ * Date 2020/6/410:48
  */
 @RestController
 @RequestMapping("/user")

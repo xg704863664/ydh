@@ -21,7 +21,7 @@ import java.util.Optional;
 
 /**
  * @ClassName OauthServiceImpl
- * @Description DOTO
+ * @Description TOKEN操作service实现类
  * @Author fyh
  * Date 2020/6/1910:11
  */

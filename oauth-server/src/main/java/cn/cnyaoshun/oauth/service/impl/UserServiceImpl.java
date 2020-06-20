@@ -21,7 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 /**
- * Created by fyh on 2020-6-4.
+ * @ClassName UserServiceImpl
+ * @Description 用户service实现类
+ * @Author fyh
+ * Date 2020-6-414:40
  */
 @Service
 @RequiredArgsConstructor

@@ -6,7 +6,12 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-
+/**
+ * @ClassName ProjectListDomain
+ * @Description 展示项目信息得List
+ * @Author xiaGen
+ * Date 2020/6
+ */
 @Data
 public class ProjectListDomain {
 
