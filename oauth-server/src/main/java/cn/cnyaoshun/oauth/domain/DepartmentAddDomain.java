@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 
 @Data
-public class DepartmentDomainV2 {
+public class DepartmentAddDomain {
 
     @NotNull(message = "组织机构ID不能为空")
     @ApiModelProperty(value = "组织机构ID")

@@ -1,8 +1,8 @@
 package cn.cnyaoshun.oauth.service;
 
-import cn.cnyaoshun.oauth.domain.DepartmentDomain;
-import cn.cnyaoshun.oauth.domain.DepartmentDomainV2;
-import cn.cnyaoshun.oauth.domain.DepartmentDomainV3;
+import cn.cnyaoshun.oauth.domain.DepartmentTreeDomain;
+import cn.cnyaoshun.oauth.domain.DepartmentAddDomain;
+import cn.cnyaoshun.oauth.domain.DepartmentUpdateDomain;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import java.util.List;
  */
 public interface DepartmentService {
 
-    Long add(DepartmentDomainV2 departmentDomainV2);
+    Long add(DepartmentAddDomain departmentAddDomain);
     void delete(Long departmentId);
-    Long update(DepartmentDomainV3 departmentDomainV3);
-    List<DepartmentDomain> findByOrganizationId(Long organizationId);
+    Long update(DepartmentUpdateDomain departmentUpdateDomain);
+    List<DepartmentTreeDomain> findByOrganizationId(Long organizationId);
 
 }

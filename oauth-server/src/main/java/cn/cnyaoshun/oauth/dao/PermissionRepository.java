@@ -1,6 +1,5 @@
 package cn.cnyaoshun.oauth.dao;
 
-import cn.cnyaoshun.oauth.domain.PermissionDomainV2;
 import cn.cnyaoshun.oauth.entity.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
 

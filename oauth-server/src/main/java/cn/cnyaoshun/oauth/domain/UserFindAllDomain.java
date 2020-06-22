@@ -10,7 +10,7 @@ import lombok.Data;
  * Date 2020/6/1615:06
  */
 @Data
-public class UserDomainV3 {
+public class UserFindAllDomain {
 
     @ApiModelProperty(value = "用户名称")
     private Long id;

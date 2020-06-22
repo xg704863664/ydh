@@ -2,7 +2,6 @@ package cn.cnyaoshun.oauth.service.impl;
 
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
-import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.*;
 import cn.cnyaoshun.oauth.entity.Account;
@@ -22,7 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 /**
- * Created by fyh on 2020-6-4.
+ * @ClassName UserServiceImpl
+ * @Description 用户service实现类
+ * @Author fyh
+ * Date 2020-6-414:40
  */
 @Service
 @RequiredArgsConstructor
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Long countByUserId(Long departmentId) {
-        Long countUser = userDepartmentRepository.countByUserId(departmentId);
+        Long countUser = userDepartmentRepository.countUserDepartmentsByDepartmentId(departmentId);
         return countUser;
     }
 
@@ -63,23 +65,28 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public List<UserDomainV3> findAllUserName() {
+    public List<UserFindAllDomain> findAllUserName() {
         Iterable<User> users = userRepository.findAll();
-        List<UserDomainV3> userDomainV3List = new ArrayList<>();
+        List<UserFindAllDomain> userFindAllDomainList = new ArrayList<>();
         users.forEach(user -> {
-            UserDomainV3 userDomainV3 = new UserDomainV3();
-            userDomainV3.setId(user.getId());
-            userDomainV3.setUserName(user.getUserName());
-            userDomainV3List.add(userDomainV3);
+            UserFindAllDomain userFindAllDomain = new UserFindAllDomain();
+            userFindAllDomain.setId(user.getId());
+            userFindAllDomain.setUserName(user.getUserName());
+            userFindAllDomainList.add(userFindAllDomain);
         });
-        return userDomainV3List;
+        return userFindAllDomainList;
     }
 
+    /**
+     * 用户调整部门
+     * @param userUpdateByDepartmentDomain
+     * @return
+     */
     @Override
     @Transactional
-    public boolean reviseDepartment(UserDomainV4 userDomainV4) {
-        Set<Long> departmentIds = userDomainV4.getDepartmentIds();
-        Set<Long> userIds = userDomainV4.getUserIds();
+    public boolean reviseDepartment(UserUpdateByDepartmentDomain userUpdateByDepartmentDomain) {
+        Set<Long> departmentIds = userUpdateByDepartmentDomain.getDepartmentIds();
+        Set<Long> userIds = userUpdateByDepartmentDomain.getUserIds();
         if(userIds !=null){
             userIds.forEach(userId->{
                 userDepartmentRepository.deleteByUserId(userId);
@@ -96,26 +103,29 @@ public class UserServiceImpl implements UserService {
                     });
                 }
             });
+            return true;
+        }else{
+            return false;
         }
-        return false;
+
     }
 
     /**
      * 添加用户
-     * @param userDomain
+     * @param userAddDomain
      * @return
      */
     @Override
     @Transactional
-    public Long add(UserDomain userDomain) {
+    public Long add(UserAddDomain userAddDomain) {
 
         User user = new User();
-        user.setIdNo(userDomain.getIdNo());
-        user.setUserName(userDomain.getUserName());
-        user.setAge(userDomain.getAge());
-        user.setEmail(userDomain.getEmail());
-        user.setIdNo(userDomain.getIdNo());
-        user.setPhone(userDomain.getPhone());
+        user.setIdNo(userAddDomain.getIdNo());
+        user.setUserName(userAddDomain.getUserName());
+        user.setAge(userAddDomain.getAge());
+        user.setEmail(userAddDomain.getEmail());
+        user.setIdNo(userAddDomain.getIdNo());
+        user.setPhone(userAddDomain.getPhone());
         userRepository.save(user);
 
         Account account = new Account();
@@ -124,8 +134,8 @@ public class UserServiceImpl implements UserService {
         account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
         accountRepository.save(account);
 
-        if (userDomain.getDepartmentId() != null && userDomain.getDepartmentId() > 0){
-               Long departmentId1 = userDomain.getDepartmentId();
+        if (userAddDomain.getDepartmentId() != null && userAddDomain.getDepartmentId() > 0){
+               Long departmentId1 = userAddDomain.getDepartmentId();
             Optional<Department> departmentOptional = departmentRepository.findById(departmentId1);
             departmentOptional.ifPresent(department -> {
                 UserDepartment userDepartment = new UserDepartment();
@@ -140,30 +150,30 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 修改
-     * @param userDomainV2
+     * @param userUpdateDomain
      * @return
      */
     @Override
     @Transactional
-    public Long update(UserDomainV2 userDomainV2){
-        Optional<User> userOptional = userRepository.findById(userDomainV2.getId());
+    public Long update(UserUpdateDomain userUpdateDomain){
+        Optional<User> userOptional = userRepository.findById(userUpdateDomain.getId());
         userOptional.ifPresent(user -> {
             User userR = new User();
             userR.setId(user.getId());
-            userR.setUserName(userDomainV2.getUserName());
-            userR.setPhone(userDomainV2.getPhone());
-            userR.setIdNo(userDomainV2.getIdNo());
-            userR.setEmail(userDomainV2.getEmail());
-            userR.setSex(userDomainV2.getSex());
+            userR.setUserName(userUpdateDomain.getUserName());
+            userR.setPhone(userUpdateDomain.getPhone());
+            userR.setIdNo(userUpdateDomain.getIdNo());
+            userR.setEmail(userUpdateDomain.getEmail());
+            userR.setSex(userUpdateDomain.getSex());
             userR.setUpdateTime(new Date());
-            userR.setAge(userDomainV2.getAge());
+            userR.setAge(userUpdateDomain.getAge());
             userRepository.save(userR);
 
             List<UserDepartment> userDepartmentList = userDepartmentRepository.findAllByUserId(userR.getId());
             userDepartmentList.forEach(userDepartment -> {
                 userDepartmentRepository.deleteById(userDepartment.getId());
             });
-            Long departmentId = userDomainV2.getDepartmentId();
+            Long departmentId = userUpdateDomain.getDepartmentId();
             Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
             departmentOptional.ifPresent(department -> {
                 UserDepartment userDepartment = new UserDepartment();
@@ -173,7 +183,7 @@ public class UserServiceImpl implements UserService {
                 userDepartmentRepository.save(userDepartment);
             });
         });
-        return userDomainV2.getId();
+        return userUpdateDomain.getId();
     }
 
     /**
@@ -184,12 +194,12 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public PageDataDomain<UserDomainV5> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize) {
+    public PageDataDomain<UserFindAllByDepartmentIdDomain> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize) {
         Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
-        PageDataDomain<UserDomainV5> pageDataDomain = new PageDataDomain<>();
+        PageDataDomain<UserFindAllByDepartmentIdDomain> pageDataDomain = new PageDataDomain<>();
         departmentOptional.ifPresent(department -> {
             Integer startPage = (pageNumber-1)*pageSize;
-            List<UserDomainV5> crmMemberEntityPage = userDao.findUserByDepartmentId(departmentId, keyWord, startPage,pageSize);
+            List<UserFindAllByDepartmentIdDomain> crmMemberEntityPage = userDao.findUserByDepartmentId(departmentId, keyWord, startPage,pageSize);
             crmMemberEntityPage.forEach(crm -> {
                 crm.setDepartmentId(department.getId());
             });

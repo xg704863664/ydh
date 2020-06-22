@@ -1,6 +1,6 @@
 package cn.cnyaoshun.oauth.dao;
 
-import cn.cnyaoshun.oauth.domain.AccountDomainV2;
+import cn.cnyaoshun.oauth.domain.AccountFindAllByRoleIdDomain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -8,13 +8,12 @@ import org.springframework.util.StringUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.lang.reflect.Field;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @ClassName AccountDao
- * @Description DOTO
+ * @Description 账户关联查询sql
  * @Author fyh
  * Date 2020-6-1518:06
  */
@@ -24,8 +23,8 @@ public class AccountDao {
 
     private  final EntityManager entityManager;
 
-    public List<AccountDomainV2> findAllByRoleId(Long roleId,String keyWord, Integer pageNumber, Integer pageSize){
-        List<AccountDomainV2> accountDomainV2List = new ArrayList<>();
+    public List<AccountFindAllByRoleIdDomain> findAllByRoleId(Long roleId, String keyWord, Integer pageNumber, Integer pageSize){
+        List<AccountFindAllByRoleIdDomain> accountFindAllByRoleIdDomainList = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT a.id ,a.account_name,u.user_name,a.state from account_role as ar left JOIN account as a on ar.account_id=a.id LEFT JOIN `user` as u on u.id=a.user_id where ar.role_id=? ");
         if (!StringUtils.isEmpty(keyWord)) {
             sql.append(" and (a.account_name like '%"+keyWord+"%' OR u.user_name LIKE '%"+keyWord+"%')");
@@ -36,24 +35,24 @@ public class AccountDao {
         nativeQuery.setParameter(2,pageNumber);
         nativeQuery.setParameter(3,pageSize);
         List<Object[]> objects =  nativeQuery.getResultList();
-        Field[] declaredFields = AccountDomainV2.class.getDeclaredFields();
+        Field[] declaredFields = AccountFindAllByRoleIdDomain.class.getDeclaredFields();
         objects.forEach(object -> {
-            AccountDomainV2 accountDomainV2 = new AccountDomainV2();
+            AccountFindAllByRoleIdDomain accountFindAllByRoleIdDomain = new AccountFindAllByRoleIdDomain();
             try {
                 declaredFields[0].setAccessible(true);
-                declaredFields[0].set(accountDomainV2,Long.valueOf(object[0].toString()));
+                declaredFields[0].set(accountFindAllByRoleIdDomain,Long.valueOf(object[0].toString()));
                 declaredFields[1].setAccessible(true);
-                declaredFields[1].set(accountDomainV2,object[1].toString());
+                declaredFields[1].set(accountFindAllByRoleIdDomain,object[1].toString());
                 declaredFields[2].setAccessible(true);
-                declaredFields[2].set(accountDomainV2,object[2].toString());
+                declaredFields[2].set(accountFindAllByRoleIdDomain,object[2].toString());
                 declaredFields[3].setAccessible(true);
-                declaredFields[3].set(accountDomainV2,Long.valueOf(object[3].toString())==1?true:false);
+                declaredFields[3].set(accountFindAllByRoleIdDomain,Long.valueOf(object[3].toString())==1?true:false);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
-                accountDomainV2List.add(accountDomainV2);
+                accountFindAllByRoleIdDomainList.add(accountFindAllByRoleIdDomain);
             });
-        return accountDomainV2List;
+        return accountFindAllByRoleIdDomainList;
     }
 
     public Long countAccountByRoleId(Long roleId, String keyWord){

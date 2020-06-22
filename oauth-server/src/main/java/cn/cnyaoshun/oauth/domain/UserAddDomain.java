@@ -7,7 +7,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * 描述:新增用户信息
@@ -15,7 +14,7 @@ import java.util.List;
  * @date: 2020-6-4
  */
 @Data
-public class UserDomain {
+public class UserAddDomain {
 
     @ApiModelProperty(value = "部门ID")
     private Long departmentId;

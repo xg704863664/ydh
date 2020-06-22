@@ -15,7 +15,7 @@ import java.util.Date;
  * Date 2020/6/179:57
  */
 @Data
-public class PermissionDomainV3 {
+public class PermissionUpdateDomain {
 
     @ApiModelProperty(value = "ID")
     private Long id;
@@ -25,7 +25,7 @@ public class PermissionDomainV3 {
     private String permissionName;
 
     @ApiModelProperty(value = "权限编码")
-    private Integer permissionType;
+    private String permissionType;
 
     @ApiModelProperty(value = "项目ID")
     private Long projectId;

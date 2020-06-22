@@ -19,8 +19,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * Created by fyh on 2020-6-4.
- * 用户表
+ * @ClassName UserController
+ * @Description 用户操作
+ * @Author fyh
+ * Date 2020/6/410:48
  */
 @RestController
 @RequestMapping("/user")
@@ -34,10 +36,10 @@ public class UserController {
 
     @ApiOperation(value = "根据部门ID获取用户信息",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping("/department/list")
-    public ReturnJsonData<PageDataDomain<UserDomainV5>> departmentList(@Min (1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber") Integer pageNumber,
-                                                                       @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")  Integer pageSize,
-                                                                       @NotNull @ApiParam(value = "部门ID", required = true)@RequestParam(value = "departmentId")  Long departmentId,
-                                                                       @ApiParam(value = "根据用户名或账户搜索用户信息")@RequestParam(value = "keyWord",required = false) String keyWord){
+    public ReturnJsonData<PageDataDomain<UserFindAllByDepartmentIdDomain>> departmentList(@Min (1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber") Integer pageNumber,
+                                                                                          @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")  Integer pageSize,
+                                                                                          @NotNull @ApiParam(value = "部门ID", required = true)@RequestParam(value = "departmentId")  Long departmentId,
+                                                                                          @ApiParam(value = "根据用户名或账户搜索用户信息")@RequestParam(value = "keyWord",required = false) String keyWord){
 
         return ReturnJsonData.build(userService.findAll(departmentId, keyWord, pageNumber, pageSize));
     }
@@ -51,15 +53,15 @@ public class UserController {
 
     @ApiOperation(value = "新增用户",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public ReturnJsonData<Long> insertUser(@ApiParam(value = "新增用户对象",required = true) @Valid @RequestBody UserDomain userDomain){
-        Long id = userService.add(userDomain);
+    public ReturnJsonData<Long> insertUser(@ApiParam(value = "新增用户对象",required = true) @Valid @RequestBody UserAddDomain userAddDomain){
+        Long id = userService.add(userAddDomain);
         return ReturnJsonData.build(id);
     }
 
     @ApiOperation(value = "根据用户ID修改用户信息",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/update",method = RequestMethod.PUT)
-    public ReturnJsonData<Long> updateOrganization(@Valid @RequestBody UserDomainV2 userDomainV2){
-        Long userId = userService.update(userDomainV2);
+    public ReturnJsonData<Long> updateOrganization(@Valid @RequestBody UserUpdateDomain userUpdateDomain){
+        Long userId = userService.update(userUpdateDomain);
         return ReturnJsonData.build(userId);
     }
 
@@ -72,16 +74,16 @@ public class UserController {
 
     @ApiOperation(value = "获取所有用户名称",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value="/findAllUserName",method = RequestMethod.GET)
-    public ReturnJsonData<List<UserDomainV3>> findAllByUserName(){
-        List<UserDomainV3> allUserName = userService.findAllUserName();
+    public ReturnJsonData<List<UserFindAllDomain>> findAllByUserName(){
+        List<UserFindAllDomain> allUserName = userService.findAllUserName();
         return  ReturnJsonData.build(allUserName);
     }
 
 
     @ApiOperation(value = "用户调整部门",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/revise",method = RequestMethod.PUT)
-    public ReturnJsonData<Boolean> reviseDepartment(@Valid @RequestBody UserDomainV4 userDomainV4){
-        boolean b = userService.reviseDepartment(userDomainV4);
+    public ReturnJsonData<Boolean> reviseDepartment(@Valid @RequestBody UserUpdateByDepartmentDomain userUpdateByDepartmentDomain){
+        boolean b = userService.reviseDepartment(userUpdateByDepartmentDomain);
         return ReturnJsonData.build(b);
     }
 

@@ -12,7 +12,7 @@ import java.util.Set;
  * Date 2020/6/1618:24
  */
 @Data
-public class UserDomainV4 {
+public class UserUpdateByDepartmentDomain {
 
     @ApiModelProperty(value = "调整后的部门集合")
     private Set<Long> departmentIds;

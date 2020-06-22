@@ -16,7 +16,7 @@ public class Permission extends AbstractEntity{
     @Column(name = "permission_name")
     private String permissionName;
     @Column(name = "permission_type")
-    private Integer permissionType;
+    private String permissionType;
     @Column(name = "project_id")
     private Long projectId;
 
