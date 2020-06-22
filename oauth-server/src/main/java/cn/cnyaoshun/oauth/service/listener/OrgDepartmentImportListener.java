@@ -38,9 +38,9 @@ public class OrgDepartmentImportListener extends AnalysisEventListener<OrgDepart
         if (StringUtils.isEmpty(orgDepartmentImportDomain.getUserName())){
             throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"员工名称不能为空");
         }
-        if (StringUtils.isEmpty(orgDepartmentImportDomain.getCardNo())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"员工身份证不能为空");
-        }
+//        if (StringUtils.isEmpty(orgDepartmentImportDomain.getCardNo())){
+//            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"员工身份证不能为空");
+//        }
         if (StringUtils.isEmpty(orgDepartmentImportDomain.getPhone())){
             throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"手机号不能为空");
         }
