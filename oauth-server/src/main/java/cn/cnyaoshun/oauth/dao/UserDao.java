@@ -1,11 +1,11 @@
 package cn.cnyaoshun.oauth.dao;
 
 
-import cn.cnyaoshun.oauth.domain.UserDomainV2;
 import cn.cnyaoshun.oauth.domain.UserDomainV5;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.lang.reflect.Field;
