@@ -4,7 +4,8 @@ import lombok.Getter;
 
 public enum  ExcelDealType {
 
-    ORG_DEPARTMENT_DEAL("org_department_deal");
+    ORG_DEPARTMENT_DEAL("org_department_deal"),
+    ACCOUNT_DEAL("account_deal");
 
     @Getter
     String type;

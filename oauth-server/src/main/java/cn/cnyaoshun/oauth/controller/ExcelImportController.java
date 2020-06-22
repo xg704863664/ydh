@@ -59,6 +59,22 @@ public class ExcelImportController {
         return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/account/download", method = RequestMethod.GET)
+    @ApiOperation(value = "下载账户模版", httpMethod = "GET")
+    public ResponseEntity<byte[]> downloadAccountExcel() {
+        byte[] bytes = null;
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        try {
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("account_template.xlsx");
+            bytes = IOUtils.toByteArray(inputStream);
+            httpHeaders.setContentDispositionFormData("attachment", URLEncoder.encode("account_template.xlsx","utf-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+    }
+
 
     @RequestMapping(value = "/excel/token", method = RequestMethod.GET)
     @ApiOperation(value = "获取excel操作token", httpMethod = "GET")
@@ -72,7 +88,7 @@ public class ExcelImportController {
     @ApiOperation(value = "excel导入", httpMethod = "POST")
     public ReturnJsonData<String> importOrgDepartmentExcel(@NotNull @ApiParam(value = "file 文件") @RequestParam("file")MultipartFile file,
                                            @NotBlank(message = "operationToken 不能为空") @ApiParam(value ="operationToken 操作token 防重复提交",required = true) @RequestParam(value = "operationToken") String operationToken,
-                                           @NotBlank(message = "dealType处理类型不能为空") @ApiParam(value ="dealType处理类型 org_department_deal:组织机构批量导入",required = true) @RequestParam(value = "dealType") String dealType) {
+                                           @NotBlank(message = "dealType处理类型不能为空") @ApiParam(value ="dealType处理类型 org_department_deal:组织机构批量导入 account_deal:帐号批量导入",required = true) @RequestParam(value = "dealType") String dealType) {
         if (!redisTokenUtil.checkToken(operationToken)){
             throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"operationToken 无效token");
         }
