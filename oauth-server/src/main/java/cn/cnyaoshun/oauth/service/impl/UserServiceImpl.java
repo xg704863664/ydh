@@ -122,6 +122,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setIdNo(userAddDomain.getIdNo());
         user.setUserName(userAddDomain.getUserName());
+        user.setSex(userAddDomain.getSex());
         user.setAge(userAddDomain.getAge());
         user.setEmail(userAddDomain.getEmail());
         user.setIdNo(userAddDomain.getIdNo());

@@ -25,7 +25,7 @@ public class UserDao {
         List<UserFindAllByDepartmentIdDomain> userDomainList = new ArrayList<>();
         StringBuilder sql =  new StringBuilder("SELECT cu.id,cu.user_name,cu.sex,cu.age,cu.phone,cu.email,cu.id_no,cu.create_time,cu.update_time, ud.department_id FROM user AS cu, user_department AS ud  WHERE  ud.department_id = ? AND cu.id = ud.user_id ");
         if (!StringUtils.isEmpty(keyWord)){
-            sql.append(" and cu.user_name like '%"+ keyWord +"%'or cu.user_no like '%" + keyWord +"%'");
+            sql.append(" and cu.user_name like '%"+ keyWord +"%'");
         }
         sql.append(" ORDER BY ud.id DESC LIMIT ?,?");
         Query nativeQuery = entityManager.createNativeQuery(sql.toString());
@@ -61,7 +61,7 @@ public class UserDao {
     public Long countUserEntitiesByDepartmentId(Long organizationId, String keyWord){
         StringBuilder sql =  new StringBuilder("SELECT COUNT(1) FROM user AS cu, user_department AS ud  WHERE  ud.department_id = ? AND cu.id = ud.user_id ");
         if (!StringUtils.isEmpty(keyWord)){
-            sql.append(" and cu.user_name like '%"+keyWord+"%'or cu.user_no like '%" + keyWord +"%'" );
+            sql.append(" and cu.user_name like '%"+keyWord+"%'" );
         }
         Query nativeQuery = entityManager.createNativeQuery(sql.toString());
         nativeQuery.setParameter(1,organizationId);
