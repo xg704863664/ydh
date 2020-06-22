@@ -1,7 +1,7 @@
 package cn.cnyaoshun.oauth.controller;
 
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
-import cn.cnyaoshun.oauth.domain.ProjectDomain;
+import cn.cnyaoshun.oauth.domain.ProjectListDomain;
 import cn.cnyaoshun.oauth.service.ProjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,9 +22,9 @@ public class ProjectController {
 
     @ApiOperation(value = "获取项目列表",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping("/list")
-    public ReturnJsonData<List<ProjectDomain>> list(){
-        List<ProjectDomain> projectDomainList = projectService.findAll();
-        return ReturnJsonData.build(projectDomainList);
+    public ReturnJsonData<List<ProjectListDomain>> list(){
+        List<ProjectListDomain> projectListDomainList = projectService.findAll();
+        return ReturnJsonData.build(projectListDomainList);
     }
 
 }

@@ -1,9 +1,9 @@
 package cn.cnyaoshun.oauth.controller;
 
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
-import cn.cnyaoshun.oauth.domain.DepartmentDomain;
-import cn.cnyaoshun.oauth.domain.DepartmentDomainV2;
-import cn.cnyaoshun.oauth.domain.DepartmentDomainV3;
+import cn.cnyaoshun.oauth.domain.DepartmentTreeDomain;
+import cn.cnyaoshun.oauth.domain.DepartmentAddDomain;
+import cn.cnyaoshun.oauth.domain.DepartmentUpdateDomain;
 import cn.cnyaoshun.oauth.service.DepartmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,15 +25,15 @@ public class DepartmentController {
 
     @ApiOperation(value = "根据组织机构ID获取部门信息,并进行树形结构展示",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/get/{organizationId}",method = RequestMethod.GET)
-    public ReturnJsonData< List<DepartmentDomain>> getDepartmentTree(@ApiParam(value = "组织机构ID",required = true)@PathVariable(value = "organizationId") Long organizationId){
-        List<DepartmentDomain> departmentDomainList = departmentService.findByOrganizationId(organizationId);
-        return ReturnJsonData.build(departmentDomainList);
+    public ReturnJsonData< List<DepartmentTreeDomain>> getDepartmentTree(@ApiParam(value = "组织机构ID",required = true)@PathVariable(value = "organizationId") Long organizationId){
+        List<DepartmentTreeDomain> departmentTreeDomainList = departmentService.findByOrganizationId(organizationId);
+        return ReturnJsonData.build(departmentTreeDomainList);
     }
 
     @ApiOperation(value = "新增部门",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public ReturnJsonData<Long> add(@Valid @RequestBody DepartmentDomainV2 departmentDomainV2){
-        Long departmentId = departmentService.add(departmentDomainV2);
+    public ReturnJsonData<Long> add(@Valid @RequestBody DepartmentAddDomain departmentAddDomain){
+        Long departmentId = departmentService.add(departmentAddDomain);
         return ReturnJsonData.build(departmentId);
     }
 
@@ -46,8 +46,8 @@ public class DepartmentController {
 
     @ApiOperation(value = "根据部门ID修改部门信息",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/update",method = RequestMethod.PUT)
-    public ReturnJsonData<Long> updateOrganization(@Valid @RequestBody DepartmentDomainV3 departmentDomainV3){
-        Long departmentId = departmentService.update(departmentDomainV3);
+    public ReturnJsonData<Long> updateOrganization(@Valid @RequestBody DepartmentUpdateDomain departmentUpdateDomain){
+        Long departmentId = departmentService.update(departmentUpdateDomain);
         return ReturnJsonData.build(departmentId);
     }
 }

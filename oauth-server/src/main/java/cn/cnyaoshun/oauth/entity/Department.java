@@ -21,6 +21,6 @@ public class Department extends AbstractEntity{
     @Column(name = "department_no")
     private String departmentNo;
     @Column(name = "department_name")
-    private String departmentName;;
+    private String departmentName;
 
 }

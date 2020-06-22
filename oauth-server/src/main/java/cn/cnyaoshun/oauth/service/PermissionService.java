@@ -1,8 +1,8 @@
 package cn.cnyaoshun.oauth.service;
 
-import cn.cnyaoshun.oauth.domain.PermissionDomain;
-import cn.cnyaoshun.oauth.domain.PermissionDomainV2;
-import cn.cnyaoshun.oauth.domain.PermissionDomainV3;
+import cn.cnyaoshun.oauth.domain.PermissionAddDomain;
+import cn.cnyaoshun.oauth.domain.PermissionFindAllByProjectIdDomain;
+import cn.cnyaoshun.oauth.domain.PermissionUpdateDomain;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import java.util.List;
  */
 public interface PermissionService {
 
-    Long add(PermissionDomain permissionDomain);
+    Long add(PermissionAddDomain permissionAddDomain);
     Long delete(Long permissionId);
-    List<PermissionDomainV2> findAllByProjectId(Long  projectId);
-    Long update(PermissionDomainV3 permissionDomainV3);
+    List<PermissionFindAllByProjectIdDomain> findAllByProjectId(Long  projectId);
+    Long update(PermissionUpdateDomain permissionUpdateDomain);
 
 }

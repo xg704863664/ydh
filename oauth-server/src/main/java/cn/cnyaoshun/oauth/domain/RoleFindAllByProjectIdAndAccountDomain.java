@@ -1,11 +1,7 @@
 package cn.cnyaoshun.oauth.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
 
 /**
  * @ClassName RoleDomainV2
@@ -14,7 +10,7 @@ import java.util.Date;
  * Date 2020-6-1515:02
  */
 @Data
-public class RoleDomainV3 {
+public class RoleFindAllByProjectIdAndAccountDomain {
 
     @ApiModelProperty(value = "角色ID")
     private Long id;

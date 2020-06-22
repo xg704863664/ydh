@@ -1,7 +1,7 @@
 package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.dao.ProjectRepository;
-import cn.cnyaoshun.oauth.domain.ProjectDomain;
+import cn.cnyaoshun.oauth.domain.ProjectListDomain;
 import cn.cnyaoshun.oauth.entity.Project;
 import cn.cnyaoshun.oauth.service.ProjectService;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +23,14 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
-    public List<ProjectDomain> findAll() {
-        List<ProjectDomain> projectDomainList = new ArrayList<>();
+    public List<ProjectListDomain> findAll() {
+        List<ProjectListDomain> projectListDomainList = new ArrayList<>();
         List<Project> projectList = projectRepository.findAll(Sort.by(Sort.Direction.DESC, "createTime"));
         projectList.forEach(project -> {
-            ProjectDomain projectDomain = new ProjectDomain();
-            BeanUtils.copyProperties(project,projectDomain);
-            projectDomainList.add(projectDomain);
+            ProjectListDomain projectListDomain = new ProjectListDomain();
+            BeanUtils.copyProperties(project, projectListDomain);
+            projectListDomainList.add(projectListDomain);
         });
-        return projectDomainList;
+        return projectListDomainList;
     }
 }

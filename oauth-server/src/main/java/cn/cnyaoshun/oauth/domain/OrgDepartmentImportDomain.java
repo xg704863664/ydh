@@ -3,8 +3,6 @@ package cn.cnyaoshun.oauth.domain;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-
 @Data
 public class OrgDepartmentImportDomain {
     @ExcelProperty("组织机构名称")

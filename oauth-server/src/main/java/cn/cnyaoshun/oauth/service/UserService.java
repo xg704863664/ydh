@@ -12,13 +12,13 @@ import java.util.List;
  */
 public interface UserService {
 
-    Long add(UserDomain userDomain);
+    Long add(UserAddDomain userAddDomain);
     Long delete(Long userId);
-    Long update(UserDomainV2 userDomainV2);
-    PageDataDomain<UserDomainV5> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize);
+    Long update(UserUpdateDomain userUpdateDomain);
+    PageDataDomain<UserFindAllByDepartmentIdDomain> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize);
     Long countByUserId(Long departmentId);
-    List<UserDomainV3> findAllUserName();
+    List<UserFindAllDomain> findAllUserName();
     //修改部门
-    boolean reviseDepartment(UserDomainV4 userDomainV4);
+    boolean reviseDepartment(UserUpdateByDepartmentDomain userUpdateByDepartmentDomain);
 
 }

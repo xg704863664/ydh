@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2020-6-15
  */
 @Data
-public class AccountDomainV2 {
+public class AccountFindAllByRoleIdDomain {
 
     @ApiModelProperty(value = "账户ID")
     private Long id;

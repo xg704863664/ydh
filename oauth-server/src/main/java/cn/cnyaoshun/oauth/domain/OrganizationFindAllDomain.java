@@ -9,7 +9,7 @@ import lombok.Data;
  * @date: 202-6-11
  */
 @Data
-public class OrganizationDomainV3 {
+public class OrganizationFindAllDomain {
 
     @ApiModelProperty(value = "ID")
     private  Long id;

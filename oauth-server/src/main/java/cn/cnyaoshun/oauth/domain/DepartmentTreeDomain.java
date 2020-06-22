@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 @Data
-public class DepartmentDomain {
+public class DepartmentTreeDomain {
     @ApiModelProperty(value = "ID")
     private  Long id;
 
@@ -29,5 +29,5 @@ public class DepartmentDomain {
     private String departmentName;
 
     @ApiModelProperty(value = "子部门")
-    List<DepartmentDomain> children = new ArrayList<>();
+    List<DepartmentTreeDomain> children = new ArrayList<>();
 }

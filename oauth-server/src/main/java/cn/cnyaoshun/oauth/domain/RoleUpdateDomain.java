@@ -15,7 +15,7 @@ import java.util.List;
  * Date 2020-6-1515:02
  */
 @Data
-public class RoleDomainV2 {
+public class RoleUpdateDomain {
 
     @ApiModelProperty(value = "角色ID")
     private Long id;

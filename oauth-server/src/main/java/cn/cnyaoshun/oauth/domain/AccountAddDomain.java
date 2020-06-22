@@ -7,12 +7,12 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * 根据角色和用户添加账户
+ * 添加账户并分配角色
  * @author yonghong.fan
  * @date 2020-6-9
  */
 @Data
-public class AccountDomainV3 {
+public class AccountAddDomain {
 
     @ApiModelProperty(value = "用户ID")
     private Long userId;

@@ -2,9 +2,9 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.PermissionRepository;
-import cn.cnyaoshun.oauth.domain.PermissionDomain;
-import cn.cnyaoshun.oauth.domain.PermissionDomainV2;
-import cn.cnyaoshun.oauth.domain.PermissionDomainV3;
+import cn.cnyaoshun.oauth.domain.PermissionAddDomain;
+import cn.cnyaoshun.oauth.domain.PermissionFindAllByProjectIdDomain;
+import cn.cnyaoshun.oauth.domain.PermissionUpdateDomain;
 import cn.cnyaoshun.oauth.entity.Permission;
 import cn.cnyaoshun.oauth.service.PermissionService;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.Optional;
 
 /**
  * @ClassName PermissionServiceImpl
- * @Description DOTO
+ * @Description 权限service实现类
  * @Author fyh
  * Date 2020/6/1710:04
  */
@@ -31,14 +31,14 @@ public class PermissionServiceImpl implements PermissionService{
 
     @Override
     @Transactional
-    public Long add(PermissionDomain permissionDomain) {
+    public Long add(PermissionAddDomain permissionAddDomain) {
 
-        boolean existsByPermissionName = permissionRepository.existsByPermissionName(permissionDomain.getPermissionName());
+        boolean existsByPermissionName = permissionRepository.existsByPermissionName(permissionAddDomain.getPermissionName());
         if(existsByPermissionName){
             throw new ExceptionValidation(418,"权限名称已存在,请重新输入");
         }
         Permission permission = new Permission();
-        BeanUtils.copyProperties(permissionDomain, permission);
+        BeanUtils.copyProperties(permissionAddDomain, permission);
         permissionRepository.save(permission);
         return permission.getId();
     }
@@ -51,30 +51,30 @@ public class PermissionServiceImpl implements PermissionService{
     }
 
     @Override
-    public List<PermissionDomainV2> findAllByProjectId(Long projectId) {
+    public List<PermissionFindAllByProjectIdDomain> findAllByProjectId(Long projectId) {
 
-        List<PermissionDomainV2> permissionDomainV2List = new ArrayList<>();
+        List<PermissionFindAllByProjectIdDomain> permissionFindAllByProjectIdDomainList = new ArrayList<>();
         List<Permission> byProjectId = permissionRepository.findByProjectId(projectId);
         byProjectId.forEach(permission -> {
-            PermissionDomainV2 permissionDomainV2 = new PermissionDomainV2();
-            BeanUtils.copyProperties(permission, permissionDomainV2);
-            permissionDomainV2List.add(permissionDomainV2);
+            PermissionFindAllByProjectIdDomain permissionFindAllByProjectIdDomain = new PermissionFindAllByProjectIdDomain();
+            BeanUtils.copyProperties(permission, permissionFindAllByProjectIdDomain);
+            permissionFindAllByProjectIdDomainList.add(permissionFindAllByProjectIdDomain);
         });
-        return permissionDomainV2List;
+        return permissionFindAllByProjectIdDomainList;
     }
 
     @Override
     @Transactional
-    public Long update(PermissionDomainV3 permissionDomainV3) {
-        Optional<Permission> permissionOptional = permissionRepository.findById(permissionDomainV3.getId());
+    public Long update(PermissionUpdateDomain permissionUpdateDomain) {
+        Optional<Permission> permissionOptional = permissionRepository.findById(permissionUpdateDomain.getId());
         permissionOptional.ifPresent(permission -> {
            Permission permission1 = new Permission();
-            BeanUtils.copyProperties(permissionDomainV3, permission1);
+            BeanUtils.copyProperties(permissionUpdateDomain, permission1);
             permission1.setId(permission.getId());
             permission1.setUpdateTime(new Date());
             permissionRepository.save(permission1);
         });
-        return permissionDomainV3.getId();
+        return permissionUpdateDomain.getId();
     }
 
 }

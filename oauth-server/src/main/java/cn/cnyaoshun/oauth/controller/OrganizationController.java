@@ -1,9 +1,9 @@
 package cn.cnyaoshun.oauth.controller;
 
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
-import cn.cnyaoshun.oauth.domain.OrganizationDomain;
-import cn.cnyaoshun.oauth.domain.OrganizationDomainV2;
-import cn.cnyaoshun.oauth.domain.OrganizationDomainV3;
+import cn.cnyaoshun.oauth.domain.OrganizationAddDomain;
+import cn.cnyaoshun.oauth.domain.OrganizationUpdateDomain;
+import cn.cnyaoshun.oauth.domain.OrganizationFindAllDomain;
 import cn.cnyaoshun.oauth.service.OrganizationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,22 +30,22 @@ public class OrganizationController {
 
     @ApiOperation(value = "新增组织机构",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public ReturnJsonData<Long> insertUser(@Valid @RequestBody OrganizationDomain OrganizationDomain){
-        Long id = organizationService.add(OrganizationDomain);
+    public ReturnJsonData<Long> insertUser(@Valid @RequestBody OrganizationAddDomain OrganizationAddDomain){
+        Long id = organizationService.add(OrganizationAddDomain);
         return ReturnJsonData.build(id);
     }
 
     @ApiOperation(value = "根据组织机构ID修改组织机构信息",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/update",method = RequestMethod.PUT)
-    public ReturnJsonData<Long> updateOrganization(@Valid @RequestBody OrganizationDomainV2 organizationDomainV2){
-        Long organizationId = organizationService.update(organizationDomainV2);
+    public ReturnJsonData<Long> updateOrganization(@Valid @RequestBody OrganizationUpdateDomain organizationUpdateDomain){
+        Long organizationId = organizationService.update(organizationUpdateDomain);
         return ReturnJsonData.build(organizationId);
     }
 
     @ApiOperation(value = "获取所有的组织机构信息",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ReturnJsonData<OrganizationDomainV3> findAll(){
-        List<OrganizationDomainV3> organizationList = organizationService.findAll();
+    public ReturnJsonData<OrganizationFindAllDomain> findAll(){
+        List<OrganizationFindAllDomain> organizationList = organizationService.findAll();
         return ReturnJsonData.build(organizationList);
     }
 

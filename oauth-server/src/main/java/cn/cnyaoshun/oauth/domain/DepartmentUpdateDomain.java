@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * @date: 2020-6-12
  */
 @Data
-public class DepartmentDomainV3 {
+public class DepartmentUpdateDomain {
 
     @ApiModelProperty(value = "部门ID")
     private Long departmentId;

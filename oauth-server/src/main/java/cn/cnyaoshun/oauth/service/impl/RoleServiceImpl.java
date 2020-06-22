@@ -3,9 +3,9 @@ package cn.cnyaoshun.oauth.service.impl;
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.RolePermissionRepository;
 import cn.cnyaoshun.oauth.dao.RoleRepository;
-import cn.cnyaoshun.oauth.domain.RoleDomain;
-import cn.cnyaoshun.oauth.domain.RoleDomainV2;
-import cn.cnyaoshun.oauth.domain.RoleDomainV3;
+import cn.cnyaoshun.oauth.domain.RoleAddDomain;
+import cn.cnyaoshun.oauth.domain.RoleUpdateDomain;
+import cn.cnyaoshun.oauth.domain.RoleFindAllByProjectIdAndAccountDomain;
 import cn.cnyaoshun.oauth.entity.Role;
 import cn.cnyaoshun.oauth.entity.RolePermission;
 import cn.cnyaoshun.oauth.service.RoleService;
@@ -23,7 +23,7 @@ import java.util.Optional;
 
 /**
  * @ClassName RoleServiceImpl
- * @Description DOTO
+ * @Description 角色service实现类
  * @Author fyh
  * Date 2020-6-1514:40
  */
@@ -37,15 +37,15 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public Long add(RoleDomain roleDomain) {
-        if(roleDomain.getProjectId() == null){
+    public Long add(RoleAddDomain roleAddDomain) {
+        if(roleAddDomain.getProjectId() == null){
             throw new ExceptionValidation(418,"项目ID不能为空");
         }
         Role role = new Role();
-        role.setProjectId(roleDomain.getProjectId());
-        role.setRoleName(roleDomain.getRoleName());
+        role.setProjectId(roleAddDomain.getProjectId());
+        role.setRoleName(roleAddDomain.getRoleName());
         roleRepository.save(role);
-        List<Long> permissionIdList = roleDomain.getPermissionIdList();
+        List<Long> permissionIdList = roleAddDomain.getPermissionIdList();
         permissionIdList.forEach(permissionId ->{
             RolePermission rolePermission = new RolePermission();
             rolePermission.setRoleId(role.getId());
@@ -74,11 +74,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleDomainV2> findAllByProjectId(Long projectId) {
+    public List<RoleUpdateDomain> findAllByProjectId(Long projectId) {
         List<Role> roleList = roleRepository.findByProjectId(projectId);
-        List<RoleDomainV2> roleDomainList = new ArrayList<>();
+        List<RoleUpdateDomain> roleDomainList = new ArrayList<>();
         roleList.forEach(role -> {
-            RoleDomainV2 roleDomain = new RoleDomainV2();
+            RoleUpdateDomain roleDomain = new RoleUpdateDomain();
             BeanUtils.copyProperties(role, roleDomain);
             roleDomainList.add(roleDomain);
         });
@@ -87,20 +87,20 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 修改角色信息时 权限信息发生变化
-     * @param roleDomainV2
+     * @param roleUpdateDomain
      * @return
      */
     @Override
     @Transactional
-    public Long update(RoleDomainV2 roleDomainV2) {
-        Optional<Role> roleOptional = roleRepository.findById(roleDomainV2.getId());
+    public Long update(RoleUpdateDomain roleUpdateDomain) {
+        Optional<Role> roleOptional = roleRepository.findById(roleUpdateDomain.getId());
         roleOptional.ifPresent(role -> {
             Role roleR = new Role();
             roleR.setId(role.getId());
-            roleR.setRoleName(roleDomainV2.getRoleName());
-            roleR.setProjectId(roleDomainV2.getProjectId());
+            roleR.setRoleName(roleUpdateDomain.getRoleName());
+            roleR.setProjectId(roleUpdateDomain.getProjectId());
             roleR.setUpdateTime(new Date());
-            roleR.setCreateTime(roleDomainV2.getCreateTime());
+            roleR.setCreateTime(roleUpdateDomain.getCreateTime());
             roleRepository.save(role);
 
             //数据库表中的权限
@@ -109,7 +109,7 @@ public class RoleServiceImpl implements RoleService {
                 rolePermissionRepository.deleteById(rolePermission.getId());
             });
             //修改的权限
-            List<Long> permissionIds = roleDomainV2.getPermissionIds();
+            List<Long> permissionIds = roleUpdateDomain.getPermissionIds();
             permissionIds.forEach(permissionId ->{
                 RolePermission permission = new RolePermission();
                 permission.setPermissionId(permissionId);
@@ -117,7 +117,7 @@ public class RoleServiceImpl implements RoleService {
                 rolePermissionRepository.save(permission);
             });
         });
-        return roleDomainV2.getId();
+        return roleUpdateDomain.getId();
     }
 
     /**
@@ -125,15 +125,15 @@ public class RoleServiceImpl implements RoleService {
      * @return
      */
     @Override
-    public List<RoleDomainV3> findAll() {
+    public List<RoleFindAllByProjectIdAndAccountDomain> findAll() {
         List<Role> roleRepositoryAll = roleRepository.findAll();
-        List<RoleDomainV3> roleDomainV3List = new ArrayList<>();
+        List<RoleFindAllByProjectIdAndAccountDomain> roleFindAllByProjectIdAndAccountDomainList = new ArrayList<>();
         roleRepositoryAll.forEach(role -> {
-            RoleDomainV3 roleDomainV3 = new RoleDomainV3();
-            roleDomainV3.setId(role.getId());
-            roleDomainV3.setRoleName(role.getRoleName());
-            roleDomainV3List.add(roleDomainV3);
+            RoleFindAllByProjectIdAndAccountDomain roleFindAllByProjectIdAndAccountDomain = new RoleFindAllByProjectIdAndAccountDomain();
+            roleFindAllByProjectIdAndAccountDomain.setId(role.getId());
+            roleFindAllByProjectIdAndAccountDomain.setRoleName(role.getRoleName());
+            roleFindAllByProjectIdAndAccountDomainList.add(roleFindAllByProjectIdAndAccountDomain);
         });
-        return roleDomainV3List;
+        return roleFindAllByProjectIdAndAccountDomainList;
     }
 }
