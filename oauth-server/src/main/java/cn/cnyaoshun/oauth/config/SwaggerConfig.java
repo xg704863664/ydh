@@ -2,6 +2,7 @@ package cn.cnyaoshun.oauth.config;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.OAuthBuilder;
@@ -20,9 +21,9 @@ import java.util.Collections;
 
 @Configuration
 @EnableSwagger2
+@RefreshScope
 public class SwaggerConfig {
 
-//    private static final String apiPath = "/api/**";
     private static final String securityName = "oauth2.0";
     @Value("${server.servlet.context-path}")
     private String contextPath;
@@ -30,11 +31,13 @@ public class SwaggerConfig {
     private String clientId;
     @Value("${login.secret}")
     private String secret;
+    @Value("${swagger.enable}")
+    private boolean enable;
 
     @Bean
     public Docket api(){
         return new Docket(DocumentationType.SWAGGER_2)
-                .enable(true)
+                .enable(enable)
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
