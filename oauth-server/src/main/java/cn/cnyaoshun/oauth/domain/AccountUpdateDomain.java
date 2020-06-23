@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @ClassName AccountDomainV4
+ * @ClassName AccountUpdateDomain
  * @Description 修改账户信息
  * @Author fyh
  * Date 2020/6/1616:00

@@ -26,5 +26,4 @@ public class AccountFindAllByRoleIdDomain {
     @ApiModelProperty(value = "角色名称")
     private String RoleName;
 
-
 }

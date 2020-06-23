@@ -28,6 +28,4 @@ public class AccountAddDomain {
     @ApiModelProperty(value = "分配角色列表")
     private List<Long> roleIdList;
 
-
-
 }

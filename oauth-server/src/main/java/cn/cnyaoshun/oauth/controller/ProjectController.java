@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/project")
-@Api(description = "项目管理操作API")
+@Api(description = "项目管理API")
 @RequiredArgsConstructor
 public class ProjectController {
 

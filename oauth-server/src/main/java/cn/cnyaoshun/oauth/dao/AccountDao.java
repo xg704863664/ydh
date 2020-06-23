@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * @ClassName AccountDao
- * @Description 账户关联查询sql
+ * @Description 账户关联查询
  * @Author fyh
  * Date 2020-6-1518:06
  */

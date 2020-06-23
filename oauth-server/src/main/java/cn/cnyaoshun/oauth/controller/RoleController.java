@@ -24,35 +24,35 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/role")
-@Api(description = "角色操作API")
+@Api(description = "角色管理API")
 @AllArgsConstructor
 @Validated
 public class RoleController {
 
     private final RoleService roleService;
 
-    @ApiOperation(value = "新增角色并为其赋予权限",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "新增角色并分配权限",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public ReturnJsonData<Long> add(@ApiParam(value = "新增角色对象",required = true) @Valid @RequestBody RoleAddDomain roleAddDomain){
         Long roleAdd = roleService.add(roleAddDomain);
         return ReturnJsonData.build(roleAdd);
     }
 
-    @ApiOperation(value = "修改角色", httpMethod = "PUT" , produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据角色ID修改角色", httpMethod = "PUT" , produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ReturnJsonData<Long> update(@ApiParam(value = "修改角色对象",required = true) @Valid @RequestBody RoleUpdateDomain roleUpdateDomain){
         Long updateId = roleService.update(roleUpdateDomain);
         return  ReturnJsonData.build(updateId);
     }
 
-    @ApiOperation(value = "根据角色ID,删除角色信息",httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据角色ID删除角色信息",httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/delete/{roleId}", method = RequestMethod.DELETE)
     public ReturnJsonData<Long> delete(@ApiParam(value = "角色ID",required = true) @PathVariable(name = "roleId") Long roleId){
         Long deleteRole = roleService.delete(roleId);
         return ReturnJsonData.build(deleteRole);
     }
 
-    @ApiOperation(value = "根据项目ID,获取角色信息",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据项目ID获取角色信息",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/findAll/{projectId}", method = RequestMethod.GET)
     public ReturnJsonData<List<RoleUpdateDomain>> findAllByProjectId(@ApiParam(value = "项目ID",required = true) @PathVariable(name = "projectId") Long projectId){
         List<RoleUpdateDomain> roleDomainList = roleService.findAllByProjectId(projectId);

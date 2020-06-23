@@ -21,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/organization")
-@Api(description = "组织机构操作API")
+@Api(description = "组织机构管理API")
 @RequiredArgsConstructor
 @Validated
 public class OrganizationController {
