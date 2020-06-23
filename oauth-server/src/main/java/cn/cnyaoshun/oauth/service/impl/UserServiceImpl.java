@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
     public boolean reviseDepartment(UserUpdateByDepartmentDomain userUpdateByDepartmentDomain) {
         Set<Long> departmentIds = userUpdateByDepartmentDomain.getDepartmentIds();
         Set<Long> userIds = userUpdateByDepartmentDomain.getUserIds();
-        if(userIds !=null){
+        if(userIds != null){
             userIds.forEach(userId->{
                 userDepartmentRepository.deleteByUserId(userId);
                 if(departmentIds != null){

@@ -19,7 +19,7 @@ import java.util.*;
 
 /**
  * @ClassName OrganizationServiceImpl
- * @Description 组织机构service实现类
+ * @Description 组织机构实现类
  * @Author fyh
  * Date 2020/6/1110:11
  */
