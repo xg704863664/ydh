@@ -13,6 +13,7 @@
         <module>oauth-server</module>
         <module>file-server</module>
         <module>api-server</module>
+        <module>curture</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>
