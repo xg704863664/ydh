@@ -2,8 +2,6 @@
 
 source ./config.sh
 
-JAVA_HOME=`which java`
-
 if [ ${1} ];
 then
   nacos_ip_port=$1
