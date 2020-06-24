@@ -98,6 +98,7 @@ public class OrganizationServiceImpl implements OrganizationService{
             organizationFindAllDomain.setId(organization.getId());
             organizationFindAllDomain.setOrganizationName(organization.getOrganizationName());
             organizationFindAllDomain.setAddress(organization.getAddress());
+            organizationFindAllDomain.setOrganizationPhone(organization.getOrganizationPhone());
             organizationFindAllDomain.setType(1);
             organizationDaomainList.add(organizationFindAllDomain);
         });
