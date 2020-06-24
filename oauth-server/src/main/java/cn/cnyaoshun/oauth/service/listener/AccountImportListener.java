@@ -27,21 +27,21 @@ public class AccountImportListener extends AnalysisEventListener<AccountImportDo
     @Override
     public void invoke(AccountImportDomain accountImportDomain, AnalysisContext analysisContext) {
         if (StringUtils.isEmpty(accountImportDomain.getAccountName())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"帐号名必填");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"帐号名不能为空");
         }
         if (StringUtils.isEmpty(accountImportDomain.getPassWord())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"密码必填");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"密码不能为空");
         }
         if (StringUtils.isEmpty(accountImportDomain.getUserName())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"用户名必填");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"用户名不能为空");
         }
         if (StringUtils.isEmpty(accountImportDomain.getPhone())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"手机号必填");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"手机号不能为空");
         }
         log.info("解析到一条数据:{}", JSON.toJSONString(accountImportDomain));
         accountImportDomainList.add(accountImportDomain);
         if (accountImportDomainList.size() >= BATCH_COUNT) {
-            log.info("{}条数据，开始存储数据库！", accountImportDomainList.size());
+            log.info("{}条数据，开始存储数据库.", accountImportDomainList.size());
             dealExcelService.dealData(accountImportDomainList);
             accountImportDomainList.clear();
         }
@@ -49,8 +49,8 @@ public class AccountImportListener extends AnalysisEventListener<AccountImportDo
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
-        log.info("{}条数据，开始存储数据库！", accountImportDomainList.size());
+        log.info("{}条数据，开始存储数据库.", accountImportDomainList.size());
         dealExcelService.dealData(accountImportDomainList);
-        log.info("所有数据解析完成！");
+        log.info("所有数据解析完成.");
     }
 }

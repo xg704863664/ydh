@@ -18,4 +18,4 @@ for (( i = 0; i < ${#jar[@]}; ++i )); do
     stop ${jar[$i]} ${server_name}
 done
 
-echo 'Stop YDH Successfully...'
+echo 'Successfully stopped YDH .'

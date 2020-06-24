@@ -24,7 +24,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Account account = accountRepository.findByAccountName(userName);
         if (account == null){
-            throw new ExceptionValidation(ApiCode.DATA_NOT_EXISTS.getCode(),"用户不存在");
+            throw new ExceptionValidation(ApiCode.DATA_NOT_EXISTS.getCode(),"账户不存在");
         }
         return new UserDetailsImpl(account);
     }

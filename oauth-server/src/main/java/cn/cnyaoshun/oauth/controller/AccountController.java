@@ -27,7 +27,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequestMapping("/account")
 @AllArgsConstructor
-@Api(description = "账户操作API")
+@Api(description = "账户管理API")
 @Validated
 public class AccountController {
 

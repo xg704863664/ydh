@@ -18,7 +18,6 @@ public interface UserService {
     PageDataDomain<UserFindAllByDepartmentIdDomain> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize);
     Long countByUserId(Long departmentId);
     List<UserFindAllDomain> findAllUserName();
-    //修改部门
     boolean reviseDepartment(UserUpdateByDepartmentDomain userUpdateByDepartmentDomain);
 
 }

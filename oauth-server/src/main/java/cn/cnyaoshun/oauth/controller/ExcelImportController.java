@@ -33,18 +33,20 @@ import java.net.URLEncoder;
 
 @RestController
 @RequestMapping("/import")
-@Api(description = "excel导入操作API")
+@Api(description = "Excel操作API")
 @RequiredArgsConstructor
 @Validated
 @Slf4j
 public class ExcelImportController {
 
-    private final ExcelImportService excelImportService;
 
+
+    // TODO  下载合为一个
+    private final ExcelImportService excelImportService;
     private final RedisTokenUtil redisTokenUtil;
 
     @RequestMapping(value = "/org/department/download", method = RequestMethod.GET)
-    @ApiOperation(value = "下载组织机构模版", httpMethod = "GET")
+    @ApiOperation(value = "下载组织机构信息模版", httpMethod = "GET")
     public ResponseEntity<byte[]> downloadOrgDepartmentExcel() {
         byte[] bytes = null;
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -60,7 +62,7 @@ public class ExcelImportController {
     }
 
     @RequestMapping(value = "/account/download", method = RequestMethod.GET)
-    @ApiOperation(value = "下载账户模版", httpMethod = "GET")
+    @ApiOperation(value = "下载账户信息模版", httpMethod = "GET")
     public ResponseEntity<byte[]> downloadAccountExcel() {
         byte[] bytes = null;
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -77,20 +79,20 @@ public class ExcelImportController {
 
 
     @RequestMapping(value = "/excel/token", method = RequestMethod.GET)
-    @ApiOperation(value = "获取excel操作token", httpMethod = "GET")
+    @ApiOperation(value = "获取操作Excel的Token", httpMethod = "GET")
     public ReturnJsonData<String> getOperationExcelToken() {
         String token = redisTokenUtil.createToken();
         return ReturnJsonData.build(token);
     }
 
 
-    @RequestMapping(value = "/excel/upload", method = RequestMethod.POST)
-    @ApiOperation(value = "excel导入", httpMethod = "POST")
-    public ReturnJsonData<String> importOrgDepartmentExcel(@NotNull @ApiParam(value = "file 文件") @RequestParam("file")MultipartFile file,
-                                           @NotBlank(message = "operationToken 不能为空") @ApiParam(value ="operationToken 操作token 防重复提交",required = true) @RequestParam(value = "operationToken") String operationToken,
-                                           @NotBlank(message = "dealType处理类型不能为空") @ApiParam(value ="dealType处理类型 org_department_deal:组织机构批量导入 account_deal:帐号批量导入",required = true) @RequestParam(value = "dealType") String dealType) {
+    @RequestMapping(value = "/excel/import", method = RequestMethod.POST)
+    @ApiOperation(value = "Excel数据导入", httpMethod = "POST")
+    public ReturnJsonData<String> importExcel(@NotNull @ApiParam(value = "待导入的文件") @RequestParam("file")MultipartFile file,
+                                           @NotBlank(message = "Token不能为空") @ApiParam(value ="操作Token防重复提交",required = true) @RequestParam(value = "operationToken") String operationToken,
+                                           @NotBlank(message = "类型不能为空") @ApiParam(value ="类型:org_department_deal,表示组织机构信息;account_deal,表示账户信息",required = true) @RequestParam(value = "dealType") String dealType) {
         if (!redisTokenUtil.checkToken(operationToken)){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"operationToken 无效token");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"获取操作Excel的Token无效");
         }
         redisTokenUtil.clearToken(operationToken);
         excelImportService.dealExcel(dealType,file);

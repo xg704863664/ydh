@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 /**
  * @ClassName ProjectListDomain
- * @Description 展示项目信息得List
+ * @Description 展示项目信息的List
  * @Author xiaGen
  * Date 2020/6
  */

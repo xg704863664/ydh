@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * @ClassName OauthUserListDao
- * @Description 根据项目ID和账号和TOKEN查询角色和用户
+ * @Description
  * @Author fyh
  * Date 2020/6/1917:19
  */
@@ -47,16 +47,15 @@ public class OauthUserListDao {
         return roleList;
     }
 
-    public List<PermissionOauthUserListDomain> getAllPermissionList(List<Long> roleIdLits){
-        StringBuilder permissionListSql = new StringBuilder("SELECT p.id,p.permission_name,p.permission_type from role_permission as rp,permission as p where rp.role_id in("+ roleIdLits +") and rp.permission_id=p.id");
+    public List<PermissionOauthUserListDomain> getAllPermissionList(List<Long> roleIdList){
+        StringBuilder permissionListSql = new StringBuilder("SELECT p.id,p.permission_name,p.permission_type from role_permission as rp,permission as p where rp.role_id in("+ roleIdList +") and rp.permission_id=p.id");
         Query nativeQuery = entityManager.createNativeQuery(permissionListSql.toString());
-        nativeQuery.setParameter(1,roleIdLits);
+        nativeQuery.setParameter(1,roleIdList);
         List<PermissionOauthUserListDomain> permissionOauthUserListDomains = new ArrayList<>();
         List<Object[]> objects =  nativeQuery.getResultList();
         Field[] declaredFieldPermission = PermissionOauthUserListDomain.class.getDeclaredFields();
         objects.forEach(object -> {
             PermissionOauthUserListDomain permissionOauthUserListDomain = new PermissionOauthUserListDomain();
-
             try {
                 declaredFieldPermission[0].setAccessible(true);
                 declaredFieldPermission[0].set(permissionOauthUserListDomain,Long.valueOf(object[0].toString()));

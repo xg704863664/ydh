@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Set;
 
 /**
- * @ClassName UserDomainV4
+ * @ClassName UserDomain
  * @Description 用于用户调整部门
  * @Author fyh
  * Date 2020/6/1618:24

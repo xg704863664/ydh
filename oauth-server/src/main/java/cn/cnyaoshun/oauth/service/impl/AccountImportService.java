@@ -25,11 +25,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountImportService implements DealExcelService<AccountImportDomain> {
 
-
     private  final AccountRepository accountRepository;
-
     private final UserRepository userRepository;
-
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -54,7 +51,7 @@ public class AccountImportService implements DealExcelService<AccountImportDomai
                 user = userRepository.save(user);
             }
             Account account = accountRepository.findByAccountName(accountImportDomain.getAccountName());
-            if (account == null){
+            if (null == account){
                 account = new Account();
                 account.setAccountName(accountImportDomain.getAccountName());
                 account.setPassword(bCryptPasswordEncoder.encode(accountImportDomain.getPassWord()));

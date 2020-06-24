@@ -38,18 +38,16 @@ public class OrgDepartmentImportListener extends AnalysisEventListener<OrgDepart
         if (StringUtils.isEmpty(orgDepartmentImportDomain.getUserName())){
             throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"员工名称不能为空");
         }
-//        if (StringUtils.isEmpty(orgDepartmentImportDomain.getCardNo())){
-//            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"员工身份证不能为空");
-//        }
+
         if (StringUtils.isEmpty(orgDepartmentImportDomain.getPhone())){
             throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"手机号不能为空");
         }
         log.info("解析到一条数据:{}", JSON.toJSONString(orgDepartmentImportDomain));
         orgDepartmentImportDomainList.add(orgDepartmentImportDomain);
         if (orgDepartmentImportDomainList.size() >= BATCH_COUNT) {
-            log.info("{}条数据，开始存储数据库！", orgDepartmentImportDomainList.size());
+            log.info("{}条数据，开始存储数据库.", orgDepartmentImportDomainList.size());
             dealExcelService.dealData(orgDepartmentImportDomainList);
-            log.info("存储数据库成功！");
+            log.info("存储数据库成功.");
             // 存储完成清理 list
             orgDepartmentImportDomainList.clear();
         }
@@ -57,9 +55,9 @@ public class OrgDepartmentImportListener extends AnalysisEventListener<OrgDepart
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
-        log.info("{}条数据，开始存储数据库！", orgDepartmentImportDomainList.size());
+        log.info("{}条数据，开始存储数据库.", orgDepartmentImportDomainList.size());
         dealExcelService.dealData(orgDepartmentImportDomainList);
-        log.info("所有数据解析完成！");
+        log.info("所有数据解析完成.");
 
     }
 }

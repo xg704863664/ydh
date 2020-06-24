@@ -30,9 +30,7 @@ import java.util.Optional;
 public class OauthServiceImpl implements OauthService {
 
     private final AccountRepository accountRepository;
-
     private final UserRepository userRepository;
-    
     private final OauthUserListDao oauthUserListDao;
 
     @Override
