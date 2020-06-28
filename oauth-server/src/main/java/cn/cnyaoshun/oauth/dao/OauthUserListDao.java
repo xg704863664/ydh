@@ -10,6 +10,9 @@ import javax.persistence.Query;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @ClassName OauthUserListDao
@@ -48,9 +51,10 @@ public class OauthUserListDao {
     }
 
     public List<PermissionOauthUserListDomain> getAllPermissionList(List<Long> roleIdList){
-        StringBuilder permissionListSql = new StringBuilder("SELECT p.id,p.permission_name,p.permission_type from role_permission as rp,permission as p where rp.role_id in("+ roleIdList +") and rp.permission_id=p.id");
+        StringBuilder permissionListSql = new StringBuilder("SELECT p.id,p.permission_name,p.permission_type from role_permission as rp,permission as p where rp.role_id in(?) and rp.permission_id=p.id");
         Query nativeQuery = entityManager.createNativeQuery(permissionListSql.toString());
-        nativeQuery.setParameter(1,roleIdList);
+        String ids = roleIdList.stream().map(id -> String.valueOf(id)).collect(Collectors.joining(","));
+        nativeQuery.setParameter(1,ids);
         List<PermissionOauthUserListDomain> permissionOauthUserListDomains = new ArrayList<>();
         List<Object[]> objects =  nativeQuery.getResultList();
         Field[] declaredFieldPermission = PermissionOauthUserListDomain.class.getDeclaredFields();
