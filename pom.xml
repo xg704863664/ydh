@@ -128,25 +128,25 @@
             </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
+                <configuration>
+                    <tasks>
+                        <!-- 存放的文件夹 -->
+                        <copy todir="${out}">
+                            <fileset dir="${project.build.directory}">
+                                <include name="${project.artifactId}-${project.version}.jar" />
+                            </fileset>
+                        </copy>
+                        <copy todir="${out}">
+                            <fileset dir="${sh}">
+                                <include name="*.sh"/>
+                            </fileset>
+                        </copy>
+                    </tasks>
+                </configuration>
                 <executions>
                     <execution>
                         <id>copy</id>
-                        <phase>package</phase>
-                        <configuration>
-                            <tasks>
-                                <!-- 存放的文件夹 -->
-                                <copy todir="${out}">
-                                    <fileset dir="${project.build.directory}">
-                                        <include name="${project.artifactId}-${project.version}.jar" />
-                                    </fileset>
-                                </copy>
-                                <!--<copy todir="${out}">-->
-                                    <!--<fileset dir="${sh}">-->
-                                        <!--<include name="*.sh"/>-->
-                                    <!--</fileset>-->
-                                <!--</copy>-->
-                            </tasks>
-                        </configuration>
+                        <phase>none</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
