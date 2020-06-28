@@ -19,7 +19,7 @@ public class RedisTokenUtil {
     private String dir = "operation:token:";
     public String createToken(){
         String uuid = UUID.randomUUID().toString().replaceAll("-","");
-        redisTemplate.opsForValue().set(dir+uuid,uuid,60*5, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(dir+uuid,uuid,60*60*5, TimeUnit.SECONDS);
         return uuid;
     }
 

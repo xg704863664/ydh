@@ -42,36 +42,10 @@ public class ExcelImportController {
     private final ExcelImportService excelImportService;
     private final RedisTokenUtil redisTokenUtil;
 
-    @RequestMapping(value = "/org/department/download", method = RequestMethod.GET)
-    @ApiOperation(value = "下载组织机构信息模版", httpMethod = "GET")
-    public ResponseEntity<byte[]> downloadOrgDepartmentExcel() {
-        byte[] bytes = null;
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        try {
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("organization_template.xlsx");
-            bytes = IOUtils.toByteArray(inputStream);
-            httpHeaders.setContentDispositionFormData("attachment", URLEncoder.encode("organization_template.xlsx","utf-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/account/download", method = RequestMethod.GET)
-    @ApiOperation(value = "下载账户信息模版", httpMethod = "GET")
-    public ResponseEntity<byte[]> downloadAccountExcel() {
-        byte[] bytes = null;
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        try {
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("account_template.xlsx");
-            bytes = IOUtils.toByteArray(inputStream);
-            httpHeaders.setContentDispositionFormData("attachment", URLEncoder.encode("account_template.xlsx","utf-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+    @RequestMapping(value = "/template/download", method = RequestMethod.GET)
+    @ApiOperation(value = "下载模版公用接口", httpMethod = "GET")
+    public ResponseEntity<byte[]> downloadOrgDepartmentExcel(@NotBlank(message = "模版类型不能为空")@ApiParam(value = "templateType 下载模版类型 org_department_template:组织机构模版 account_template: 账户模版",required = true)@RequestParam(value = "templateType") String templateType) {
+        return excelImportService.downLoadTemplate(templateType);
     }
 
 

@@ -1,6 +1,7 @@
 .idea
 logs
 .idea/**
+target
 api-gateway-server/target/
 api-gateway-server/target/**
 api-gateway-server/api-gateway-server.iml

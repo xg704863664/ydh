@@ -1,0 +1,27 @@
+<assembly
+        xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <id>release</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+
+    <!--<files>-->
+        <!--<file>-->
+            <!--<source>${user.dir}/jar/api-gateway-server-1.0-SNAPSHOT.jar</source>-->
+            <!--<destName>api-gateway-server-1.0-SNAPSHOT.jar</destName>-->
+        <!--</file>-->
+    <!--</files>-->
+
+    <fileSets>
+        <fileSet>
+            <directory>${out}</directory>
+            <includes>
+                <include>*.jar</include>
+                <include>*.sh</include>
+            </includes>
+            <outputDirectory>\</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>
