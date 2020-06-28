@@ -140,11 +140,11 @@
                                         <include name="${project.artifactId}-${project.version}.jar" />
                                     </fileset>
                                 </copy>
-                                <copy todir="${out}">
-                                    <fileset dir="${sh}">
-                                        <include name="*.sh"/>
-                                    </fileset>
-                                </copy>
+                                <!--<copy todir="${out}">-->
+                                    <!--<fileset dir="${sh}">-->
+                                        <!--<include name="*.sh"/>-->
+                                    <!--</fileset>-->
+                                <!--</copy>-->
                             </tasks>
                         </configuration>
                         <goals>
