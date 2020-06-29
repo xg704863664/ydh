@@ -1,14 +1,23 @@
 package cn.cnyaoshun.oauth.service.impl;
 
+import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.PermissionRepository;
+import cn.cnyaoshun.oauth.dao.ProjectRepository;
 import cn.cnyaoshun.oauth.domain.PermissionAddDomain;
 import cn.cnyaoshun.oauth.domain.PermissionFindAllByProjectIdDomain;
+import cn.cnyaoshun.oauth.domain.PermissionFindAllDomain;
 import cn.cnyaoshun.oauth.domain.PermissionUpdateDomain;
 import cn.cnyaoshun.oauth.entity.Permission;
+import cn.cnyaoshun.oauth.entity.Project;
 import cn.cnyaoshun.oauth.service.PermissionService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +34,12 @@ import java.util.Optional;
  */
 @Service
 @AllArgsConstructor
+@Slf4j
 public class PermissionServiceImpl implements PermissionService{
 
     private final PermissionRepository permissionRepository;
+
+    private final ProjectRepository projectRepository;
 
     @Override
     @Transactional
@@ -60,7 +72,31 @@ public class PermissionServiceImpl implements PermissionService{
             BeanUtils.copyProperties(permission, permissionFindAllByProjectIdDomain);
             permissionFindAllByProjectIdDomainList.add(permissionFindAllByProjectIdDomain);
         });
+        log.info("权限信息获取成功.共有:"+permissionFindAllByProjectIdDomainList.size()+"条记录");
         return permissionFindAllByProjectIdDomainList;
+    }
+
+    @Override
+    public PageDataDomain<PermissionFindAllDomain> findAll(Integer pageNumber, Integer pageSize) {
+        PageDataDomain<PermissionFindAllDomain> pageDataDomain = new PageDataDomain();
+        Sort sort = Sort.by(Sort.Direction.DESC,"id");
+        Pageable page = PageRequest.of(pageNumber-1,pageSize,sort);
+        Page<Permission> permissionPage = permissionRepository.findAll(page);
+        pageDataDomain.setCurrent(pageNumber-1);
+        pageDataDomain.setPages(pageSize);
+        pageDataDomain.setTotal(permissionPage.getTotalElements());
+        permissionPage.getContent().forEach(permission -> {
+            Optional<Project> projectOptional = projectRepository.findById(permission.getProjectId());
+            projectOptional.ifPresent(project -> {
+                PermissionFindAllDomain permissionFindAllDomain = new PermissionFindAllDomain();
+                permissionFindAllDomain.setPermissionName(permission.getPermissionName());
+                permissionFindAllDomain.setPermissionType(permission.getPermissionType());
+                permissionFindAllDomain.setProjectName(project.getProjectName());
+                pageDataDomain.getRecords().add(permissionFindAllDomain);
+            });
+        });
+        log.info("获取权限信息成功,共有:"+pageDataDomain.getTotal() +"条数据");
+        return pageDataDomain;
     }
 
     @Override

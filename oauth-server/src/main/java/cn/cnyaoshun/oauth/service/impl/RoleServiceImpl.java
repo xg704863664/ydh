@@ -10,6 +10,7 @@ import cn.cnyaoshun.oauth.entity.Role;
 import cn.cnyaoshun.oauth.entity.RolePermission;
 import cn.cnyaoshun.oauth.service.RoleService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
@@ -29,6 +30,7 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
@@ -71,6 +73,7 @@ public class RoleServiceImpl implements RoleService {
         rolePermissions.forEach(rolePermission -> {
             rolePermissionRepository.deleteById(rolePermission.getId());
         });
+        log.info("角色信息及其关联信息删除成功");
     }
 
     @Override
@@ -82,6 +85,7 @@ public class RoleServiceImpl implements RoleService {
             BeanUtils.copyProperties(role, roleDomain);
             roleDomainList.add(roleDomain);
         });
+        log.info("获取角色信息查询成功,共有:"+roleDomainList.size()+"条数据");
         return roleDomainList;
     }
 
@@ -102,7 +106,7 @@ public class RoleServiceImpl implements RoleService {
             roleR.setUpdateTime(new Date());
             roleR.setCreateTime(roleUpdateDomain.getCreateTime());
             roleRepository.save(role);
-
+            log.info("角色信息修改成功");
             //数据库表中的权限
             List<RolePermission> rolePermissionAll = rolePermissionRepository.findByRoleId(role.getId());
             rolePermissionAll.forEach(rolePermission -> {
@@ -116,6 +120,7 @@ public class RoleServiceImpl implements RoleService {
                 permission.setRoleId(role.getId());
                 rolePermissionRepository.save(permission);
             });
+            log.info("角色关联权限信息修改成功");
         });
         return roleUpdateDomain.getId();
     }

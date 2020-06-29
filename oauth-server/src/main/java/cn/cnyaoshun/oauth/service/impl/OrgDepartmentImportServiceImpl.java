@@ -9,6 +9,7 @@ import cn.cnyaoshun.oauth.service.DealExcelService;
 import cn.cnyaoshun.oauth.service.listener.OrgDepartmentImportListener;
 import com.alibaba.excel.EasyExcel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -25,6 +26,7 @@ import java.util.List;
 @HandlerType(ExcelDealType.ORG_DEPARTMENT_DEAL)
 @RequiredArgsConstructor
 @RefreshScope
+@Slf4j
 public class OrgDepartmentImportServiceImpl implements DealExcelService<OrgDepartmentImportDomain> {
 
     private final OrganizationRepository organizationRepository;
@@ -102,7 +104,7 @@ public class OrgDepartmentImportServiceImpl implements DealExcelService<OrgDepar
             saveUserDepartment(user, organization.getId(), oneDepartment.getId());
             return;
         });
-
+        log.info("组织机构信息导入成功,共导入:"+orgDepartmentImportDomainList.size()+"条数据");
     }
 
 

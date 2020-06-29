@@ -11,6 +11,7 @@ import cn.cnyaoshun.oauth.entity.Role;
 import cn.cnyaoshun.oauth.entity.User;
 import cn.cnyaoshun.oauth.service.AccountService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +30,7 @@ import java.util.Optional;
  */
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AccountServiceImpl implements AccountService{
 
     private final AccountDao accountDao;
@@ -69,6 +71,7 @@ public class AccountServiceImpl implements AccountService{
                 pageDataDomain.getRecords().add(accountFindAllByRoleIdDomain);
             }
         });
+        log.info("根据角色信息查询账户信息,共有"+pageDataDomain.getTotal()+"条数据");
         return pageDataDomain;
     }
 
@@ -133,6 +136,7 @@ public class AccountServiceImpl implements AccountService{
         accountRepository.deleteById(accountId);
         AccountServiceImpl accountService = (AccountServiceImpl)AopContext.currentProxy();
         accountService.deleteAccountRole(accountId);
+        log.info("账户信息删除成功,删除的账号ID为"+accountId);
         return accountId;
     }
 
