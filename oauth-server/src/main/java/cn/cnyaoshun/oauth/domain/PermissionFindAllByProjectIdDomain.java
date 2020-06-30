@@ -17,6 +17,9 @@ public class PermissionFindAllByProjectIdDomain {
     @ApiModelProperty(value = "项目ID")
     private Long projectId;
 
+    @ApiModelProperty(value = "权限ID")
+    private Long id;
+
     @ApiModelProperty(value = "权限名称非空")
     @NotNull(message = "权限名称不能为空")
     private String permissionName;

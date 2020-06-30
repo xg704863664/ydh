@@ -69,7 +69,10 @@ public class PermissionServiceImpl implements PermissionService{
         List<Permission> byProjectId = permissionRepository.findByProjectId(projectId);
         byProjectId.forEach(permission -> {
             PermissionFindAllByProjectIdDomain permissionFindAllByProjectIdDomain = new PermissionFindAllByProjectIdDomain();
-            BeanUtils.copyProperties(permission, permissionFindAllByProjectIdDomain);
+            permissionFindAllByProjectIdDomain.setId(permission.getId());
+            permissionFindAllByProjectIdDomain.setPermissionName(permission.getPermissionName());
+            permissionFindAllByProjectIdDomain.setPermissionType(permission.getPermissionType());
+            permissionFindAllByProjectIdDomain.setProjectId(permission.getProjectId());
             permissionFindAllByProjectIdDomainList.add(permissionFindAllByProjectIdDomain);
         });
         log.info("权限信息获取成功.共有:"+permissionFindAllByProjectIdDomainList.size()+"条记录");
