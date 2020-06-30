@@ -1,8 +1,10 @@
 package cn.cnyaoshun.oauth.controller;
 
+import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
 import cn.cnyaoshun.oauth.domain.PermissionAddDomain;
 import cn.cnyaoshun.oauth.domain.PermissionFindAllByProjectIdDomain;
+import cn.cnyaoshun.oauth.domain.PermissionFindAllDomain;
 import cn.cnyaoshun.oauth.domain.PermissionUpdateDomain;
 import cn.cnyaoshun.oauth.service.PermissionService;
 import io.swagger.annotations.Api;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -57,5 +60,13 @@ public class PermissionController {
     public ReturnJsonData<Long> update(@Validated @RequestBody PermissionUpdateDomain permissionUpdateDomain){
         Long update = permissionService.update(permissionUpdateDomain);
         return ReturnJsonData.build(update);
+    }
+
+    @ApiOperation(value = "获取所有权限信息",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/findAll", method = RequestMethod.GET)
+    public ReturnJsonData<PageDataDomain<PermissionFindAllDomain>> findAll(@Min(1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber")Integer pageNumber,
+                                                                           @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")Integer pageSize){
+        PageDataDomain<PermissionFindAllDomain> domains = permissionService.findAll(pageNumber,pageSize);
+        return ReturnJsonData.build(domains);
     }
 }

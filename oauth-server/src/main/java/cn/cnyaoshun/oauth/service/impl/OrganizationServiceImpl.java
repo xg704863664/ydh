@@ -9,6 +9,7 @@ import cn.cnyaoshun.oauth.entity.Organization;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.OrganizationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
@@ -25,6 +26,7 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrganizationServiceImpl implements OrganizationService{
 
     private final OrganizationRepository organizationRepository;
@@ -81,7 +83,7 @@ public class OrganizationServiceImpl implements OrganizationService{
         organizationRepository.deleteById(organizationId);
         OrganizationServiceImpl organizationService = (OrganizationServiceImpl) AopContext.currentProxy();
         organizationService.deleteDepartment(organizationId);
-
+        log.info("组织机构信息及其关联信息删除成功,删除的组织机构ID为"+organizationId);
     }
 
     /**
@@ -98,9 +100,11 @@ public class OrganizationServiceImpl implements OrganizationService{
             organizationFindAllDomain.setId(organization.getId());
             organizationFindAllDomain.setOrganizationName(organization.getOrganizationName());
             organizationFindAllDomain.setAddress(organization.getAddress());
+            organizationFindAllDomain.setOrganizationPhone(organization.getOrganizationPhone());
             organizationFindAllDomain.setType(1);
             organizationDaomainList.add(organizationFindAllDomain);
         });
+        log.info("组织机构信息获取成功.共有"+organizationDaomainList.size()+"条数据");
         return organizationDaomainList;
     }
 

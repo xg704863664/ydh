@@ -21,7 +21,7 @@ import java.util.Optional;
 
 /**
  * @ClassName OauthServiceImpl
- * @Description TOKEN操作service实现类
+ * @Description 获取Tonken信息实现类
  * @Author fyh
  * Date 2020/6/1910:11
  */
@@ -33,6 +33,12 @@ public class OauthServiceImpl implements OauthService {
     private final UserRepository userRepository;
     private final OauthUserListDao oauthUserListDao;
 
+    /**
+     * 根据Token和项目ID获取账户信息及权限
+     * @param oAuth2Authentication
+     * @param projectId
+     * @return
+     */
     @Override
     public OauthUserListDomain getAllUserInfo(OAuth2Authentication oAuth2Authentication,Long projectId) {
 

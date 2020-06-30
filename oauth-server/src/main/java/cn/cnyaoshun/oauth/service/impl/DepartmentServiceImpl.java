@@ -9,6 +9,7 @@ import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.Department;
 import cn.cnyaoshun.oauth.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
@@ -25,6 +26,7 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
@@ -112,6 +114,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             });
         });
         departmentRepository.deleteById(departmentId);
+        log.info("部门删除成功,删除的部门ID为:"+departmentId);
         DepartmentServiceImpl departmentService = (DepartmentServiceImpl) AopContext.currentProxy();
         departmentService.deleteUser(departmentId);
     }
@@ -143,6 +146,7 @@ public class DepartmentServiceImpl implements DepartmentService {
                 accountRoleRepository.deleteAllByAccountId(account.getId());
             });
         });
+        log.info("部门关联信息删除成功");
     }
 
     /**

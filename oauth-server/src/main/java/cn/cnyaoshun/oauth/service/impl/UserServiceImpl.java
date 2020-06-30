@@ -10,6 +10,7 @@ import cn.cnyaoshun.oauth.entity.User;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -29,6 +30,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @RefreshScope
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Value("${modify.password}")
@@ -74,6 +76,7 @@ public class UserServiceImpl implements UserService {
             userFindAllDomain.setUserName(user.getUserName());
             userFindAllDomainList.add(userFindAllDomain);
         });
+        log.info("获取所有用户信息查询完毕,共有:"+userFindAllDomainList.size()+"条数据");
         return userFindAllDomainList;
     }
 
@@ -128,13 +131,13 @@ public class UserServiceImpl implements UserService {
         user.setIdNo(userAddDomain.getIdNo());
         user.setPhone(userAddDomain.getPhone());
         userRepository.save(user);
-
+        log.info("用户添加成功");
         Account account = new Account();
         account.setUserId(user.getId());
         account.setState(true);
         account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
         accountRepository.save(account);
-
+        log.info("用户关联默认账户添加成功");
         if (userAddDomain.getDepartmentId() != null && userAddDomain.getDepartmentId() > 0){
                Long departmentId1 = userAddDomain.getDepartmentId();
             Optional<Department> departmentOptional = departmentRepository.findById(departmentId1);
@@ -144,6 +147,7 @@ public class UserServiceImpl implements UserService {
                 userDepartment.setDepartmentId(departmentId1);
                 userDepartment.setOrganizationId(department.getOrganizationId());
                 userDepartmentRepository.save(userDepartment);
+                log.info("用户关联账户关联关系添加成功");
             });
         }
         return user.getId();
@@ -169,7 +173,7 @@ public class UserServiceImpl implements UserService {
             userR.setUpdateTime(new Date());
             userR.setAge(userUpdateDomain.getAge());
             userRepository.save(userR);
-
+            log.info("用户信息修改成功");
             List<UserDepartment> userDepartmentList = userDepartmentRepository.findAllByUserId(userR.getId());
             userDepartmentList.forEach(userDepartment -> {
                 userDepartmentRepository.deleteById(userDepartment.getId());
@@ -182,6 +186,7 @@ public class UserServiceImpl implements UserService {
                 userDepartment.setUserId(userR.getId());
                 userDepartment.setOrganizationId(department.getOrganizationId());
                 userDepartmentRepository.save(userDepartment);
+                log.info("用户部门关联信息表修改成功");
             });
         });
         return userUpdateDomain.getId();
@@ -213,7 +218,7 @@ public class UserServiceImpl implements UserService {
 
             pageDataDomain.getRecords().addAll(crmMemberEntityPage);
         });
-
+        log.info("根据部门ID获取用户信息查询完毕,共有:"+pageDataDomain.getTotal()+"条数据");
         return pageDataDomain;
     }
 
@@ -223,6 +228,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userId);
         UserServiceImpl userService = (UserServiceImpl)AopContext.currentProxy();
         userService.deleteAccount(userId);
+        log.info("用户及其关联关系删除成功");
         return userId;
     }
 
