@@ -8,5 +8,4 @@ management:
       show-details: ALWAYS
 server:
   port: 16004
-  servlet:
-    context-path: /api/${spring.application.name}
+

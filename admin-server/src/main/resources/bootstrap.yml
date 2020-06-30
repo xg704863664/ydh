@@ -7,6 +7,3 @@ spring:
         enabled: false
       discovery:
         server-addr: 47.94.92.201:15005
-        metadata:
-          management:
-            context-path: ${server.servlet.context-path}/actuator
