@@ -21,8 +21,8 @@ public class AccountUpdateDomain {
     @ApiModelProperty(value = "账号ID")
     private Long id;
 
-    @ApiModelProperty(value = "用户名称")
-    private String userName;
+    @ApiModelProperty(value = "用户ID")
+    private Long userId;
 
     @ApiModelProperty(value = "账号,不能为空")
     @NotNull(message = "账号不能为空")

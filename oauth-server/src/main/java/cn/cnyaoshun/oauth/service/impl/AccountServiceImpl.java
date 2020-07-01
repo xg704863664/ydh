@@ -94,8 +94,7 @@ public class AccountServiceImpl implements AccountService{
             accountU.setAccountName(accountUpdateDomain.getAccountName());
             accountU.setPassword(bCryptPasswordEncoder.encode(accountUpdateDomain.getPassword())); //密码修改后进行加密处理
             accountU.setUpdateTime(new Date());
-            User user = userRepository.findByUserName(accountUpdateDomain.getUserName());
-            accountU.setUserId(user.getId());
+            accountU.setUserId(accountUpdateDomain.getUserId());
             accountRepository.save(accountU);
 
             List<AccountRole> allByAccountId = accountRoleRepository.findAllByAccountId(accountU.getId());
@@ -136,7 +135,7 @@ public class AccountServiceImpl implements AccountService{
         pageDataDomain.setPages(pageSize);
         pageDataDomain.setTotal(accountRepositoryAll.getTotalElements());
 
-        accountRepositoryAll.getContent().forEach(account -> {
+        accountRepositoryAll.forEach(account -> {
             AccountFindAllDomain accountFindAllDomain = new AccountFindAllDomain();
             accountFindAllDomain.setId(account.getId());
             accountFindAllDomain.setAccountName(account.getAccountName());
