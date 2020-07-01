@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName AccountServiceImpl
@@ -136,20 +137,18 @@ public class AccountServiceImpl implements AccountService{
                 });
             });
             List<AccountRole> accountRoleList = accountRoleRepository.findAllByAccountId(account.getId());
-            List<String> roleNameList = new ArrayList<>();
-            List<RoleDomain> roleDomainList = new ArrayList<>();
-            accountRoleList.forEach(accountRole -> {
+            List<RoleDomain> roleDomainList = accountRoleList.stream().map(accountRole -> {
                 RoleDomain roleDomain = new RoleDomain();
-                Optional<Role> roleOptional = roleRepository.findById(accountRole.getRoleId());
-                roleOptional.ifPresent(role -> {
-                    roleNameList.add(role.getRoleName());
-                    roleDomain.setId(role.getId());
-                    roleDomain.setRoleName(role.getRoleName());
-                    roleDomain.setProjectId(role.getProjectId());
-                    roleDomainList.add(roleDomain);
+                Optional.ofNullable(accountRole.getRoleId()).ifPresent(roleId ->{
+                        Optional<Role> roleOptional = roleRepository.findById(roleId);
+                        roleOptional.ifPresent(role -> {
+                            roleDomain.setId(role.getId());
+                            roleDomain.setRoleName(role.getRoleName());
+                            roleDomain.setProjectId(role.getProjectId());
+                        });
                 });
-            });
-            accountFindAllDomain.setRoleName(roleNameList);
+                return roleDomain;
+            }).filter(roleDomain -> roleDomain.getId()!=null).collect(Collectors.toList());
             accountFindAllDomain.setRoleList(roleDomainList);
             pageDataDomain.getRecords().add(accountFindAllDomain);
         });

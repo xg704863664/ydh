@@ -35,7 +35,4 @@ public class AccountFindAllDomain {
     @ApiModelProperty(value = "账号对应角色信息")
     private List<RoleDomain> roleList;
 
-    @ApiModelProperty(value = "角色名称")
-    private List<String> RoleName;
-
 }
