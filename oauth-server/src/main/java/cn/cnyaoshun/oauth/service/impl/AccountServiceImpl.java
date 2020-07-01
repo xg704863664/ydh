@@ -8,7 +8,6 @@ import cn.cnyaoshun.oauth.entity.AccountRole;
 import cn.cnyaoshun.oauth.entity.Role;
 import cn.cnyaoshun.oauth.entity.User;
 import cn.cnyaoshun.oauth.service.AccountService;
-import javassist.runtime.Desc;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
@@ -21,10 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
@@ -115,10 +111,8 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public PageDataDomain<AccountFindAllDomain> findAll(Integer pageNumber, Integer pageSize, String keyWord) {
-
         PageDataDomain<AccountFindAllDomain> pageDataDomain = new PageDataDomain<>();
-        Sort sort = Sort.by(Sort.Direction.DESC,"id");
-        PageRequest page = PageRequest.of(pageNumber-1,pageSize,sort);
+        PageRequest page = PageRequest.of(pageNumber-1,pageSize, Sort.by(Sort.Direction.DESC,"id"));
         Specification<Account> accountSpecification = (Specification<Account>) (root, criteriaQuery, cb) -> {
             Predicate restrictions = cb.conjunction();
             if(!StringUtils.isEmpty(keyWord)){
