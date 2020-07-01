@@ -13,11 +13,3 @@ spring:
         metadata:
           management:
             context-path: ${server.servlet.context-path}/actuator
-
-#hystrix:
-#  command:
-#    default:
-#      execution:
-#        isolation:
-#          thread:
-#            timeoutInMilliseconds: 3000

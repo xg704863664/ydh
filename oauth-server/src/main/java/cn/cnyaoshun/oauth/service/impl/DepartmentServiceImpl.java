@@ -65,9 +65,7 @@ public class DepartmentServiceImpl implements DepartmentService {
                 departmentMap.put(department.getParentId(), departments);
             }
         });
-        departmentTreeDomainList.forEach(departmentTreeDomain -> {
-            recursiveDepartment(departmentTreeDomain,departmentMap);
-        });
+        departmentTreeDomainList.forEach(departmentTreeDomain -> recursiveDepartment(departmentTreeDomain,departmentMap));
         return departmentTreeDomainList;
     }
 
@@ -76,6 +74,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @param departmentAddDomain
      * @return
      */
+    @Transactional
     @Override
     public Long add(DepartmentAddDomain departmentAddDomain) {
 
