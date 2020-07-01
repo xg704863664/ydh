@@ -118,32 +118,30 @@ public class AccountServiceImpl implements AccountService{
         PageDataDomain<AccountFindAllDomain> pageDataDomain = new PageDataDomain<>();
         Sort sort = Sort.by(Sort.Direction.DESC,"id");
         PageRequest page = PageRequest.of(pageNumber-1,pageSize,sort);
-        Specification<Account> accountSpecification = new Specification<Account>() {
-            @Override
-            public Predicate toPredicate(Root<Account> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
-                Predicate restrictions = cb.conjunction();
-                if(keyWord != null && !"".equals(keyWord)){
-                    Predicate predicate1 = cb.like(root.get("accountName"),"%"+keyWord+"%");
-                    restrictions = cb.and(restrictions,predicate1);
-                }
-                Predicate pre = cb.and(restrictions);
-                return pre;
+        Specification<Account> accountSpecification = (Specification<Account>) (root, criteriaQuery, cb) -> {
+            Predicate restrictions = cb.conjunction();
+            if(keyWord != null && !"".equals(keyWord)){
+                Predicate predicate1 = cb.like(root.get("accountName"),"%"+keyWord+"%");
+                restrictions = cb.and(restrictions,predicate1);
             }
+            Predicate pre = cb.and(restrictions);
+            return pre;
         };
         Page<Account> accountRepositoryAll = accountRepository.findAll(accountSpecification,page);
         pageDataDomain.setCurrent(pageNumber-1);
         pageDataDomain.setPages(pageSize);
         pageDataDomain.setTotal(accountRepositoryAll.getTotalElements());
-
         accountRepositoryAll.forEach(account -> {
             AccountFindAllDomain accountFindAllDomain = new AccountFindAllDomain();
             accountFindAllDomain.setId(account.getId());
             accountFindAllDomain.setAccountName(account.getAccountName());
-            Optional<User> userOptional = userRepository.findById(account.getUserId());
+            Optional.ofNullable(account.getUserId()).ifPresent(userId -> {
+                Optional<User> userOptional = userRepository.findById(userId);
                 userOptional.ifPresent(user -> {
                     accountFindAllDomain.setUserId(user.getId());
                     accountFindAllDomain.setUserName(user.getUserName());
                 });
+            });
             List<AccountRole> accountRoleList = accountRoleRepository.findAllByAccountId(account.getId());
             List<String> roleNameList = new ArrayList<>();
             List<RoleDomain> roleDomainList = new ArrayList<>();
@@ -152,7 +150,6 @@ public class AccountServiceImpl implements AccountService{
                 Optional<Role> roleOptional = roleRepository.findById(accountRole.getRoleId());
                 roleOptional.ifPresent(role -> {
                     roleNameList.add(role.getRoleName());
-
                     roleDomain.setId(role.getId());
                     roleDomain.setRoleName(role.getRoleName());
                     roleDomain.setProjectId(role.getProjectId());
