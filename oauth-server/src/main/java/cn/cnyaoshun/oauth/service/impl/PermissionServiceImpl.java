@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -87,23 +88,15 @@ public class PermissionServiceImpl implements PermissionService{
     public PageDataDomain<PermissionFindAllDomain> findAll(Integer pageNumber, Integer pageSize,String keyWord) {
 
         PageDataDomain<PermissionFindAllDomain> pageDataDomain = new PageDataDomain();
-        Sort sort = Sort.by(Sort.Direction.DESC,"id");
-        PageRequest page = PageRequest.of(pageNumber - 1, pageSize, sort);
-        Specification<Permission> specification = new Specification<Permission>() {
-            @Override
-            public Predicate toPredicate(Root<Permission> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
-                Predicate restrictions = cb.conjunction();
-                if(keyWord != null && !"".equals(keyWord)){
-                    Predicate predicate1 = cb.like(root.get("permissionName"),"%"+keyWord+"%");
-                    restrictions = cb.and(restrictions,predicate1);
-                }
-                if(keyWord != null && !"".equals(keyWord)){
-                    Predicate predicate2 = cb.like(root.get("permissionType"),"%"+keyWord+"%");
-                    restrictions = cb.or(restrictions,predicate2);
-                }
-                Predicate pre = cb.and(restrictions);
-                return pre;
+        PageRequest page = PageRequest.of(pageNumber - 1, pageSize, Sort.by(Sort.Direction.DESC,"id"));
+        Specification<Permission> specification = (Specification<Permission>) (root, criteriaQuery, cb) -> {
+            Predicate restrictions = cb.conjunction();
+            if(!StringUtils.isEmpty(keyWord)){
+                restrictions = cb.and(restrictions,cb.like(root.get("permissionName"),"%"+keyWord+"%"));
+                restrictions = cb.or(restrictions,cb.like(root.get("permissionType"),"%"+keyWord+"%"));
             }
+            Predicate pre = cb.and(restrictions);
+            return pre;
         };
         Page<Permission> permissionPage = permissionRepository.findAll(specification,page);
         PageDataDomain<PermissionFindAllDomain> permissionFindAllDomainPageDataDomain = permissionFindAll(pageDataDomain, pageNumber, pageSize, permissionPage);
