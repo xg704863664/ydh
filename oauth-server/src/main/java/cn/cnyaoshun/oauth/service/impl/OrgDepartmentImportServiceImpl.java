@@ -59,7 +59,6 @@ public class OrgDepartmentImportServiceImpl implements DealExcelService<OrgDepar
     @Override
     public void dealData(List<OrgDepartmentImportDomain> orgDepartmentImportDomainList) {
         orgDepartmentImportDomainList.stream().forEach(orgDepartmentImportDomain -> {
-
             Organization organization = organizationRepository.findByOrganizationName(orgDepartmentImportDomain.getOrgName());
             if (organization == null) {
                 organization = new Organization();

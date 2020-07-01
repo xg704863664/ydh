@@ -19,13 +19,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @HandlerType(value = ExcelDealType.ACCOUNT_DEAL)
 @RequiredArgsConstructor
 public class AccountImportService implements DealExcelService<AccountImportDomain> {
 
-    private  final AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -44,21 +45,25 @@ public class AccountImportService implements DealExcelService<AccountImportDomai
     public void dealData(List<AccountImportDomain> list) {
         list.stream().forEach(accountImportDomain -> {
             User user = userRepository.findByPhone(accountImportDomain.getPhone());
-            if (null == user){
-                user = new User();
-                user.setUserName(accountImportDomain.getUserName());
-                user.setPhone(accountImportDomain.getPhone());
-                user = userRepository.save(user);
-            }
+            Long userId = Optional.ofNullable(user).orElseGet(() -> saveUser(accountImportDomain)).getId();
             Account account = accountRepository.findByAccountName(accountImportDomain.getAccountName());
-            if (null == account){
-                account = new Account();
-                account.setAccountName(accountImportDomain.getAccountName());
-                account.setPassword(bCryptPasswordEncoder.encode(accountImportDomain.getPassWord()));
-                account.setState(true);
-                account.setUserId(user.getId());
-                accountRepository.save(account);
-            }
+            Optional.ofNullable(account).orElseGet(() -> saveAccount(accountImportDomain, userId));
         });
+    }
+
+    public User saveUser(AccountImportDomain accountImportDomain) {
+        User user = new User();
+        user.setUserName(accountImportDomain.getUserName());
+        user.setPhone(accountImportDomain.getPhone());
+        return userRepository.save(user);
+    }
+
+    public Account saveAccount(AccountImportDomain accountImportDomain, Long userId) {
+        Account account = new Account();
+        account.setAccountName(accountImportDomain.getAccountName());
+        account.setPassword(bCryptPasswordEncoder.encode(accountImportDomain.getPassWord()));
+        account.setState(true);
+        account.setUserId(userId);
+        return accountRepository.save(account);
     }
 }
