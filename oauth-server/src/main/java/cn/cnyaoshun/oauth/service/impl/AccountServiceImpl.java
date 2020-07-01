@@ -96,9 +96,7 @@ public class AccountServiceImpl implements AccountService{
             accountRepository.save(accountU);
 
             List<AccountRole> allByAccountId = accountRoleRepository.findAllByAccountId(accountU.getId());
-            allByAccountId.forEach(roleAccount ->{
-                accountRoleRepository.deleteAllByAccountId(roleAccount.getAccountId());
-            });
+            allByAccountId.forEach(roleAccount -> accountRoleRepository.deleteAllByAccountId(roleAccount.getAccountId()));
             List<Long> roleIdList = accountUpdateDomain.getRoleIdList();
             roleIdList.forEach(roleId ->{
                 AccountRole accountRole = new AccountRole();
@@ -195,8 +193,6 @@ public class AccountServiceImpl implements AccountService{
     @Transactional
     public void deleteAccountRole(Long accountId){
         List<AccountRole> accountRoleList = accountRoleRepository.findAllByAccountId(accountId);
-        accountRoleList.forEach(accountRole -> {
-            accountRoleRepository.deleteById(accountRole.getId());
-        });
+        accountRoleList.forEach(accountRole -> accountRoleRepository.deleteById(accountRole.getId()));
     }
 }
