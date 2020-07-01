@@ -20,6 +20,9 @@ public class RoleFindAllByProjectIdAndAccountDomain {
     @ApiModelProperty(value = "角色名称")
     private String roleName;
 
+    @ApiModelProperty(value = "所属系统ID")
+    private Long projectId;
+
     @ApiModelProperty(value = "所属系统")
     private String projectName;
 

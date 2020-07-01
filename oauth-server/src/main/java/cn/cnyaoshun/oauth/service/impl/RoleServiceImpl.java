@@ -160,7 +160,7 @@ public class RoleServiceImpl implements RoleService {
             }
         };
         Page<Role> roleRepositoryAll = roleRepository.findAll(specification,page);
-        pageDataDomain.setCurrent(pageNumber-1);
+        pageDataDomain.setCurrent(pageNumber);
         pageDataDomain.setPages(pageSize);
         pageDataDomain.setTotal(roleRepositoryAll.getTotalElements());
         roleRepositoryAll.forEach(role -> {
@@ -169,6 +169,7 @@ public class RoleServiceImpl implements RoleService {
             roleFindAllByProjectIdAndAccountDomain.setRoleName(role.getRoleName());
             Optional<Project> projectOptional = projectRepository.findById(role.getProjectId());
             projectOptional.ifPresent(project -> {
+                roleFindAllByProjectIdAndAccountDomain.setProjectId(project.getId());
                 roleFindAllByProjectIdAndAccountDomain.setProjectName(project.getProjectName());
             });
             List<RolePermission> rolePermissions = rolePermissionRepository.findByRoleId(role.getId());

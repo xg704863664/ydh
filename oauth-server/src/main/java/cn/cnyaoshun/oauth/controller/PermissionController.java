@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/permission")
-@Api(description = "权限管理API")
+@Api(description = "权限管理")
 @AllArgsConstructor
 @Validated
 public class PermissionController {

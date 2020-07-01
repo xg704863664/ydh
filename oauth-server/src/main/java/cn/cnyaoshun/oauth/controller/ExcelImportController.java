@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/import")
-@Api(description = "Excel操作API")
+@Api(description = "Excel操作")
 @RequiredArgsConstructor
 @Validated
 @Slf4j

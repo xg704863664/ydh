@@ -80,7 +80,7 @@ public class SwaggerConfig {
 //    }
 
     private ApiInfo apiInfo(){
-        return new ApiInfo("oauth 服务","oauth api文档","v0.0.1",null,new Contact("Xia Gen","","704863664@qq.com"),"Apache License Version 2.0","https://www.apache.org/licenses/LICENSE-2.0", Collections.emptyList());
+        return new ApiInfo("OAuth 服务","OAuth API文档","v0.0.1",null,new Contact("Xia Gen","","704863664@qq.com"),"Apache License Version 2.0","https://www.apache.org/licenses/LICENSE-2.0", Collections.emptyList());
     }
 
     private AuthorizationScope[] scopes() {
