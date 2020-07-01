@@ -67,9 +67,9 @@ public class AccountController {
 
     @ApiOperation(value = "获取账户所有信息",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/findAll",method = RequestMethod.GET)
-    public ReturnJsonData<PageDataDomain<AccountFindAllDomain>> findAll(@ApiParam(value = "根据账号搜索账户信息") @RequestParam(value = "keyWord",required = false) String keyWord,
-                                                                        @Min(1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber")Integer pageNumber,
-                                                                        @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")Integer pageSize ){
+    public ReturnJsonData<PageDataDomain<AccountFindAllDomain>> findAll(@Min(1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber")Integer pageNumber,
+                                                                        @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")Integer pageSize,
+                                                                        @ApiParam(value = "账户条件筛选")@RequestParam(value = "keyWord",required = false) String keyWord){
         PageDataDomain<AccountFindAllDomain> domainPageDataDomain = accountService.findAll(pageNumber, pageSize, keyWord);
         return ReturnJsonData.build(domainPageDataDomain);
     }
