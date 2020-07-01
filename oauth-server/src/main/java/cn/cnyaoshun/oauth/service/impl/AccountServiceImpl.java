@@ -19,6 +19,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -120,12 +121,10 @@ public class AccountServiceImpl implements AccountService{
         PageRequest page = PageRequest.of(pageNumber-1,pageSize,sort);
         Specification<Account> accountSpecification = (Specification<Account>) (root, criteriaQuery, cb) -> {
             Predicate restrictions = cb.conjunction();
-            if(keyWord != null && !"".equals(keyWord)){
-                Predicate predicate1 = cb.like(root.get("accountName"),"%"+keyWord+"%");
-                restrictions = cb.and(restrictions,predicate1);
+            if(!StringUtils.isEmpty(keyWord)){
+                restrictions = cb.and(restrictions,cb.like(root.get("accountName"),"%"+keyWord+"%"));
             }
-            Predicate pre = cb.and(restrictions);
-            return pre;
+            return cb.and(restrictions);
         };
         Page<Account> accountRepositoryAll = accountRepository.findAll(accountSpecification,page);
         pageDataDomain.setCurrent(pageNumber-1);
