@@ -28,10 +28,6 @@ public class AccountUpdateDomain {
     @NotNull(message = "账号不能为空")
     private String accountName;
 
-    @ApiModelProperty(value = "密码")
-    @NotNull(message = "密码不能为空")
-    private  String password;
-
     @ApiModelProperty(value = "状态")
     private boolean state;
 

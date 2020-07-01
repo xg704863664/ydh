@@ -74,4 +74,11 @@ public class AccountController {
         return ReturnJsonData.build(domainPageDataDomain);
     }
 
+    @ApiOperation(value = "重置密码",httpMethod = "PUT",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/reloadPassword/{accountId}",method = RequestMethod.PUT)
+    public ReturnJsonData<Long> reloadPassword(@ApiParam(value = "账户ID",required = true)@RequestParam(value = "accountId") Long accountId){
+        Long id = accountService.reloadPassword(accountId);
+        return ReturnJsonData.build(id);
+    }
+
 }

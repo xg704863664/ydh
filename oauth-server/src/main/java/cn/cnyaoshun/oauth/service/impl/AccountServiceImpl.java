@@ -90,7 +90,6 @@ public class AccountServiceImpl implements AccountService{
             accountU.setId(account.getId());
             accountU.setState(accountUpdateDomain.isState());
             accountU.setAccountName(accountUpdateDomain.getAccountName());
-            accountU.setPassword(bCryptPasswordEncoder.encode(accountUpdateDomain.getPassword())); //密码修改后进行加密处理
             accountU.setUpdateTime(new Date());
             accountU.setUserId(accountUpdateDomain.getUserId());
             accountRepository.save(accountU);
@@ -155,6 +154,7 @@ public class AccountServiceImpl implements AccountService{
         return pageDataDomain;
     }
 
+
     /**
      * 新增
      * @param accountAddDomain
@@ -198,5 +198,18 @@ public class AccountServiceImpl implements AccountService{
         accountRoleList.forEach(accountRole -> {
             accountRoleRepository.deleteById(accountRole.getId());
         });
+    }
+
+    @Override
+    @Transactional
+    public Long reloadPassword(Long accountId){
+        Optional<Account> accountOptional = accountRepository.findById(accountId);
+        if(accountOptional != null){
+            accountOptional.ifPresent(account -> {
+                account.setPassword(bCryptPasswordEncoder.encode("12345678"));
+                accountRepository.save(account);
+            });
+        }
+        return accountId;
     }
 }
