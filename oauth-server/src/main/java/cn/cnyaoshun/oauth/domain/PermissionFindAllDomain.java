@@ -21,7 +21,13 @@ public class PermissionFindAllDomain {
     @ApiModelProperty(value = "权限编码")
     private String permissionType;
 
+    @ApiModelProperty(value = "项目ID")
+    private Long projectId;
+
     @ApiModelProperty(value = "项目名称")
     private String projectName;
+
+    @ApiModelProperty(value = "权限ID")
+    private Long id;
 
 }

@@ -65,8 +65,9 @@ public class PermissionController {
     @ApiOperation(value = "获取所有权限信息",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/findAll", method = RequestMethod.GET)
     public ReturnJsonData<PageDataDomain<PermissionFindAllDomain>> findAll(@Min(1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber")Integer pageNumber,
-                                                                           @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")Integer pageSize){
-        PageDataDomain<PermissionFindAllDomain> domains = permissionService.findAll(pageNumber,pageSize);
+                                                                           @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")Integer pageSize,
+                                                                           @ApiParam(value = "条件筛选权限名称和权限编码")@RequestParam(value = "RoleName",required = false) String keyWord){
+        PageDataDomain<PermissionFindAllDomain> domains = permissionService.findAll(pageNumber,pageSize,keyWord);
         return ReturnJsonData.build(domains);
     }
 }

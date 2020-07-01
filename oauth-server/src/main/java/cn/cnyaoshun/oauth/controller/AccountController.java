@@ -4,6 +4,7 @@ import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
 import cn.cnyaoshun.oauth.domain.AccountFindAllByRoleIdDomain;
 import cn.cnyaoshun.oauth.domain.AccountAddDomain;
+import cn.cnyaoshun.oauth.domain.AccountFindAllDomain;
 import cn.cnyaoshun.oauth.domain.AccountUpdateDomain;
 import cn.cnyaoshun.oauth.service.AccountService;
 import io.swagger.annotations.Api;
@@ -62,6 +63,15 @@ public class AccountController {
     public ReturnJsonData<Long> update(@Valid @RequestBody AccountUpdateDomain accountUpdateDomain){
         Long id = accountService.update(accountUpdateDomain);
         return ReturnJsonData.build(id);
+    }
+
+    @ApiOperation(value = "获取账户所有信息",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/findAll",method = RequestMethod.GET)
+    public ReturnJsonData<PageDataDomain<AccountFindAllDomain>> findAll(@ApiParam(value = "根据账号搜索账户信息") @RequestParam(value = "keyWord",required = false) String keyWord,
+                                                                        @Min(1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber")Integer pageNumber,
+                                                                        @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")Integer pageSize ){
+        PageDataDomain<AccountFindAllDomain> domainPageDataDomain = accountService.findAll(pageNumber, pageSize, keyWord);
+        return ReturnJsonData.build(domainPageDataDomain);
     }
 
 }

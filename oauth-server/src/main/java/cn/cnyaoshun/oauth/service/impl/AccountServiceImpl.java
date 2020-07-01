@@ -2,22 +2,30 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.dao.*;
-import cn.cnyaoshun.oauth.domain.AccountFindAllByRoleIdDomain;
-import cn.cnyaoshun.oauth.domain.AccountAddDomain;
-import cn.cnyaoshun.oauth.domain.AccountUpdateDomain;
+import cn.cnyaoshun.oauth.domain.*;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.AccountRole;
 import cn.cnyaoshun.oauth.entity.Role;
 import cn.cnyaoshun.oauth.entity.User;
 import cn.cnyaoshun.oauth.service.AccountService;
+import javassist.runtime.Desc;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -103,6 +111,60 @@ public class AccountServiceImpl implements AccountService{
             });
         });
         return accountUpdateDomain.getId();
+    }
+
+    @Override
+    public PageDataDomain<AccountFindAllDomain> findAll(Integer pageNumber, Integer pageSize, String keyWord) {
+
+        PageDataDomain<AccountFindAllDomain> pageDataDomain = new PageDataDomain<>();
+        Sort sort = Sort.by(Sort.Direction.DESC,"id");
+        PageRequest page = PageRequest.of(pageNumber-1,pageSize,sort);
+        Specification<Account> accountSpecification = new Specification<Account>() {
+            @Override
+            public Predicate toPredicate(Root<Account> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
+                Predicate restrictions = cb.conjunction();
+                if(keyWord != null && !"".equals(keyWord)){
+                    Predicate predicate1 = cb.like(root.get("accountName"),"%"+keyWord+"%");
+                    restrictions = cb.and(restrictions,predicate1);
+                }
+                Predicate pre = cb.and(restrictions);
+                return pre;
+            }
+        };
+        Page<Account> accountRepositoryAll = accountRepository.findAll(accountSpecification,page);
+        pageDataDomain.setCurrent(pageNumber-1);
+        pageDataDomain.setPages(pageSize);
+        pageDataDomain.setTotal(accountRepositoryAll.getTotalElements());
+
+        accountRepositoryAll.getContent().forEach(account -> {
+            AccountFindAllDomain accountFindAllDomain = new AccountFindAllDomain();
+            accountFindAllDomain.setId(account.getId());
+            accountFindAllDomain.setAccountName(account.getAccountName());
+            Optional<User> userOptional = userRepository.findById(account.getUserId());
+                userOptional.ifPresent(user -> {
+                    accountFindAllDomain.setUserId(user.getId());
+                    accountFindAllDomain.setUserName(user.getUserName());
+                });
+            List<AccountRole> accountRoleList = accountRoleRepository.findAllByAccountId(account.getId());
+            List<String> roleNameList = new ArrayList<>();
+            List<RoleDomain> roleDomainList = new ArrayList<>();
+            accountRoleList.forEach(accountRole -> {
+                RoleDomain roleDomain = new RoleDomain();
+                Optional<Role> roleOptional = roleRepository.findById(accountRole.getRoleId());
+                roleOptional.ifPresent(role -> {
+                    roleNameList.add(role.getRoleName());
+
+                    roleDomain.setId(role.getId());
+                    roleDomain.setRoleName(role.getRoleName());
+                    roleDomain.setProjectId(role.getProjectId());
+                    roleDomainList.add(roleDomain);
+                });
+            });
+            accountFindAllDomain.setRoleName(roleNameList);
+            accountFindAllDomain.setRoleList(roleDomainList);
+            pageDataDomain.getRecords().add(accountFindAllDomain);
+        });
+        return pageDataDomain;
     }
 
     /**

@@ -4,13 +4,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * @ClassName RoleDomainV2
- * @Description 获取所有的角色列表,根据项目ID和TOKEN获取角色信息
+ * @ClassName RoleDomain
+ * @Description DOTO
  * @Author fyh
- * Date 2020-6-1515:02
+ * Date 2020/6/3018:20
  */
 @Data
-public class RoleFindAllByProjectIdAndAccountDomain {
+public class RoleDomain {
 
     @ApiModelProperty(value = "角色ID")
     private Long id;
@@ -18,9 +18,7 @@ public class RoleFindAllByProjectIdAndAccountDomain {
     @ApiModelProperty(value = "角色名称")
     private String roleName;
 
-    @ApiModelProperty(value = "所属系统")
-    private String projectName;
-
-
+    @ApiModelProperty(value = "项目ID")
+    private Long projectId;
 
 }

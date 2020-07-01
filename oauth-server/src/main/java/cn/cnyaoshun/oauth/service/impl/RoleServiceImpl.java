@@ -1,25 +1,39 @@
 package cn.cnyaoshun.oauth.service.impl;
 
+import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
+import cn.cnyaoshun.oauth.dao.ProjectRepository;
 import cn.cnyaoshun.oauth.dao.RolePermissionRepository;
 import cn.cnyaoshun.oauth.dao.RoleRepository;
-import cn.cnyaoshun.oauth.domain.RoleAddDomain;
-import cn.cnyaoshun.oauth.domain.RoleUpdateDomain;
-import cn.cnyaoshun.oauth.domain.RoleFindAllByProjectIdAndAccountDomain;
+import cn.cnyaoshun.oauth.domain.*;
+import cn.cnyaoshun.oauth.entity.Department;
+import cn.cnyaoshun.oauth.entity.Project;
 import cn.cnyaoshun.oauth.entity.Role;
 import cn.cnyaoshun.oauth.entity.RolePermission;
 import cn.cnyaoshun.oauth.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.dynamic.DynamicType;
+import org.apache.el.stream.*;
+import org.hibernate.Session;
+import org.hibernate.validator.HibernateValidatorFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.management.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.Optional;
 
 /**
@@ -36,6 +50,8 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
 
     private final RolePermissionRepository rolePermissionRepository;
+
+    private final ProjectRepository projectRepository;
 
     @Override
     @Transactional
@@ -103,12 +119,13 @@ public class RoleServiceImpl implements RoleService {
             roleR.setId(role.getId());
             roleR.setRoleName(roleUpdateDomain.getRoleName());
             roleR.setProjectId(roleUpdateDomain.getProjectId());
-            roleR.setUpdateTime(new Date());
+            roleR.setUpdateTime(roleUpdateDomain.getUpdateTime());
+
             roleR.setCreateTime(roleUpdateDomain.getCreateTime());
-            roleRepository.save(role);
+            roleRepository.save(roleR);
             log.info("角色信息修改成功");
             //数据库表中的权限
-            List<RolePermission> rolePermissionAll = rolePermissionRepository.findByRoleId(role.getId());
+            List<RolePermission> rolePermissionAll = rolePermissionRepository.findByRoleId(roleR.getId());
             rolePermissionAll.forEach(rolePermission -> {
                 rolePermissionRepository.deleteById(rolePermission.getId());
             });
@@ -117,7 +134,7 @@ public class RoleServiceImpl implements RoleService {
             permissionIds.forEach(permissionId ->{
                 RolePermission permission = new RolePermission();
                 permission.setPermissionId(permissionId);
-                permission.setRoleId(role.getId());
+                permission.setRoleId(roleR.getId());
                 rolePermissionRepository.save(permission);
             });
             log.info("角色关联权限信息修改成功");
@@ -130,15 +147,52 @@ public class RoleServiceImpl implements RoleService {
      * @return
      */
     @Override
-    public List<RoleFindAllByProjectIdAndAccountDomain> findAll() {
-        List<Role> roleRepositoryAll = roleRepository.findAll();
-        List<RoleFindAllByProjectIdAndAccountDomain> roleFindAllByProjectIdAndAccountDomainList = new ArrayList<>();
+    public PageDataDomain<RoleFindAllByProjectIdAndAccountDomain> findAll(Integer pageNumber, Integer pageSize,String roleName) {
+        PageDataDomain<RoleFindAllByProjectIdAndAccountDomain> pageDataDomain = new PageDataDomain();
+        Sort sort = Sort.by(Sort.Direction.DESC,"id");
+        PageRequest page = PageRequest.of(pageNumber - 1, pageSize, sort);
+        Specification<Role> specification = new Specification<Role>() {
+            @Override
+            public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
+                Predicate restrictions = cb.conjunction();
+                if(roleName != null && !"".equals(roleName)){
+                    Predicate p = cb.like(root.get("roleName"),"%"+roleName+"%");
+                    restrictions = cb.and(restrictions,p);
+                }
+                Predicate pre = cb.and(restrictions);
+                return pre;
+            }
+        };
+        Page<Role> roleRepositoryAll = roleRepository.findAll(specification,page);
+
         roleRepositoryAll.forEach(role -> {
             RoleFindAllByProjectIdAndAccountDomain roleFindAllByProjectIdAndAccountDomain = new RoleFindAllByProjectIdAndAccountDomain();
             roleFindAllByProjectIdAndAccountDomain.setId(role.getId());
             roleFindAllByProjectIdAndAccountDomain.setRoleName(role.getRoleName());
-            roleFindAllByProjectIdAndAccountDomainList.add(roleFindAllByProjectIdAndAccountDomain);
+            Optional<Project> projectOptional = projectRepository.findById(role.getProjectId());
+            projectOptional.ifPresent(project -> {
+                roleFindAllByProjectIdAndAccountDomain.setProjectName(project.getProjectName());
+            });
+            pageDataDomain.getRecords().add(roleFindAllByProjectIdAndAccountDomain);
         });
-        return roleFindAllByProjectIdAndAccountDomainList;
+        return pageDataDomain;
     }
+
+    @Override
+    public List<ProjectRoleTreeDomain> findAllRoleTree() {
+
+        List<Project> projectList = projectRepository.findAll();
+        List<ProjectRoleTreeDomain> treeDomainList = new ArrayList<>();
+        Map<Long,List<Role>> roleMap = new HashMap<>();
+        if(projectList != null){
+            projectList.forEach(project -> {
+                ProjectRoleTreeDomain projectRoleTreeDomain = new ProjectRoleTreeDomain();
+                projectRoleTreeDomain.setProjectId(project.getId());
+                projectRoleTreeDomain.setProjectName(project.getProjectName());
+
+            });
+        }
+        return treeDomainList;
+    }
+
 }

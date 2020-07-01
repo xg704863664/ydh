@@ -1,9 +1,11 @@
 package cn.cnyaoshun.oauth.controller;
 
+import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
+import cn.cnyaoshun.oauth.domain.ProjectRoleTreeDomain;
 import cn.cnyaoshun.oauth.domain.RoleAddDomain;
-import cn.cnyaoshun.oauth.domain.RoleUpdateDomain;
 import cn.cnyaoshun.oauth.domain.RoleFindAllByProjectIdAndAccountDomain;
+import cn.cnyaoshun.oauth.domain.RoleUpdateDomain;
 import cn.cnyaoshun.oauth.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 /**
@@ -61,9 +64,19 @@ public class RoleController {
 
     @ApiOperation(value = "获取所有的角色名称和ID",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/findAllRoleNameAndId", method = RequestMethod.GET)
-    public ReturnJsonData<List<RoleFindAllByProjectIdAndAccountDomain>> findAllRoleNameAndId(){
-        List<RoleFindAllByProjectIdAndAccountDomain> all = roleService.findAll();
+    public ReturnJsonData<PageDataDomain<RoleFindAllByProjectIdAndAccountDomain>> findAllRoleNameAndId(@Min(1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber")Integer pageNumber,
+                                                                                                       @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")Integer pageSize,
+                                                                                                       @ApiParam(value = "条件筛选角色名称")@RequestParam(value = "RoleName",required = false) String roleName){
+        PageDataDomain<RoleFindAllByProjectIdAndAccountDomain> all = roleService.findAll(pageNumber,pageSize,roleName);
         return ReturnJsonData.build(all);
     }
+
+    @ApiOperation(value = "获取项目角色树",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/findRoleTree",method = RequestMethod.GET)
+    public ReturnJsonData<List<ProjectRoleTreeDomain>> findRoleTree(){
+        List<ProjectRoleTreeDomain> roleTree = roleService.findAllRoleTree();
+        return ReturnJsonData.build(roleTree);
+    }
+
 
 }
