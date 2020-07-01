@@ -6,35 +6,27 @@ import cn.cnyaoshun.oauth.dao.ProjectRepository;
 import cn.cnyaoshun.oauth.dao.RolePermissionRepository;
 import cn.cnyaoshun.oauth.dao.RoleRepository;
 import cn.cnyaoshun.oauth.domain.*;
-import cn.cnyaoshun.oauth.entity.Department;
 import cn.cnyaoshun.oauth.entity.Project;
 import cn.cnyaoshun.oauth.entity.Role;
 import cn.cnyaoshun.oauth.entity.RolePermission;
 import cn.cnyaoshun.oauth.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.dynamic.DynamicType;
-import org.apache.el.stream.*;
-import org.hibernate.Session;
-import org.hibernate.validator.HibernateValidatorFactory;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.management.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.Optional;
 
 /**
  * @ClassName RoleServiceImpl
@@ -189,7 +181,15 @@ public class RoleServiceImpl implements RoleService {
                 ProjectRoleTreeDomain projectRoleTreeDomain = new ProjectRoleTreeDomain();
                 projectRoleTreeDomain.setProjectId(project.getId());
                 projectRoleTreeDomain.setProjectName(project.getProjectName());
-
+                List<Role> roleList = roleRepository.findByProjectId(project.getId());
+                roleList.forEach(role -> {
+                    RoleDomain roleDomain = new RoleDomain();
+                    roleDomain.setId(role.getId());
+                    roleDomain.setRoleName(role.getRoleName());
+                    roleDomain.setProjectId(role.getProjectId());
+                    projectRoleTreeDomain.getChildren().add(roleDomain);
+                });
+                treeDomainList.add(projectRoleTreeDomain);
             });
         }
         return treeDomainList;
