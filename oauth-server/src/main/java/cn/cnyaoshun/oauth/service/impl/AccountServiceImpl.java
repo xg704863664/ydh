@@ -121,7 +121,7 @@ public class AccountServiceImpl implements AccountService{
             return cb.and(restrictions);
         };
         Page<Account> accountRepositoryAll = accountRepository.findAll(accountSpecification,page);
-        pageDataDomain.setCurrent(pageNumber-1);
+        pageDataDomain.setCurrent(pageNumber);
         pageDataDomain.setPages(pageSize);
         pageDataDomain.setTotal(accountRepositoryAll.getTotalElements());
         accountRepositoryAll.forEach(account -> {
