@@ -14,7 +14,7 @@
         <module>oauth-server</module>
         <module>file-server</module>
         <module>api-server</module>
-        <module>curture</module>
+        <module>admin-server</module>
     </modules>
 
     <properties>
@@ -58,10 +58,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

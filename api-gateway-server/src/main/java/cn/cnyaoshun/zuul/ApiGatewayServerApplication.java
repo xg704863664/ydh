@@ -10,9 +10,6 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 public class ApiGatewayServerApplication {
 
     public static void main(String[] args) {
-//        Properties p = new Properties();
-//        p.setProperty("server.port","11111");
-//        new SpringApplicationBuilder(ApiGatewayServerApplication.class).properties(p).build(args);
         SpringApplication.run(ApiGatewayServerApplication.class,args);
     }
 }

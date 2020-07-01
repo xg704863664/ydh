@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: admin-server
+  cloud:
+    nacos:
+      config:
+        enabled: false
+      discovery:
+        server-addr: 47.94.92.201:15005

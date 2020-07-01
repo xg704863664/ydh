@@ -10,11 +10,6 @@ spring:
         file-extension: yml
       discovery:
         server-addr: 47.94.92.201:15005
-
-#hystrix:
-#  command:
-#    default:
-#      execution:
-#        isolation:
-#          thread:
-#            timeoutInMilliseconds: 3000
+        metadata:
+          management:
+            context-path: ${server.servlet.context-path}/actuator
