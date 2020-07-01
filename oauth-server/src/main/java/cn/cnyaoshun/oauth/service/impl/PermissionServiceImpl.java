@@ -106,6 +106,26 @@ public class PermissionServiceImpl implements PermissionService{
             }
         };
         Page<Permission> permissionPage = permissionRepository.findAll(specification,page);
+        PageDataDomain<PermissionFindAllDomain> permissionFindAllDomainPageDataDomain = permissionFindAll(pageDataDomain, pageNumber, pageSize, permissionPage);
+        log.info("获取权限信息成功,共有:"+pageDataDomain.getTotal() +"条数据");
+        return permissionFindAllDomainPageDataDomain;
+    }
+
+    @Override
+    @Transactional
+    public Long update(PermissionUpdateDomain permissionUpdateDomain) {
+        Optional<Permission> permissionOptional = permissionRepository.findById(permissionUpdateDomain.getId());
+        permissionOptional.ifPresent(permission -> {
+           Permission permission1 = new Permission();
+            BeanUtils.copyProperties(permissionUpdateDomain, permission1);
+            permission1.setId(permission.getId());
+            permission1.setUpdateTime(new Date());
+            permissionRepository.save(permission1);
+        });
+        return permissionUpdateDomain.getId();
+    }
+
+    private PageDataDomain<PermissionFindAllDomain> permissionFindAll(PageDataDomain<PermissionFindAllDomain> pageDataDomain,Integer pageNumber,Integer pageSize,Page<Permission> permissionPage){
 
         pageDataDomain.setCurrent(pageNumber-1);
         pageDataDomain.setPages(pageSize);
@@ -123,22 +143,6 @@ public class PermissionServiceImpl implements PermissionService{
                 pageDataDomain.getRecords().add(permissionFindAllDomain);
             });
         });
-        log.info("获取权限信息成功,共有:"+pageDataDomain.getTotal() +"条数据");
-        return pageDataDomain;
+        return  pageDataDomain;
     }
-
-    @Override
-    @Transactional
-    public Long update(PermissionUpdateDomain permissionUpdateDomain) {
-        Optional<Permission> permissionOptional = permissionRepository.findById(permissionUpdateDomain.getId());
-        permissionOptional.ifPresent(permission -> {
-           Permission permission1 = new Permission();
-            BeanUtils.copyProperties(permissionUpdateDomain, permission1);
-            permission1.setId(permission.getId());
-            permission1.setUpdateTime(new Date());
-            permissionRepository.save(permission1);
-        });
-        return permissionUpdateDomain.getId();
-    }
-
 }

@@ -179,6 +179,7 @@ public class AccountServiceImpl implements AccountService{
         Account account = new Account();
         account.setAccountName(accountAddDomain.getAccountName());
         account.setPassword(bCryptPasswordEncoder.encode(accountAddDomain.getPassword()));
+        account.setState(true);
         account.setUserId(accountAddDomain.getUserId());
         accountRepository.save(account);
         //新建账户角色关联关系
