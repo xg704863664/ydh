@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/department")
-@Api(description = "组织机构管理-部门管理API")
+@Api(description = "组织机构-部门管理")
 @RequiredArgsConstructor
 public class DepartmentController {
 

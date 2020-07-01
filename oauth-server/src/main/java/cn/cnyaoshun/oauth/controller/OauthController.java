@@ -21,7 +21,7 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/oauth")
-@Api(description = "TOKEN操作API")
+@Api(description = "TOKEN操作")
 @RequiredArgsConstructor
 public class OauthController {
 

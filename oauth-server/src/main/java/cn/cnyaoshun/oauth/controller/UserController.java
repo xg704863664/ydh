@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user")
-@Api(description = "用户管理API")
+@Api(description = "组织机构-用户管理")
 @RequiredArgsConstructor
 @Validated
 public class UserController {

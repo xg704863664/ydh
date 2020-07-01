@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/role")
-@Api(description = "角色管理API")
+@Api(description = "角色管理")
 @AllArgsConstructor
 @Validated
 public class RoleController {
