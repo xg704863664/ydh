@@ -127,7 +127,7 @@ public class PermissionServiceImpl implements PermissionService{
 
     private PageDataDomain<PermissionFindAllDomain> permissionFindAll(PageDataDomain<PermissionFindAllDomain> pageDataDomain,Integer pageNumber,Integer pageSize,Page<Permission> permissionPage){
 
-        pageDataDomain.setCurrent(pageNumber-1);
+        pageDataDomain.setCurrent(pageNumber);
         pageDataDomain.setPages(pageSize);
         pageDataDomain.setTotal(permissionPage.getTotalElements());
         permissionPage.getContent().forEach(permission -> {

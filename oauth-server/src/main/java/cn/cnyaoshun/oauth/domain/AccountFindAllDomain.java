@@ -20,9 +20,6 @@ public class AccountFindAllDomain {
     @ApiModelProperty(value = "账号")
     private String accountName;
 
-//    @ApiModelProperty(value = "密码")
-//    private String password;
-
     @ApiModelProperty(value = "角色ID")
     private Long userId;
 

@@ -16,5 +16,5 @@ public interface AccountService {
     PageDataDomain<AccountFindAllByRoleIdDomain> findAllByRoleId(Long roleId, String keyWord, Integer pageNumber, Integer pageSize );
     Long update(AccountUpdateDomain accountUpdateDomain);
     PageDataDomain<AccountFindAllDomain> findAll(Integer pageNumber,Integer pageSize,String keyWord);
-
+    Long reloadPassword(Long accountId);
 }

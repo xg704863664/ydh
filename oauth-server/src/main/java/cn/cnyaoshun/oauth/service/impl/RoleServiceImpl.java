@@ -2,10 +2,12 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
+import cn.cnyaoshun.oauth.dao.PermissionRepository;
 import cn.cnyaoshun.oauth.dao.ProjectRepository;
 import cn.cnyaoshun.oauth.dao.RolePermissionRepository;
 import cn.cnyaoshun.oauth.dao.RoleRepository;
 import cn.cnyaoshun.oauth.domain.*;
+import cn.cnyaoshun.oauth.entity.Permission;
 import cn.cnyaoshun.oauth.entity.Project;
 import cn.cnyaoshun.oauth.entity.Role;
 import cn.cnyaoshun.oauth.entity.RolePermission;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -27,6 +30,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName RoleServiceImpl
@@ -44,6 +48,8 @@ public class RoleServiceImpl implements RoleService {
     private final RolePermissionRepository rolePermissionRepository;
 
     private final ProjectRepository projectRepository;
+
+    private final PermissionRepository permissionRepository;
 
     @Override
     @Transactional
@@ -147,16 +153,16 @@ public class RoleServiceImpl implements RoleService {
             @Override
             public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
                 Predicate restrictions = cb.conjunction();
-                if(roleName != null && !"".equals(roleName)){
-                    Predicate p = cb.like(root.get("roleName"),"%"+roleName+"%");
-                    restrictions = cb.and(restrictions,p);
+                if(!StringUtils.isEmpty(roleName)){
+                    restrictions = cb.like(root.get("roleName"),"%"+roleName+"%");
                 }
-                Predicate pre = cb.and(restrictions);
-                return pre;
+                return cb.and(restrictions);
             }
         };
         Page<Role> roleRepositoryAll = roleRepository.findAll(specification,page);
-
+        pageDataDomain.setCurrent(pageNumber-1);
+        pageDataDomain.setPages(pageSize);
+        pageDataDomain.setTotal(roleRepositoryAll.getTotalElements());
         roleRepositoryAll.forEach(role -> {
             RoleFindAllByProjectIdAndAccountDomain roleFindAllByProjectIdAndAccountDomain = new RoleFindAllByProjectIdAndAccountDomain();
             roleFindAllByProjectIdAndAccountDomain.setId(role.getId());
@@ -165,6 +171,19 @@ public class RoleServiceImpl implements RoleService {
             projectOptional.ifPresent(project -> {
                 roleFindAllByProjectIdAndAccountDomain.setProjectName(project.getProjectName());
             });
+            List<RolePermission> rolePermissions = rolePermissionRepository.findByRoleId(role.getId());
+            List<PermissionIDAndNameDomain> permissionList = rolePermissions.stream().map(rolePermission -> {
+                PermissionIDAndNameDomain permissionDomain = new PermissionIDAndNameDomain();
+                Optional.ofNullable(rolePermission.getPermissionId()).ifPresent(permissionId ->{
+                    Optional<Permission> permissionOptional = permissionRepository.findById(permissionId);
+                    permissionOptional.ifPresent(permission -> {
+                        permissionDomain.setId(permission.getId());
+                        permissionDomain.setPermissionName(permission.getPermissionName());
+                    });
+                });
+                return permissionDomain;
+            }).filter(permissionDomain ->permissionDomain.getId()!=null).collect(Collectors.toList());
+            roleFindAllByProjectIdAndAccountDomain.setPermissionList(permissionList);
             pageDataDomain.getRecords().add(roleFindAllByProjectIdAndAccountDomain);
         });
         return pageDataDomain;
@@ -175,7 +194,6 @@ public class RoleServiceImpl implements RoleService {
 
         List<Project> projectList = projectRepository.findAll();
         List<ProjectRoleTreeDomain> treeDomainList = new ArrayList<>();
-        Map<Long,List<Role>> roleMap = new HashMap<>();
         if(projectList != null){
             projectList.forEach(project -> {
                 ProjectRoleTreeDomain projectRoleTreeDomain = new ProjectRoleTreeDomain();
