@@ -2,9 +2,8 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.OrganizationAddDomain;
-import cn.cnyaoshun.oauth.domain.OrganizationUpdateDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationFindAllDomain;
-import cn.cnyaoshun.oauth.entity.Account;
+import cn.cnyaoshun.oauth.domain.OrganizationUpdateDomain;
 import cn.cnyaoshun.oauth.entity.Organization;
 import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.service.OrganizationService;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName OrganizationServiceImpl
@@ -115,27 +115,15 @@ public class OrganizationServiceImpl implements OrganizationService{
         departmentRepository.deleteAllByOrganizationId(organizationId);
         //在关联关系表中根据组织机构id查询所有userId
         List<UserDepartment> userDepartmentList = userDepartmentRepository.findByOrganizationId(organizationId);
-        //去除重复
-        Set<Long> userIds = new HashSet<>();
-        //遍历删除用户信息
-        userDepartmentList.forEach(userDepartment -> {
-            userDepartmentRepository.delete(userDepartment);
-            userIds.add(userDepartment.getUserId());
-        });
-        if (!userIds.isEmpty()){
-            userRepository.deleteAllByIdIn(userIds);
-            //根据用户信息删除账户信息
-            List<Account> accountList = new ArrayList<>();
-            userIds.forEach(userId ->{
-                List<Account> byUserId = accountRepository.findByUserId(userId);
-                accountList.addAll(byUserId);
-            });
-            if(!accountList.isEmpty()){
-                accountList.forEach(account -> {
-                    accountRepository.deleteAllByIdIn(account.getId());
-                    accountRoleRepository.deleteAllByAccountId(account.getId());
-                });
+        Optional.ofNullable(userDepartmentList).ifPresent(userDepartments -> userDepartmentRepository.deleteAll(userDepartments));
+        Set<Long> userIds =userDepartmentList.stream().map(UserDepartment::getUserId).collect(Collectors.toSet());
+        Optional.ofNullable(userIds).ifPresent(uis -> {
+            userRepository.deleteAllByIdIn(uis);
+            uis.stream().map(userId -> accountRepository.findByUserId(userId)).forEach(accounts -> accounts.stream().forEach(account -> {
+                accountRepository.deleteAllByIdIn(account.getId());
+                accountRoleRepository.deleteAllByAccountId(account.getId());
             }
-        }
+          ));
+        });
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName OauthServiceImpl
@@ -48,24 +49,21 @@ public class OauthServiceImpl implements OauthService {
         String accountName = userAuthenticationPrincipal.getUsername();
         Long accountId = userAuthenticationPrincipal.getId();
         List<RoleFindAllByProjectIdAndAccountDomain> roleList = oauthUserListDao.getAllRoleDomain(accountId, projectId);
-        List<Long> roleIdList = new ArrayList<>();
-        roleList.forEach(roleDomainV3 -> {
-            roleIdList.add(roleDomainV3.getId());
-        });
-        if(!roleIdList.isEmpty()){
-            List<PermissionOauthUserListDomain> permissionList = oauthUserListDao.getAllPermissionList(roleIdList);
+        List<Long> roleIdList = roleList.stream().map(RoleFindAllByProjectIdAndAccountDomain::getId).collect(Collectors.toList());
+        Optional.ofNullable(roleIdList).ifPresent(roleIds ->{
+            List<PermissionOauthUserListDomain> permissionList = oauthUserListDao.getAllPermissionList(roleIds);
             oauthUserListDomain.setPermissionList(permissionList);
-        }
+        });
         Account account = accountRepository.findByAccountName(accountName);
         oauthUserListDomain.setRoleList(roleList);
         oauthUserListDomain.setAccountId(accountId);
-        if(account.getUserId() != null){
-            Optional<User> userOptional = userRepository.findById(account.getUserId());
+        Optional.ofNullable(account.getUserId()).ifPresent(userId -> {
+            Optional<User> userOptional = userRepository.findById(userId);
             userOptional.ifPresent(user -> {
                 oauthUserListDomain.setUserName(user.getUserName());
                 oauthUserListDomain.setUserId(user.getId());
             });
-        }
+        });
         return oauthUserListDomain;
     }
 }
