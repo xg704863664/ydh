@@ -16,11 +16,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -80,20 +84,41 @@ public class PermissionServiceImpl implements PermissionService{
     }
 
     @Override
-    public PageDataDomain<PermissionFindAllDomain> findAll(Integer pageNumber, Integer pageSize) {
+    public PageDataDomain<PermissionFindAllDomain> findAll(Integer pageNumber, Integer pageSize,String keyWord) {
+
         PageDataDomain<PermissionFindAllDomain> pageDataDomain = new PageDataDomain();
         Sort sort = Sort.by(Sort.Direction.DESC,"id");
-        Pageable page = PageRequest.of(pageNumber-1,pageSize,sort);
-        Page<Permission> permissionPage = permissionRepository.findAll(page);
+        PageRequest page = PageRequest.of(pageNumber - 1, pageSize, sort);
+        Specification<Permission> specification = new Specification<Permission>() {
+            @Override
+            public Predicate toPredicate(Root<Permission> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
+                Predicate restrictions = cb.conjunction();
+                if(keyWord != null && !"".equals(keyWord)){
+                    Predicate predicate1 = cb.like(root.get("permissionName"),"%"+keyWord+"%");
+                    restrictions = cb.and(restrictions,predicate1);
+                }
+                if(keyWord != null && !"".equals(keyWord)){
+                    Predicate predicate2 = cb.like(root.get("permissionType"),"%"+keyWord+"%");
+                    restrictions = cb.or(restrictions,predicate2);
+                }
+                Predicate pre = cb.and(restrictions);
+                return pre;
+            }
+        };
+        Page<Permission> permissionPage = permissionRepository.findAll(specification,page);
+
         pageDataDomain.setCurrent(pageNumber-1);
         pageDataDomain.setPages(pageSize);
         pageDataDomain.setTotal(permissionPage.getTotalElements());
         permissionPage.getContent().forEach(permission -> {
             Optional<Project> projectOptional = projectRepository.findById(permission.getProjectId());
             projectOptional.ifPresent(project -> {
+
                 PermissionFindAllDomain permissionFindAllDomain = new PermissionFindAllDomain();
                 permissionFindAllDomain.setPermissionName(permission.getPermissionName());
                 permissionFindAllDomain.setPermissionType(permission.getPermissionType());
+                permissionFindAllDomain.setId(permission.getId());
+                permissionFindAllDomain.setProjectId(project.getId());
                 permissionFindAllDomain.setProjectName(project.getProjectName());
                 pageDataDomain.getRecords().add(permissionFindAllDomain);
             });

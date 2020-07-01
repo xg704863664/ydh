@@ -1,5 +1,7 @@
 package cn.cnyaoshun.oauth.service;
 
+import cn.cnyaoshun.oauth.common.PageDataDomain;
+import cn.cnyaoshun.oauth.domain.ProjectRoleTreeDomain;
 import cn.cnyaoshun.oauth.domain.RoleAddDomain;
 import cn.cnyaoshun.oauth.domain.RoleUpdateDomain;
 import cn.cnyaoshun.oauth.domain.RoleFindAllByProjectIdAndAccountDomain;
@@ -15,6 +17,6 @@ public interface RoleService {
     Long delete(Long roleId);
     List<RoleUpdateDomain> findAllByProjectId(Long projectId);
     Long update(RoleUpdateDomain roleUpdateDomain);
-    List<RoleFindAllByProjectIdAndAccountDomain> findAll();
-
+    PageDataDomain<RoleFindAllByProjectIdAndAccountDomain> findAll(Integer pageNumber, Integer pageSize,String roleName);
+    List<ProjectRoleTreeDomain> findAllRoleTree();
 }

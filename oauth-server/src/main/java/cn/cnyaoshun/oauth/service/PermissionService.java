@@ -16,7 +16,7 @@ public interface PermissionService {
     Long add(PermissionAddDomain permissionAddDomain);
     Long delete(Long permissionId);
     List<PermissionFindAllByProjectIdDomain> findAllByProjectId(Long  projectId);
-    PageDataDomain<PermissionFindAllDomain> findAll(Integer pageNumber, Integer pageSize);
+    PageDataDomain<PermissionFindAllDomain> findAll(Integer pageNumber, Integer pageSize,String keyWord);
     Long update(PermissionUpdateDomain permissionUpdateDomain);
 
 }
