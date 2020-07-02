@@ -62,12 +62,14 @@ public class RoleServiceImpl implements RoleService {
         role.setRoleName(roleAddDomain.getRoleName());
         roleRepository.save(role);
         List<Long> permissionIdList = roleAddDomain.getPermissionIdList();
-        permissionIdList.forEach(permissionId ->{
-            RolePermission rolePermission = new RolePermission();
-            rolePermission.setRoleId(role.getId());
-            rolePermission.setPermissionId(permissionId);
-            rolePermissionRepository.save(rolePermission);
-        });
+        if(permissionIdList != null){
+            permissionIdList.forEach(permissionId ->{
+                RolePermission rolePermission = new RolePermission();
+                rolePermission.setRoleId(role.getId());
+                rolePermission.setPermissionId(permissionId);
+                rolePermissionRepository.save(rolePermission);
+            });
+        }
         return role.getId();
     }
 

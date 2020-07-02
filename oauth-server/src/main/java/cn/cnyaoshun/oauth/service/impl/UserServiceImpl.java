@@ -123,6 +123,7 @@ public class UserServiceImpl implements UserService {
         Account account = new Account();
         account.setUserId(user.getId());
         account.setState(true);
+        account.setAccountName(userAddDomain.getUserName());
         account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
         accountRepository.save(account);
         log.info("用户关联默认账户添加成功");
