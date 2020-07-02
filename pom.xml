@@ -15,7 +15,6 @@
         <module>file-server</module>
         <module>api-server</module>
         <module>admin-server</module>
-        <module>gateway-server</module>
     </modules>
 
     <properties>

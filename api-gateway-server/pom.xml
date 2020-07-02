@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>gateway-server</artifactId>
+    <artifactId>api-gateway-server</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
