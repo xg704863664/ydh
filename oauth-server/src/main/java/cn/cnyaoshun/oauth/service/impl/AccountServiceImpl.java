@@ -134,6 +134,7 @@ public class AccountServiceImpl implements AccountService{
             AccountFindAllDomain accountFindAllDomain = new AccountFindAllDomain();
             accountFindAllDomain.setId(account.getId());
             accountFindAllDomain.setAccountName(account.getAccountName());
+            accountFindAllDomain.setState(account.isState());
             Optional.ofNullable(account.getUserId()).ifPresent(userId -> {
                 Optional<User> userOptional = userRepository.findById(userId);
                 userOptional.ifPresent(user -> {
