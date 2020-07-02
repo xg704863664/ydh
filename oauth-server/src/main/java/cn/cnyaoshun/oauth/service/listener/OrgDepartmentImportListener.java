@@ -29,18 +29,19 @@ public class OrgDepartmentImportListener extends AnalysisEventListener<OrgDepart
 
     @Override
     public void invoke(OrgDepartmentImportDomain orgDepartmentImportDomain, AnalysisContext analysisContext) {
+        Integer row = analysisContext.readRowHolder().getRowIndex();
         if (StringUtils.isEmpty(orgDepartmentImportDomain.getOrgName())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"组织机构名称不能为空");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"第"+row+"行组织机构名称不能为空");
         }
         if (StringUtils.isEmpty(orgDepartmentImportDomain.getOneDepartment())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"一级部门不能为空");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"第"+row+"行一级部门不能为空");
         }
         if (StringUtils.isEmpty(orgDepartmentImportDomain.getUserName())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"员工名称不能为空");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"第"+row+"行员工名称不能为空");
         }
 
         if (StringUtils.isEmpty(orgDepartmentImportDomain.getPhone())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"手机号不能为空");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"第"+row+"行手机号不能为空");
         }
         log.info("解析到一条数据:{}", JSON.toJSONString(orgDepartmentImportDomain));
         orgDepartmentImportDomainList.add(orgDepartmentImportDomain);

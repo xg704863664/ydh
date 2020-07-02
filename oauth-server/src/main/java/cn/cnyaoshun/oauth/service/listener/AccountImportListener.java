@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountImportListener extends AnalysisEventListener<AccountImportDomain> {
 
+
     private List<AccountImportDomain> accountImportDomainList = new ArrayList<>();
 
     private final DealExcelService<AccountImportDomain> dealExcelService;
@@ -26,17 +27,18 @@ public class AccountImportListener extends AnalysisEventListener<AccountImportDo
 
     @Override
     public void invoke(AccountImportDomain accountImportDomain, AnalysisContext analysisContext) {
+        Integer row = analysisContext.readRowHolder().getRowIndex();
         if (StringUtils.isEmpty(accountImportDomain.getAccountName())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"帐号名不能为空");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"第"+row+"行帐号名不能为空");
         }
         if (StringUtils.isEmpty(accountImportDomain.getPassWord())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"密码不能为空");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"第"+row+"行密码不能为空");
         }
         if (StringUtils.isEmpty(accountImportDomain.getUserName())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"用户名不能为空");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"第"+row+"行用户名不能为空");
         }
         if (StringUtils.isEmpty(accountImportDomain.getPhone())){
-            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"手机号不能为空");
+            throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"第"+row+"行手机号不能为空");
         }
         log.info("解析到一条数据:{}", JSON.toJSONString(accountImportDomain));
         accountImportDomainList.add(accountImportDomain);
