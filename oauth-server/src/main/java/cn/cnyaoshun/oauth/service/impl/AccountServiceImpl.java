@@ -8,9 +8,11 @@ import cn.cnyaoshun.oauth.entity.AccountRole;
 import cn.cnyaoshun.oauth.entity.Role;
 import cn.cnyaoshun.oauth.entity.User;
 import cn.cnyaoshun.oauth.service.AccountService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,7 +24,6 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,9 +36,13 @@ import java.util.stream.Collectors;
  * Date 2020-6-1516:56
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@RefreshScope
 @Slf4j
 public class AccountServiceImpl implements AccountService{
+
+    @Value("${modify.password}")
+    private String modifyPassword;
 
     private final AccountDao accountDao;
 
@@ -90,6 +95,7 @@ public class AccountServiceImpl implements AccountService{
             accountU.setId(account.getId());
             accountU.setState(accountUpdateDomain.isState());
             accountU.setAccountName(accountUpdateDomain.getAccountName());
+            accountU.setPassword(account.getPassword());
             accountU.setUpdateTime(new Date());
             accountU.setUserId(accountUpdateDomain.getUserId());
             accountRepository.save(accountU);
@@ -97,12 +103,14 @@ public class AccountServiceImpl implements AccountService{
             List<AccountRole> allByAccountId = accountRoleRepository.findAllByAccountId(accountU.getId());
             allByAccountId.forEach(roleAccount -> accountRoleRepository.deleteAllByAccountId(roleAccount.getAccountId()));
             List<Long> roleIdList = accountUpdateDomain.getRoleIdList();
-            roleIdList.forEach(roleId ->{
-                AccountRole accountRole = new AccountRole();
-                accountRole.setAccountId(accountU.getId());
-                accountRole.setRoleId(roleId);
-                accountRoleRepository.save(accountRole);
-            });
+            if(roleIdList != null){
+                roleIdList.forEach(roleId ->{
+                    AccountRole accountRole = new AccountRole();
+                    accountRole.setAccountId(accountU.getId());
+                    accountRole.setRoleId(roleId);
+                    accountRoleRepository.save(accountRole);
+                });
+            }
         });
         return accountUpdateDomain.getId();
     }
@@ -170,12 +178,14 @@ public class AccountServiceImpl implements AccountService{
         accountRepository.save(account);
         //新建账户角色关联关系
         List<Long> roleIdList = accountAddDomain.getRoleIdList();
-        roleIdList.forEach(roleId ->{
-            AccountRole accountRole = new AccountRole();
-            accountRole.setRoleId(roleId);
-            accountRole.setAccountId(account.getId());
-            accountRoleRepository.save(accountRole);
-        });
+        if(roleIdList != null){
+            roleIdList.forEach(roleId ->{
+                AccountRole accountRole = new AccountRole();
+                accountRole.setRoleId(roleId);
+                accountRole.setAccountId(account.getId());
+                accountRoleRepository.save(accountRole);
+            });
+        }
         return account.getId();
     }
 
@@ -196,16 +206,19 @@ public class AccountServiceImpl implements AccountService{
         accountRoleList.forEach(accountRole -> accountRoleRepository.deleteById(accountRole.getId()));
     }
 
+    /**
+     * 重置密码
+     * @param accountId
+     * @return
+     */
     @Override
     @Transactional
     public Long reloadPassword(Long accountId){
         Optional<Account> accountOptional = accountRepository.findById(accountId);
-        if(accountOptional != null){
             accountOptional.ifPresent(account -> {
-                account.setPassword(bCryptPasswordEncoder.encode("12345678"));
+                account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
                 accountRepository.save(account);
             });
-        }
         return accountId;
     }
 }

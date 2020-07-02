@@ -50,18 +50,6 @@ public class UserServiceImpl implements UserService {
 
     private final DepartmentRepository departmentRepository;
 
-
-    /**
-     * 根据部门ID统计部门下的用户数量
-     * @param departmentId
-     * @return
-     */
-    @Override
-    public Long countByUserId(Long departmentId) {
-        Long countUser = userDepartmentRepository.countUserDepartmentsByDepartmentId(departmentId);
-        return countUser;
-    }
-
     /**
      * 获取所有用户名称以及其ID
      * @return
