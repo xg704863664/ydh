@@ -22,7 +22,6 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -170,12 +169,13 @@ public class AccountServiceImpl implements AccountService{
         accountRepository.save(account);
         //新建账户角色关联关系
         List<Long> roleIdList = accountAddDomain.getRoleIdList();
-        roleIdList.forEach(roleId ->{
+        List<AccountRole> accountRoleList = roleIdList.stream().map(roleId -> {
             AccountRole accountRole = new AccountRole();
             accountRole.setRoleId(roleId);
             accountRole.setAccountId(account.getId());
-            accountRoleRepository.save(accountRole);
-        });
+            return accountRole;
+        }).collect(Collectors.toList());
+        Optional.ofNullable(accountRoleList).ifPresent(accountRoles -> accountRoleRepository.saveAll(accountRoles));
         return account.getId();
     }
 
