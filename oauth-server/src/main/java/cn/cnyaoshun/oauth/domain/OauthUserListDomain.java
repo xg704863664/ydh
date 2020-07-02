@@ -18,7 +18,7 @@ public class OauthUserListDomain {
     private Long accountId;
 
     @ApiModelProperty(value = "角色集合")
-    private List<RoleFindAllByProjectIdAndAccountDomain> roleList;
+    private List<RoleFindAllByOauthDomain> roleList;
 
     @ApiModelProperty(value = "权限集合")
     private List<PermissionOauthUserListDomain> permissionList;

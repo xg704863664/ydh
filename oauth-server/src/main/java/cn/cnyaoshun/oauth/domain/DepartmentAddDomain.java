@@ -21,7 +21,6 @@ public class DepartmentAddDomain {
     @ApiModelProperty(value = "父ID")
     private Long parentId;
 
-    @NotNull(message = "部门编号不能为空")
     @ApiModelProperty(value = "部门编号")
     private String departmentNo;
 

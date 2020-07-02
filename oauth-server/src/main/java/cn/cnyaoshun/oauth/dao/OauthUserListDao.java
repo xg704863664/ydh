@@ -1,6 +1,7 @@
 package cn.cnyaoshun.oauth.dao;
 
 import cn.cnyaoshun.oauth.domain.PermissionOauthUserListDomain;
+import cn.cnyaoshun.oauth.domain.RoleFindAllByOauthDomain;
 import cn.cnyaoshun.oauth.domain.RoleFindAllByProjectIdAndAccountDomain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -26,17 +27,17 @@ public class OauthUserListDao {
 
     private final EntityManager entityManager;
 
-    public List<RoleFindAllByProjectIdAndAccountDomain> getAllRoleDomain(Long accountId, Long projectId){
+    public List<RoleFindAllByOauthDomain> getAllRoleDomain(Long accountId, Long projectId){
         //角色信息
         StringBuilder roleSql = new StringBuilder("SELECT r.id,r.role_name from account_role as ar,role as r WHERE r.project_id=? and ar.account_id = ? and ar.role_id = r.id");
         Query nativeQuery = entityManager.createNativeQuery(roleSql.toString());
         nativeQuery.setParameter(1,projectId);
         nativeQuery.setParameter(2,accountId);
-        List<RoleFindAllByProjectIdAndAccountDomain> roleList = new ArrayList<>();
+        List<RoleFindAllByOauthDomain> roleList = new ArrayList<>();
         List<Object[]> objects =  nativeQuery.getResultList();
-        Field[] declaredFields = RoleFindAllByProjectIdAndAccountDomain.class.getDeclaredFields();
+        Field[] declaredFields = RoleFindAllByOauthDomain.class.getDeclaredFields();
         objects.forEach(object -> {
-            RoleFindAllByProjectIdAndAccountDomain roleFindAllByProjectIdAndAccountDomain = new RoleFindAllByProjectIdAndAccountDomain();
+            RoleFindAllByOauthDomain roleFindAllByProjectIdAndAccountDomain = new RoleFindAllByOauthDomain();
             try {
                 declaredFields[0].setAccessible(true);
                 declaredFields[0].set(roleFindAllByProjectIdAndAccountDomain,Long.valueOf(object[0].toString()));

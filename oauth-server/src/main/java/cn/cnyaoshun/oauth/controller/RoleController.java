@@ -62,7 +62,7 @@ public class RoleController {
         return  ReturnJsonData.build(roleDomainList);
     }
 
-    @ApiOperation(value = "获取所有的角色名称和ID",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "获取所有角色信息",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/findAllRoleNameAndId", method = RequestMethod.GET)
     public ReturnJsonData<PageDataDomain<RoleFindAllByProjectIdAndAccountDomain>> findAllRoleNameAndId(@Min(1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber")Integer pageNumber,
                                                                                                        @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")Integer pageSize,

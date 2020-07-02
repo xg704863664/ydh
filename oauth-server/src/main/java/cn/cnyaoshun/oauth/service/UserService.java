@@ -16,7 +16,6 @@ public interface UserService {
     Long delete(Long userId);
     Long update(UserUpdateDomain userUpdateDomain);
     PageDataDomain<UserFindAllByDepartmentIdDomain> findAll(Long departmentId, String keyWord, Integer pageNumber, Integer pageSize);
-    Long countByUserId(Long departmentId);
     List<UserFindAllDomain> findAllUserName();
     boolean reviseDepartment(UserUpdateByDepartmentDomain userUpdateByDepartmentDomain);
 
