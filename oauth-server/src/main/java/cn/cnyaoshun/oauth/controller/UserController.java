@@ -44,13 +44,6 @@ public class UserController {
         return ReturnJsonData.build(userService.findAll(departmentId, keyWord, pageNumber, pageSize));
     }
 
-    @ApiOperation(value = "根据部门ID获取部门下的用户数量",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @RequestMapping(value = "/count/{departmentId}",method = RequestMethod.GET)
-    public ReturnJsonData<Long> countUser(@ApiParam(value = "部门ID" , required = true)@PathVariable(value = "departmentId") Long departmentId){
-        Long countUser = userService.countByUserId(departmentId);
-        return  ReturnJsonData.build(countUser);
-    }
-
     @ApiOperation(value = "新增用户",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public ReturnJsonData<Long> insertUser(@ApiParam(value = "新增用户对象",required = true) @Valid @RequestBody UserAddDomain userAddDomain){

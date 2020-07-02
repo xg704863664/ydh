@@ -5,6 +5,7 @@ import cn.cnyaoshun.oauth.dao.OauthUserListDao;
 import cn.cnyaoshun.oauth.dao.UserRepository;
 import cn.cnyaoshun.oauth.domain.OauthUserListDomain;
 import cn.cnyaoshun.oauth.domain.PermissionOauthUserListDomain;
+import cn.cnyaoshun.oauth.domain.RoleFindAllByOauthDomain;
 import cn.cnyaoshun.oauth.domain.RoleFindAllByProjectIdAndAccountDomain;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.User;
@@ -48,8 +49,8 @@ public class OauthServiceImpl implements OauthService {
         UserDetailsImpl userAuthenticationPrincipal = (UserDetailsImpl)userAuthentication.getPrincipal();
         String accountName = userAuthenticationPrincipal.getUsername();
         Long accountId = userAuthenticationPrincipal.getId();
-        List<RoleFindAllByProjectIdAndAccountDomain> roleList = oauthUserListDao.getAllRoleDomain(accountId, projectId);
-        List<Long> roleIdList = roleList.stream().map(RoleFindAllByProjectIdAndAccountDomain::getId).collect(Collectors.toList());
+        List<RoleFindAllByOauthDomain> roleList = oauthUserListDao.getAllRoleDomain(accountId, projectId);
+        List<Long> roleIdList = roleList.stream().map(RoleFindAllByOauthDomain::getId).collect(Collectors.toList());
         Optional.ofNullable(roleIdList).ifPresent(roleIds ->{
             List<PermissionOauthUserListDomain> permissionList = oauthUserListDao.getAllPermissionList(roleIds);
             oauthUserListDomain.setPermissionList(permissionList);

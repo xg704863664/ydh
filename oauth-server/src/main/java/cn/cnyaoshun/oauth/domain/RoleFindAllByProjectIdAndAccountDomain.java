@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @ClassName RoleDomainV2
- * @Description 获取所有的角色列表,根据项目ID和TOKEN获取角色信息
+ * @Description 获取所有的角色列表
  * @Author fyh
  * Date 2020-6-1515:02
  */
