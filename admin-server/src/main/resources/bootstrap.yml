@@ -1,9 +1,12 @@
 spring:
+  profiles:
+    active: dev
   application:
     name: admin-server
   cloud:
     nacos:
       config:
-        enabled: false
+        server-addr: 47.94.92.201:15005
+        file-extension: yml
       discovery:
         server-addr: 47.94.92.201:15005

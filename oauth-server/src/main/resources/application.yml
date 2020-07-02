@@ -1,54 +1,57 @@
-#server:
-#  port: 16001
-#  servlet:
-#    context-path: /api/${spring.application.name}
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "*"
-#  health:
-#    db:
-#      enabled: true
-#  endpoint:
-#    health:
-#      show-details: always
-#login:
-#  clientId: web-app
-#  secret: uddCkEAIg46KKwTa2aQKU0zVRxI0r9aD
-#modify:
-#  password: 123456
-#spring:
-#  jpa:
-#    open-in-view: false
-#  liquibase:
-#    change-log: classpath:db/master.xml
-#    default-schema: oauth-server
-#  datasource:
-#    url: jdbc:mysql://47.94.92.201:3306/oauth-server?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=GMT%2B8
-#    username: root
-#    password: CNliren123
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    hikari:
-#      allow-pool-suspension: true
-#      connection-test-query: 'select 1'
-#      auto-commit: false
-#      maximum-pool-size: 20
-#      minimum-idle: 5
-#      idle-timeout: 60000
-#      max-lifetime: 30000
-#      connection-timeout: 10000
-#      validation-timeout: 1000
-#      leak-detection-threshold: 30000
-#  redis:
-#    host: 47.94.92.201
-#    port: 6379
-#    database: 0
-#    password: admin1234567
-#    lettuce:
-#      pool:
-#        max-active: 20
-#        max-idle: 20
-#        max-wait: 6
-#        min-idle: 5
+server:
+  port: 16001
+  servlet:
+    context-path: /api/${spring.application.name}
+  tomcat:
+    accept-count: 1000
+    max-threads: 500
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    db:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+login:
+  clientId: web-app
+  secret: uddCkEAIg46KKwTa2aQKU0zVRxI0r9aD
+modify:
+  password: 123456
+spring:
+  jpa:
+    open-in-view: false
+  liquibase:
+    change-log: classpath:db/master.xml
+    default-schema: oauth-server
+  datasource:
+    url: jdbc:mysql://47.94.92.201:3306/oauth-server?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: CNliren123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      allow-pool-suspension: true
+      connection-test-query: 'select 1'
+      auto-commit: false
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 60000
+      max-lifetime: 30000
+      connection-timeout: 10000
+      validation-timeout: 1000
+      leak-detection-threshold: 30000
+  redis:
+    host: 47.94.92.201
+    port: 6379
+    database: 0
+    password: admin1234567
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 20
+        max-wait: 6
+        min-idle: 5
 

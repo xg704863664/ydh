@@ -4,6 +4,10 @@ spring:
   application:
     name: api-gateway-server
   cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
     nacos:
       config:
         server-addr: 47.94.92.201:15005

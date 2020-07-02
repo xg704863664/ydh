@@ -1,14 +1,10 @@
-package cn.cnyaoshun.zuul;
+package cn.cnyaoshun.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
-import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
-
 
 @SpringCloudApplication
-@EnableZuulProxy
 public class ApiGatewayServerApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(ApiGatewayServerApplication.class,args);
     }
