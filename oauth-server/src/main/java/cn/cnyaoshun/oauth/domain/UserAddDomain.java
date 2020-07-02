@@ -35,11 +35,9 @@ public class UserAddDomain {
     private String phone;
 
     @Email
-    @ApiModelProperty(value = "邮箱; 必填")
     private String email;
 
     @NotNull(message = "身份证号码不能为空")
-    @ApiModelProperty(value = "身份证号")
     private String idNo;
 
 }
