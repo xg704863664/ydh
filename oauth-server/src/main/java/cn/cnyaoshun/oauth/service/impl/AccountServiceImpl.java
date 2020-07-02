@@ -186,6 +186,13 @@ public class AccountServiceImpl implements AccountService{
                 accountRoleRepository.save(accountRole);
             });
         }
+        List<AccountRole> accountRoleList = roleIdList.stream().map(roleId -> {
+            AccountRole accountRole = new AccountRole();
+            accountRole.setRoleId(roleId);
+            accountRole.setAccountId(account.getId());
+            return accountRole;
+        }).collect(Collectors.toList());
+        Optional.ofNullable(accountRoleList).ifPresent(accountRoles -> accountRoleRepository.saveAll(accountRoles));
         return account.getId();
     }
 
