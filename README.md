@@ -4,11 +4,12 @@ ydh是姚舜智能研究院的基础核心代码框架,包括统一认证服务�
 ### 目录结构
 ```
 ydh 项目名
-    api-gateway-server // 后端网关(zuul)
+    api-gateway-server // 后端网关(gateway)
     nacos              // 服务与发现及配置中心
     oauth-server // 统一认证服务
     file-server  // 统一文件服务
     api-server   // 统一API服务
+    admin-server // 服务监控
 ```
 ### 如何编译
 mvn clean package -Dmaven.test.skip=true
