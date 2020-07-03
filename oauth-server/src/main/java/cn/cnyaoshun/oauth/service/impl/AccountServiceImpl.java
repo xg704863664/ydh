@@ -179,14 +179,6 @@ public class AccountServiceImpl implements AccountService{
         accountRepository.save(account);
         //新建账户角色关联关系
         List<Long> roleIdList = accountAddDomain.getRoleIdList();
-        if(roleIdList != null){
-            roleIdList.forEach(roleId ->{
-                AccountRole accountRole = new AccountRole();
-                accountRole.setRoleId(roleId);
-                accountRole.setAccountId(account.getId());
-                accountRoleRepository.save(accountRole);
-            });
-        }
         List<AccountRole> accountRoleList = roleIdList.stream().map(roleId -> {
             AccountRole accountRole = new AccountRole();
             accountRole.setRoleId(roleId);
