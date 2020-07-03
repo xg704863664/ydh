@@ -53,7 +53,7 @@ public class AccountController {
 
     @ApiOperation(value = "根据账户ID删除账户信息",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/delete/{accountId}")
-    public ReturnJsonData<Long> delete(@NotNull @ApiParam(value = "账户ID") @RequestParam(value = "accountId") Long accountId){
+    public ReturnJsonData<Long> delete(@NotNull @ApiParam(value = "账户ID") @PathVariable(value = "accountId") Long accountId){
         Long deleteAccount = accountService.delete(accountId);
         return ReturnJsonData.build(deleteAccount);
     }

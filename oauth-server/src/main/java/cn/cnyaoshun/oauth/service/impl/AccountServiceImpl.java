@@ -1,6 +1,7 @@
 package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
+import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.*;
 import cn.cnyaoshun.oauth.entity.Account;
@@ -169,6 +170,10 @@ public class AccountServiceImpl implements AccountService{
     @Transactional
     public Long add(AccountAddDomain accountAddDomain) {
 
+        boolean existsByAccountName = accountRepository.existsByAccountName(accountAddDomain.getAccountName());
+        if(existsByAccountName){
+            throw new ExceptionValidation(418,"账号已存在请重新输入");
+        }
         Account account = new Account();
         account.setAccountName(accountAddDomain.getAccountName());
         account.setPassword(bCryptPasswordEncoder.encode(accountAddDomain.getPassword()));

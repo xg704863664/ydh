@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -81,9 +82,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(departmentAddDomain.getParentId()!=null &&  departmentAddDomain.getParentId() == 0){
             throw  new ExceptionValidation(418,"父节点ID不能为0");
         }
-        boolean depNumber = departmentRepository.existsByDepartmentNo(departmentAddDomain.getDepartmentNo());
-        if(depNumber){
-            throw new ExceptionValidation(418,"部门编号已存在");
+        if (!StringUtils.isEmpty(departmentAddDomain.getDepartmentNo())) {
+            boolean depNumber = departmentRepository.existsByOrganizationIdAndDepartmentNo(departmentAddDomain.getOrganizationId(), departmentAddDomain.getDepartmentNo());
+            if (depNumber) {
+                throw new ExceptionValidation(418, "部门编号已存在");
+            }
         }
         boolean organizationIdExt = organizationRepository.existsById(departmentAddDomain.getOrganizationId());
         if(!organizationIdExt){
