@@ -103,14 +103,12 @@ public class AccountServiceImpl implements AccountService{
             List<AccountRole> allByAccountId = accountRoleRepository.findAllByAccountId(accountU.getId());
             allByAccountId.forEach(roleAccount -> accountRoleRepository.deleteAllByAccountId(roleAccount.getAccountId()));
             List<Long> roleIdList = accountUpdateDomain.getRoleIdList();
-            if(roleIdList != null){
-                roleIdList.forEach(roleId ->{
-                    AccountRole accountRole = new AccountRole();
-                    accountRole.setAccountId(accountU.getId());
-                    accountRole.setRoleId(roleId);
-                    accountRoleRepository.save(accountRole);
-                });
-            }
+            Optional.ofNullable(roleIdList).ifPresent(roleIds -> roleIds.forEach(roleId ->{
+                AccountRole accountRole = new AccountRole();
+                accountRole.setAccountId(accountU.getId());
+                accountRole.setRoleId(roleId);
+                accountRoleRepository.save(accountRole);
+            }));
         });
         return accountUpdateDomain.getId();
     }

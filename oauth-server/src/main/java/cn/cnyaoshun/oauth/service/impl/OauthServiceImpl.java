@@ -6,7 +6,6 @@ import cn.cnyaoshun.oauth.dao.UserRepository;
 import cn.cnyaoshun.oauth.domain.OauthUserListDomain;
 import cn.cnyaoshun.oauth.domain.PermissionOauthUserListDomain;
 import cn.cnyaoshun.oauth.domain.RoleFindAllByOauthDomain;
-import cn.cnyaoshun.oauth.domain.RoleFindAllByProjectIdAndAccountDomain;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.User;
 import cn.cnyaoshun.oauth.entity.UserDetailsImpl;
@@ -16,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

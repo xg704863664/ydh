@@ -108,9 +108,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentOptional.ifPresent((department ) -> {
 
             List<Department> departmentList = departmentRepository.findByParentIdAndIdNotIn(department.getParentId(),departmentId);
-            departmentList.forEach(department1 -> {
-                    departmentRepository.save(department1);
-            });
+            departmentList.forEach(depart -> departmentRepository.save(depart));
         });
         departmentRepository.deleteById(departmentId);
         log.info("部门删除成功,删除的部门ID为:"+departmentId);
@@ -141,9 +139,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             userRepository.deleteById(userId);
             accountRepository.deleteAllByUserId(userId);
             List<Account> accountList = accountRepository.findByUserId(userId);
-            accountList.forEach(account -> {
-                accountRoleRepository.deleteAllByAccountId(account.getId());
-            });
+            accountList.forEach(account -> accountRoleRepository.deleteAllByAccountId(account.getId()));
         });
         log.info("部门关联信息删除成功");
     }
