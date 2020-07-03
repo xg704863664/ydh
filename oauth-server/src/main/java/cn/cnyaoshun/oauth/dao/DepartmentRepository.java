@@ -11,7 +11,7 @@ import java.util.List;
 public interface DepartmentRepository extends PagingAndSortingRepository<Department,Long>{
     void deleteAllByOrganizationId(Long organizationId);
     List<Department> findByOrganizationIdOrderByIdDesc(Long organizationId);
-    boolean existsByDepartmentNo(String departmentNo);
+    boolean existsByOrganizationIdAndDepartmentNo(Long organizationId, String departmentNo);
     List<Department> findByParentIdAndIdNotIn(Long parentId, Long department);
     Department findByOrganizationIdAndDepartmentName(Long orgId,String departmentName);
     boolean existsByOrganizationIdAndDepartmentName(Long orgId,String departmentName);
