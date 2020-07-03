@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @Configuration
 public class RouteConfiguration {
 
-    private static final String ALLOWED_HEADERS = "xx-requested-with, authorization, Content-Type, Authorization, credential, X-XSRF-TOKEN, content-disposition, content-length, cache-control";
+    private static final String ALLOWED_HEADERS = "x-requested-with, authorization, Content-Type, Authorization, credential, X-XSRF-TOKEN, content-disposition, content-length, cache-control";
     private static final String ALLOWED_METHODS = "POST, GET, OPTIONS, DELETE, PUT";
     private static final String ALLOWED_ORIGIN = "*";
     private static final String ALLOWED_Expose = "x-requested-with, authorization, Content-Type, Authorization, credential, X-XSRF-TOKEN, content-disposition, content-length, cache-control";
