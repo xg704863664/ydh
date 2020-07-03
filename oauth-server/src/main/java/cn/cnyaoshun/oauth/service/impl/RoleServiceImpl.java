@@ -29,7 +29,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -57,6 +59,10 @@ public class RoleServiceImpl implements RoleService {
         if(roleAddDomain.getProjectId() == null){
             throw new ExceptionValidation(418,"项目ID不能为空");
         }
+        boolean projectIdAndAndRoleName = roleRepository.existsByProjectIdAndAndRoleName(roleAddDomain.getProjectId(), roleAddDomain.getRoleName());
+        if(projectIdAndAndRoleName){
+            throw new ExceptionValidation(418,"角色名称已存在,请重新输入");
+        }
         Role role = new Role();
         role.setProjectId(roleAddDomain.getProjectId());
         role.setRoleName(roleAddDomain.getRoleName());
@@ -70,6 +76,7 @@ public class RoleServiceImpl implements RoleService {
                 rolePermissionRepository.save(rolePermission);
             });
         }
+        log.info("角色信息新增成功"+ role.getId());
         return role.getId();
     }
 
@@ -113,6 +120,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public Long update(RoleUpdateDomain roleUpdateDomain) {
+        boolean projectIdAndAndRoleName = roleRepository.existsByProjectIdAndAndRoleName(roleUpdateDomain.getProjectId(), roleUpdateDomain.getRoleName());
+        if(projectIdAndAndRoleName){
+            throw new ExceptionValidation(418,"角色名称已存在,请重新输入");
+        }
         Optional<Role> roleOptional = roleRepository.findById(roleUpdateDomain.getId());
         roleOptional.ifPresent(role -> {
             Role roleR = new Role();
@@ -189,6 +200,7 @@ public class RoleServiceImpl implements RoleService {
             roleFindAllByProjectIdAndAccountDomain.setPermissionList(permissionList);
             pageDataDomain.getRecords().add(roleFindAllByProjectIdAndAccountDomain);
         });
+        log.info("角色信息获取成功.共有:"+pageDataDomain.getTotal()+"条数据");
         return pageDataDomain;
     }
 

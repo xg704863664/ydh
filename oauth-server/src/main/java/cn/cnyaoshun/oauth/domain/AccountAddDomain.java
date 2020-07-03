@@ -3,7 +3,7 @@ package cn.cnyaoshun.oauth.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -18,11 +18,11 @@ public class AccountAddDomain {
     private Long userId;
 
     @ApiModelProperty(value = "账号,不能为空")
-    @NotNull(message = "账号不能为空")
+    @NotBlank(message = "账号不能为空")
     private String accountName;
 
     @ApiModelProperty(value = "密码,不能为空")
-    @NotNull(message = "密码不能为空")
+    @NotBlank(message = "密码不能为空")
     private  String password;
 
     @ApiModelProperty(value = "分配角色列表")

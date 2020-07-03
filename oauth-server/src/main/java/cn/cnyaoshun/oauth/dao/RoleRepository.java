@@ -11,4 +11,5 @@ import java.util.List;
  */
 public interface RoleRepository extends JpaRepository<Role, Long>,JpaSpecificationExecutor<Role> {
     List<Role> findByProjectId(Long projectId);
+    boolean existsByProjectIdAndAndRoleName(Long projectId, String roleName);
 }
