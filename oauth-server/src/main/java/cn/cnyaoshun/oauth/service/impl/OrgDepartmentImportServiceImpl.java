@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @HandlerType(ExcelDealType.ORG_DEPARTMENT_DEAL)
@@ -85,12 +86,11 @@ public class OrgDepartmentImportServiceImpl implements DealExcelService<OrgDepar
                 user.setUserName(orgDepartmentImportDomain.getUserName());
                 user.setIdNo(orgDepartmentImportDomain.getCardNo());
                 user = userRepository.save(user);
-                Account account = new Account();
-                account.setUserId(user.getId());
-                account.setState(true);
-                account.setAccountName(user.getPhone());
-                account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
-                accountRepository.save(account);
+                String phone = user.getPhone();
+                Long userId = user.getId();
+                Account account = accountRepository.findByAccountName(user.getPhone());
+                Optional.ofNullable(account).orElseGet(() -> saveAccount(userId,phone));
+
             }
             if (threeDepartment != null) {
                 saveUserDepartment(user, organization.getId(), threeDepartment.getId());
@@ -106,6 +106,14 @@ public class OrgDepartmentImportServiceImpl implements DealExcelService<OrgDepar
         log.info("组织机构信息导入成功,共导入:"+orgDepartmentImportDomainList.size()+"条数据");
     }
 
+    public Account saveAccount(Long userId,String phone){
+        Account  account = new Account();
+        account.setUserId(userId);
+        account.setState(true);
+        account.setAccountName(phone);
+        account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
+        return accountRepository.save(account);
+    }
 
     public void saveUserDepartment(User user, Long orgId, Long departmentId) {
         UserDepartment userDepartment = userDepartmentRepository.findByDepartmentIdAndUserId(departmentId, user.getId());
