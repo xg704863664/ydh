@@ -40,6 +40,7 @@ public class UserUpdateDomain {
     private String idNo;
 
     @ApiModelProperty(value = "部门ID")
+    @NotNull(message = "部门ID不能为空")
     private Long departmentId;
 
     @ApiModelProperty(value = "最后一次修改时间")

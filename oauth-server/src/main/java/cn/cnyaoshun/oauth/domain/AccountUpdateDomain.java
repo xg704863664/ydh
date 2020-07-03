@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class AccountUpdateDomain {
 
     @ApiModelProperty(value = "账号ID")
+    @NotNull(message = "账号ID不能为空")
     private Long id;
 
     @ApiModelProperty(value = "用户ID")
