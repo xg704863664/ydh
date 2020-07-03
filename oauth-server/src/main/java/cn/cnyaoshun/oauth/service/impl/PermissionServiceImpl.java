@@ -47,9 +47,13 @@ public class PermissionServiceImpl implements PermissionService{
     @Transactional
     public Long add(PermissionAddDomain permissionAddDomain) {
 
-        boolean existsByPermissionName = permissionRepository.existsByPermissionName(permissionAddDomain.getPermissionName());
+        boolean existsByPermissionName = permissionRepository.existsByProjectIdAndPermissionName(permissionAddDomain.getProjectId(),permissionAddDomain.getPermissionName());
         if(existsByPermissionName){
             throw new ExceptionValidation(418,"权限名称已存在,请重新输入");
+        }
+        boolean projectIdAndAndPermissionType = permissionRepository.existsByProjectIdAndAndPermissionType(permissionAddDomain.getProjectId(), permissionAddDomain.getPermissionType());
+        if(projectIdAndAndPermissionType){
+            throw new ExceptionValidation(418,"权限类型已存在,请重新输入");
         }
         Permission permission = new Permission();
         BeanUtils.copyProperties(permissionAddDomain, permission);
@@ -104,6 +108,15 @@ public class PermissionServiceImpl implements PermissionService{
     @Override
     @Transactional
     public Long update(PermissionUpdateDomain permissionUpdateDomain) {
+
+        boolean existsByPermissionName = permissionRepository.existsByProjectIdAndPermissionName(permissionUpdateDomain.getProjectId(),permissionUpdateDomain.getPermissionName());
+        if(existsByPermissionName){
+            throw new ExceptionValidation(418,"权限名称已存在,请重新输入");
+        }
+        boolean projectIdAndAndPermissionType = permissionRepository.existsByProjectIdAndAndPermissionType(permissionUpdateDomain.getProjectId(), permissionUpdateDomain.getPermissionType());
+        if(projectIdAndAndPermissionType){
+            throw new ExceptionValidation(418,"权限类型已存在,请重新输入");
+        }
         Optional<Permission> permissionOptional = permissionRepository.findById(permissionUpdateDomain.getId());
         permissionOptional.ifPresent(permission -> {
            Permission permission1 = new Permission();
@@ -112,6 +125,7 @@ public class PermissionServiceImpl implements PermissionService{
             permission1.setUpdateTime(new Date());
             permissionRepository.save(permission1);
         });
+        log.info("权限ID为:"+permissionUpdateDomain.getId() +"的权限信息修改成功");
         return permissionUpdateDomain.getId();
     }
 
@@ -133,6 +147,7 @@ public class PermissionServiceImpl implements PermissionService{
                 pageDataDomain.getRecords().add(permissionFindAllDomain);
             });
         });
+        log.info("权限信息获取成功!共有:"+pageDataDomain.getTotal() +"条数据");
         return  pageDataDomain;
     }
 }

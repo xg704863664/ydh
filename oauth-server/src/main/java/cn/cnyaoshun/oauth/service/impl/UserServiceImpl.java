@@ -2,6 +2,7 @@ package cn.cnyaoshun.oauth.service.impl;
 
 
 import cn.cnyaoshun.oauth.common.PageDataDomain;
+import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.*;
 import cn.cnyaoshun.oauth.entity.Account;
@@ -109,7 +110,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long add(UserAddDomain userAddDomain) {
-
+        Optional<Department> departOptional = departmentRepository.findById(userAddDomain.getDepartmentId());
+        departOptional.ifPresent(department -> {
+            boolean existsDepartment = departmentRepository.existsByOrganizationIdAndId(department.getOrganizationId(), department.getId());
+            if(existsDepartment){
+                boolean existsByUserName = userRepository.existsByUserName(userAddDomain.getUserName());
+                if(existsByUserName){
+                    throw new ExceptionValidation(418,"用户已存在,请重新输入");
+                }
+            }
+        });
         User user = new User();
         user.setIdNo(userAddDomain.getIdNo());
         user.setUserName(userAddDomain.getUserName());

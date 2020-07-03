@@ -3,6 +3,7 @@ package cn.cnyaoshun.oauth.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -15,9 +16,11 @@ import java.util.List;
 public class RoleAddDomain {
 
     @ApiModelProperty(value = "项目ID")
+    @NotBlank(message = "项目ID不能为空")
     private Long projectId;
 
     @ApiModelProperty(value = "角色名称")
+    @NotBlank(message = "角色名称不能为空")
     private String roleName;
 
     @ApiModelProperty(value = "权限ID")

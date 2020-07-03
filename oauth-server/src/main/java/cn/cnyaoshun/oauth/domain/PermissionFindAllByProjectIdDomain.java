@@ -3,6 +3,7 @@ package cn.cnyaoshun.oauth.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -21,7 +22,7 @@ public class PermissionFindAllByProjectIdDomain {
     private Long id;
 
     @ApiModelProperty(value = "权限名称非空")
-    @NotNull(message = "权限名称不能为空")
+    @NotBlank(message = "权限名称不能为空")
     private String permissionName;
 
     @ApiModelProperty(value = "权限编码")

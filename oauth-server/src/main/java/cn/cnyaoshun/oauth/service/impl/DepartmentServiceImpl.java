@@ -127,7 +127,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         Optional<Department> departmentOptional = departmentRepository.findById(departmentUpdateDomain.getDepartmentId());
         departmentOptional.ifPresent(department -> {
-           department.setId(department.getId());
+            boolean organizationIdAndDepartmentName = departmentRepository.existsByOrganizationIdAndDepartmentName(department.getOrganizationId(), departmentUpdateDomain.getDepartmentName());
+            if(organizationIdAndDepartmentName){
+                throw new ExceptionValidation(418,"部门名称已存在,请重新输入");
+            }
+            department.setId(department.getId());
            department.setDepartmentName(departmentUpdateDomain.getDepartmentName());
            department.setUpdateTime(new Date());
            departmentRepository.save(department);
