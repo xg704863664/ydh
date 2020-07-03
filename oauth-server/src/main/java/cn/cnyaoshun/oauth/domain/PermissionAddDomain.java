@@ -23,7 +23,7 @@ public class PermissionAddDomain {
     @ApiModelProperty(value = "权限编码")
     private String permissionType;
 
-    @NotBlank(message = "项目ID不能为空")
+    @NotNull(message = "项目ID不能为空")
     @ApiModelProperty(value = "项目ID")
     private Long projectId;
 }

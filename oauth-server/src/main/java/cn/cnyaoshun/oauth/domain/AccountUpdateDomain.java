@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class AccountUpdateDomain {
     private Long userId;
 
     @ApiModelProperty(value = "账号,不能为空")
-    @NotNull(message = "账号不能为空")
+    @NotBlank(message = "账号不能为空")
     private String accountName;
 
     @ApiModelProperty(value = "状态")

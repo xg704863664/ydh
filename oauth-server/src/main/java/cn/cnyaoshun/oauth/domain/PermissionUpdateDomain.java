@@ -30,7 +30,7 @@ public class PermissionUpdateDomain {
     private String permissionType;
 
     @ApiModelProperty(value = "项目ID")
-    @NotBlank(message = "项目ID不能为空")
+    @NotNull(message = "项目ID不能为空")
     private Long projectId;
 
     @ApiModelProperty(value = "最后一次修改时间")

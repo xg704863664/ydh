@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -17,12 +19,15 @@ import java.util.List;
 @Data
 public class RoleUpdateDomain {
 
+    @NotNull(message = "角色ID不能为空")
     @ApiModelProperty(value = "角色ID")
     private Long id;
 
+    @NotNull(message = "项目ID不能为空")
     @ApiModelProperty(value = "项目ID")
     private Long projectId;
 
+    @NotBlank(message = "角色名称不能为空")
     @ApiModelProperty(value = "角色名称")
     private String roleName;
 

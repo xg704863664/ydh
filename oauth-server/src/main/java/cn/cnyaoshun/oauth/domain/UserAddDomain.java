@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * 描述:新增用户信息
@@ -34,10 +33,10 @@ public class UserAddDomain {
     @Length(min=11,max = 11)
     private String phone;
 
-    @Email
+    @ApiModelProperty(value = "邮件")
     private String email;
 
-    @NotBlank(message = "身份证号码不能为空")
+    @ApiModelProperty(value = "身份证号码")
     private String idNo;
 
 }
