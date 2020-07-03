@@ -2,6 +2,8 @@ package cn.cnyaoshun.oauth.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 
@@ -14,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class DepartmentAddDomain {
 
-    @NotNull(message = "组织机构ID不能为空")
+    @NotBlank(message = "组织机构ID不能为空")
     @ApiModelProperty(value = "组织机构ID")
     private Long organizationId;
 
@@ -24,7 +26,7 @@ public class DepartmentAddDomain {
     @ApiModelProperty(value = "部门编号")
     private String departmentNo;
 
-    @NotNull(message = "部门名称不能为空")
+    @NotBlank(message = "部门名称不能为空")
     @ApiModelProperty(value = "部门名称")
     private String departmentName;
 }

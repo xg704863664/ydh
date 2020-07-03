@@ -19,7 +19,7 @@ public class UserAddDomain {
     @ApiModelProperty(value = "部门ID")
     private Long departmentId;
 
-    @NotNull(message = "姓名不能为空")
+    @NotBlank(message = "姓名不能为空")
     @ApiModelProperty(value = "姓名不能为空")
     private String userName;
 
@@ -37,7 +37,7 @@ public class UserAddDomain {
     @Email
     private String email;
 
-    @NotNull(message = "身份证号码不能为空")
+    @NotBlank(message = "身份证号码不能为空")
     private String idNo;
 
 }

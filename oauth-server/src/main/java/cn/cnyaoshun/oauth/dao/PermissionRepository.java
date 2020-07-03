@@ -10,6 +10,7 @@ import java.util.List;
  * Created by fyh on 2020/6/17.
  */
 public interface PermissionRepository extends JpaRepository<Permission , Long>,JpaSpecificationExecutor<Permission> {
-    boolean existsByPermissionName(String permissionName);
+    boolean existsByProjectIdAndPermissionName(Long projectId,String permissionName);
+    boolean existsByProjectIdAndAndPermissionType(Long projectId, String permissionType);
     List<Permission> findByProjectId(Long projectId);
 }

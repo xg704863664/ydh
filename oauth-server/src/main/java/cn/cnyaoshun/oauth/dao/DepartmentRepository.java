@@ -15,5 +15,5 @@ public interface DepartmentRepository extends PagingAndSortingRepository<Departm
     List<Department> findByParentIdAndIdNotIn(Long parentId, Long department);
     Department findByOrganizationIdAndDepartmentName(Long orgId,String departmentName);
     boolean existsByOrganizationIdAndDepartmentName(Long orgId,String departmentName);
-
+    boolean existsByOrganizationIdAndId(Long organizationId,Long id);
 }
