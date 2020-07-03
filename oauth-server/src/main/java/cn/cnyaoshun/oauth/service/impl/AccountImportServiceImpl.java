@@ -24,7 +24,7 @@ import java.util.Optional;
 @Service
 @HandlerType(value = ExcelDealType.ACCOUNT_DEAL)
 @RequiredArgsConstructor
-public class AccountImportService implements DealExcelService<AccountImportDomain> {
+public class AccountImportServiceImpl implements DealExcelService<AccountImportDomain> {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
