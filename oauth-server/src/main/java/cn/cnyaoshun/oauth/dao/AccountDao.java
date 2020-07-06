@@ -64,6 +64,6 @@ public class AccountDao {
         Query nativeQuery = entityManager.createNativeQuery(sql.toString());
         nativeQuery.setParameter(1,roleId);
         String count = nativeQuery.getSingleResult().toString();
-        return Long.valueOf(count.toString());
+        return Long.valueOf(count);
     }
 }
