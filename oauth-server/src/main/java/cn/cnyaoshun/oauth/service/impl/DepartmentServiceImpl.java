@@ -88,6 +88,12 @@ public class DepartmentServiceImpl implements DepartmentService {
                 throw new ExceptionValidation(418, "部门编号已存在");
             }
         }
+        if(!StringUtils.isEmpty(departmentAddDomain.getDepartmentName())){
+            boolean organizationIdAndDepartmentName = departmentRepository.existsByOrganizationIdAndDepartmentName(departmentAddDomain.getOrganizationId(), departmentAddDomain.getDepartmentName());
+            if(organizationIdAndDepartmentName){
+                throw new ExceptionValidation(418,"部门名称已存在,请重新输入");
+            }
+        }
         boolean organizationIdExt = organizationRepository.existsById(departmentAddDomain.getOrganizationId());
         if(!organizationIdExt){
             throw new ExceptionValidation(418,"公司不存在请重新输入");
