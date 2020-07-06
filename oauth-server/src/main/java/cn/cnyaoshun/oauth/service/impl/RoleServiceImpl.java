@@ -120,7 +120,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public Long update(RoleUpdateDomain roleUpdateDomain) {
-        boolean projectIdAndAndRoleName = roleRepository.existsByProjectIdAndAndRoleName(roleUpdateDomain.getProjectId(), roleUpdateDomain.getRoleName());
+        boolean projectIdAndAndRoleName = roleRepository.existsByProjectIdAndAndRoleNameAndIdNot(roleUpdateDomain.getProjectId(), roleUpdateDomain.getRoleName(),roleUpdateDomain.getId());
         if(projectIdAndAndRoleName){
             throw new ExceptionValidation(418,"角色名称已存在,请重新输入");
         }

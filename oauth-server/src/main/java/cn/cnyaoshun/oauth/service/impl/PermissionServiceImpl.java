@@ -51,7 +51,7 @@ public class PermissionServiceImpl implements PermissionService{
         if(existsByPermissionName){
             throw new ExceptionValidation(418,"权限名称已存在,请重新输入");
         }
-        boolean projectIdAndAndPermissionType = permissionRepository.existsByProjectIdAndAndPermissionType(permissionAddDomain.getProjectId(), permissionAddDomain.getPermissionType());
+        boolean projectIdAndAndPermissionType = permissionRepository.existsByProjectIdAndPermissionType(permissionAddDomain.getProjectId(), permissionAddDomain.getPermissionType());
         if(projectIdAndAndPermissionType){
             throw new ExceptionValidation(418,"权限类型已存在,请重新输入");
         }
@@ -109,11 +109,11 @@ public class PermissionServiceImpl implements PermissionService{
     @Transactional
     public Long update(PermissionUpdateDomain permissionUpdateDomain) {
 
-        boolean existsByPermissionName = permissionRepository.existsByProjectIdAndPermissionName(permissionUpdateDomain.getProjectId(),permissionUpdateDomain.getPermissionName());
+        boolean existsByPermissionName = permissionRepository.existsByProjectIdAndPermissionNameAndIdNot(permissionUpdateDomain.getProjectId(),permissionUpdateDomain.getPermissionName(),permissionUpdateDomain.getId());
         if(existsByPermissionName){
             throw new ExceptionValidation(418,"权限名称已存在,请重新输入");
         }
-        boolean projectIdAndAndPermissionType = permissionRepository.existsByProjectIdAndAndPermissionType(permissionUpdateDomain.getProjectId(), permissionUpdateDomain.getPermissionType());
+        boolean projectIdAndAndPermissionType = permissionRepository.existsByProjectIdAndPermissionTypeAndIdNot(permissionUpdateDomain.getProjectId(), permissionUpdateDomain.getPermissionType(),permissionUpdateDomain.getId());
         if(projectIdAndAndPermissionType){
             throw new ExceptionValidation(418,"权限类型已存在,请重新输入");
         }
