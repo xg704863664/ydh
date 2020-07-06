@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -17,7 +16,7 @@ import java.util.Date;
 @Data
 public class UserUpdateDomain {
 
-    @NotBlank(message = "ID不能为空")
+    @NotNull(message = "ID不能为空")
     @ApiModelProperty(value = "ID")
     private Long id;
 
