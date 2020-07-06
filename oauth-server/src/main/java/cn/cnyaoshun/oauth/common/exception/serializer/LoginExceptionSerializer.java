@@ -16,8 +16,8 @@ public class LoginExceptionSerializer extends StdSerializer<LoginException> {
     @Override
     public void serialize(LoginException loginException, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField("error", String.valueOf(loginException.getHttpErrorCode()));
-        jsonGenerator.writeStringField("message", loginException.getMessage());
+        jsonGenerator.writeStringField("code", String.valueOf(loginException.getHttpErrorCode()));
+        jsonGenerator.writeStringField("msg", loginException.getMessage());
         jsonGenerator.writeStringField("timestamp", String.valueOf(new Date().getTime()));
         if (loginException.getAdditionalInformation() != null) {
             for (Map.Entry<String, String> entry : loginException.getAdditionalInformation().entrySet()) {
