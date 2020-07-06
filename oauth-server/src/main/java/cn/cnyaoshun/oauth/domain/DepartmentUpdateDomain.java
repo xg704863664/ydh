@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 public class DepartmentUpdateDomain {
 
     @ApiModelProperty(value = "部门ID")
+    @NotNull(message = "部门ID不能为空")
     private Long departmentId;
 
     @NotBlank(message = "部门名称不能为空")

@@ -173,8 +173,11 @@ public class RoleServiceImpl implements RoleService {
             }
         };
         Page<Role> roleRepositoryAll = roleRepository.findAll(specification,page);
+        //当前页
         pageDataDomain.setCurrent(pageNumber);
-        pageDataDomain.setPages(pageSize);
+        //每页指定元素
+        pageDataDomain.setSize(pageSize);
+        //总共多少条数据
         pageDataDomain.setTotal(roleRepositoryAll.getTotalElements());
         roleRepositoryAll.forEach(role -> {
             RoleFindAllByProjectIdAndAccountDomain roleFindAllByProjectIdAndAccountDomain = new RoleFindAllByProjectIdAndAccountDomain();
