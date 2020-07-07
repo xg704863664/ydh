@@ -18,4 +18,10 @@ public class ReturnJsonData<T> {
         returnJsonData.setData(o);
         return returnJsonData;
     }
+    public static ReturnJsonData build(){
+        ReturnJsonData returnJsonData = new ReturnJsonData();
+        returnJsonData.setCode(ApiCode.SUCCESS.getCode());
+        returnJsonData.setMsg(ApiCode.SUCCESS.getMsg());
+        return returnJsonData;
+    }
 }
