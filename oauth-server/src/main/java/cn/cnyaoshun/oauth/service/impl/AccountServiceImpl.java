@@ -127,7 +127,7 @@ public class AccountServiceImpl implements AccountService{
         };
         Page<Account> accountRepositoryAll = accountRepository.findAll(accountSpecification,page);
         pageDataDomain.setCurrent(pageNumber);
-        pageDataDomain.setPages(pageSize);
+        pageDataDomain.setSize(pageSize);
         pageDataDomain.setTotal(accountRepositoryAll.getTotalElements());
         accountRepositoryAll.forEach(account -> {
             AccountFindAllDomain accountFindAllDomain = new AccountFindAllDomain();
