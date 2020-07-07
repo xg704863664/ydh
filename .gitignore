@@ -5,7 +5,7 @@ target
 
 from-server/target/
 from-server/target/**
-from-server/from-server.iml
+form-server/form-server.iml
 
 admin-server/target/
 admin-server/target/**
