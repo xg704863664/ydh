@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringCloudApplication
 @EnableJpaAuditing
 @EnableFeignClients
-public class FromServerApplication {
+public class FormServerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(FromServerApplication.class,args);
+        SpringApplication.run(FormServerApplication.class,args);
     }
 }
