@@ -3,6 +3,8 @@ package cn.cnyaoshun.file.config;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -31,5 +33,6 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo("file-server 服务", "file api文档", "v0.0.1", null, new Contact("Xia Gen", "", "704863664@qq.com"), "Apache License Version 2.0", "https://www.apache.org/licenses/LICENSE-2.0", Collections.emptyList());
     }
+
 
 }
