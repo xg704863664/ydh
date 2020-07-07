@@ -1,0 +1,41 @@
+#server:
+#  port: 16001
+#  servlet:
+#    context-path: /api/${spring.application.name}
+#  tomcat:
+#    accept-count: 1000
+#    max-threads: 500
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#  health:
+#    db:
+#      enabled: true
+#  endpoint:
+#    health:
+#      show-details: always
+#spring:
+#  jpa:
+#    open-in-view: false
+#  liquibase:
+#    change-log: classpath:db/master.xml
+#    default-schema: from-server
+#  datasource:
+#    url: jdbc:mysql://47.94.92.201:3306/from-server?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=GMT%2B8
+#    username: root
+#    password: CNliren123
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    hikari:
+#      allow-pool-suspension: true
+#      connection-test-query: 'select 1'
+#      auto-commit: false
+#      maximum-pool-size: 20
+#      minimum-idle: 5
+#      idle-timeout: 200000
+#      max-lifetime: 180000
+#      connection-timeout: 10000
+#      validation-timeout: 1000
+#      leak-detection-threshold: 30000
+#
