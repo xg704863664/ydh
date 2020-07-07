@@ -63,12 +63,21 @@ public class DynamicDataSourceUtil {
      * @param dataSource
      * @return
      */
-    private JdbcTemplate getJdbcTemplate(String databaseType,String url,String username,String password){
+    public JdbcTemplate getJdbcTemplate(String databaseType,String url,String username,String password){
         DriverManagerDataSource dataSource = getDataSource(databaseType, url, username, password);
         return new JdbcTemplate(dataSource);
     }
 
 
+    /**
+     *
+     *  获取数据源
+     * @param databaseType mysql/oracle
+     * @param url jdbc:oracle:thin:@192.168.1.9:1521:xe
+     * @param username root
+     * @param password root
+     * @return
+     */
     public DynamicTemplate getDynamicTemplate(String databaseType,String url,String username,String password){
         DriverManagerDataSource dataSource = getDataSource(databaseType, url, username, password);
         TransactionTemplate transactionTemplate = getTransactionTemplate(dataSource);
