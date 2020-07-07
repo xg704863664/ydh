@@ -1,4 +1,4 @@
-package cn.cnyaoshun.from.common.entity;
+package cn.cnyaoshun.form.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;

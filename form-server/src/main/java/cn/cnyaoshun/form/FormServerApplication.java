@@ -1,4 +1,4 @@
-package cn.cnyaoshun.from;
+package cn.cnyaoshun.form;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;

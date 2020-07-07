@@ -21,9 +21,9 @@
 #    open-in-view: false
 #  liquibase:
 #    change-log: classpath:db/master.xml
-#    default-schema: from-server
+#    default-schema: form-server
 #  datasource:
-#    url: jdbc:mysql://47.94.92.201:3306/from-server?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=GMT%2B8
+#    url: jdbc:mysql://47.94.92.201:3306/form-server?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=GMT%2B8
 #    username: root
 #    password: CNliren123
 #    driver-class-name: com.mysql.cj.jdbc.Driver

@@ -1,4 +1,4 @@
-package cn.cnyaoshun.from.common.aop;
+package cn.cnyaoshun.form.common.aop;
 
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.JoinPoint;
@@ -22,7 +22,7 @@ import java.util.Arrays;
 @Aspect
 @Log4j2
 public class AspectRequestAop {
-    @Pointcut("execution(public * cn.cnyaoshun.from.controller.*.*(..))")
+    @Pointcut("execution(public * cn.cnyaoshun.form.controller.*.*(..))")
     public void requestRecoder(){
     }
 

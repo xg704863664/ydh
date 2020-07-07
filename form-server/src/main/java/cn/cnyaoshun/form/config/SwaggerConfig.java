@@ -1,4 +1,4 @@
-package cn.cnyaoshun.from.config;
+package cn.cnyaoshun.form.config;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +29,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfo("from-server 服务", "表单系统 api文档", "v0.0.1", null, new Contact("Xia Gen", "", "704863664@qq.com"), "Apache License Version 2.0", "https://www.apache.org/licenses/LICENSE-2.0", Collections.emptyList());
+        return new ApiInfo("form-server 服务", "表单系统 api文档", "v0.0.1", null, new Contact("Xia Gen", "", "704863664@qq.com"), "Apache License Version 2.0", "https://www.apache.org/licenses/LICENSE-2.0", Collections.emptyList());
     }
 
 }

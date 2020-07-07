@@ -1,4 +1,4 @@
-package cn.cnyaoshun.from.common.entity;
+package cn.cnyaoshun.form.common.entity;
 
 import lombok.Getter;
 import lombok.Setter;

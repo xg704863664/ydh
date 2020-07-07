@@ -1,4 +1,4 @@
-package cn.cnyaoshun.from.common.exception;
+package cn.cnyaoshun.form.common.exception;
 
 import lombok.Data;
 

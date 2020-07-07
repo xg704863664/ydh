@@ -1,9 +1,9 @@
-package cn.cnyaoshun.from.common.handler;
+package cn.cnyaoshun.form.common.handler;
 
-import cn.cnyaoshun.from.common.ApiCode;
-import cn.cnyaoshun.from.common.ReturnJsonData;
-import cn.cnyaoshun.from.common.exception.ExceptionAuth;
-import cn.cnyaoshun.from.common.exception.ExceptionValidation;
+import cn.cnyaoshun.form.common.ApiCode;
+import cn.cnyaoshun.form.common.ReturnJsonData;
+import cn.cnyaoshun.form.common.exception.ExceptionAuth;
+import cn.cnyaoshun.form.common.exception.ExceptionValidation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

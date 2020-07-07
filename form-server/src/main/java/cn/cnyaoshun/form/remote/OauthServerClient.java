@@ -1,6 +1,6 @@
-package cn.cnyaoshun.from.remote;
+package cn.cnyaoshun.form.remote;
 
-import cn.cnyaoshun.from.common.ReturnJsonData;
+import cn.cnyaoshun.form.common.ReturnJsonData;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;

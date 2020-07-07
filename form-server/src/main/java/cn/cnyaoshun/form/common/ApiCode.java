@@ -1,4 +1,4 @@
-package cn.cnyaoshun.from.common;
+package cn.cnyaoshun.form.common;
 
 import lombok.Getter;
 

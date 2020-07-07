@@ -1,7 +1,7 @@
-package cn.cnyaoshun.from.config;
+package cn.cnyaoshun.form.config;
 
-import cn.cnyaoshun.from.common.ApiCode;
-import cn.cnyaoshun.from.common.exception.ExceptionAuth;
+import cn.cnyaoshun.form.common.ApiCode;
+import cn.cnyaoshun.form.common.exception.ExceptionAuth;
 import feign.Response;
 import feign.Util;
 import feign.codec.ErrorDecoder;

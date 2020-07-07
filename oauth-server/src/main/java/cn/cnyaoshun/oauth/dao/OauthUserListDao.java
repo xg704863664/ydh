@@ -26,7 +26,7 @@ public class OauthUserListDao {
 
     public List<RoleFindAllByOauthDomain> getAllRoleDomain(Long accountId, Long projectId){
         //角色信息
-        StringBuilder roleSql = new StringBuilder("SELECT r.id,r.role_name from account_role as ar,role as r WHERE r.project_id=? and ar.account_id = ? and ar.role_id = r.id");
+        StringBuilder roleSql = new StringBuilder("SELECT r.id,r.role_name form account_role as ar,role as r WHERE r.project_id=? and ar.account_id = ? and ar.role_id = r.id");
         Query nativeQuery = entityManager.createNativeQuery(roleSql.toString());
         nativeQuery.setParameter(1,projectId);
         nativeQuery.setParameter(2,accountId);
@@ -49,7 +49,7 @@ public class OauthUserListDao {
     }
 
     public List<PermissionOauthUserListDomain> getAllPermissionList(List<Long> roleIdList){
-        StringBuilder permissionListSql = new StringBuilder("SELECT p.id,p.permission_name,p.permission_type from role_permission as rp,permission as p where rp.role_id in(?) and rp.permission_id=p.id");
+        StringBuilder permissionListSql = new StringBuilder("SELECT p.id,p.permission_name,p.permission_type form role_permission as rp,permission as p where rp.role_id in(?) and rp.permission_id=p.id");
         Query nativeQuery = entityManager.createNativeQuery(permissionListSql.toString());
         String ids = roleIdList.stream().map(id -> String.valueOf(id)).collect(Collectors.joining(","));
         nativeQuery.setParameter(1,ids);
