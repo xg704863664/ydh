@@ -27,7 +27,9 @@ nohup java  -Xmx3g -Xms3g -Xmn1g -Xss256k -XX:ParallelGCThreads=8 -XX:+UseConcMa
 oracle jdbc pom依赖
 
 1.根据自己ojdbc8.jar路径修改-Dfile
+```
 mvn install:install-file -Dfile=D:\workspace\VCPlatform\lib\ojdbc8.jar -DgroupId=com.oracle -DartifactId=ojdbc8 -Dversion=12.2.0.1 -Dpackaging=jar
+```
 2.添加项目依赖（已添加）
 ```
 <dependency>
