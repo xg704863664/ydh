@@ -2,11 +2,9 @@ package cn.cnyaoshun.form.datasource.service.impl;
 
 import cn.cnyaoshun.form.common.DatabaseDriverType;
 import cn.cnyaoshun.form.common.annotation.DynamicType;
-import cn.cnyaoshun.form.common.exception.ExceptionDataNotExists;
 import cn.cnyaoshun.form.common.util.DynamicDataSourceUtil;
 import cn.cnyaoshun.form.common.util.DynamicTemplate;
 import cn.cnyaoshun.form.datasource.model.DataSourceConfig;
-import cn.cnyaoshun.form.datasource.repository.DataSourceConfigRepository;
 import cn.cnyaoshun.form.datasource.service.DynamicDataSourceConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
