@@ -27,20 +27,19 @@ public class Designer extends AbstractEntity {
      * 表单json字符串
      */
     @ApiModelProperty(value = "value")
-    @Column(columnDefinition = "varchar(4000)")
     private String value;
 
     /**
      * 树id
      */
     @ApiModelProperty(value = "orgId")
-    private String orgId;
+    private Long orgId;
 
     /**
      * 数据源id
      */
     @ApiModelProperty(value = "dataSourceId")
-    private String dataSourceId;
+    private Long dataSourceId;
 
     /**
      * 表名
