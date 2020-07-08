@@ -80,21 +80,6 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
     @Override
     public List<String> findTableNameById(Long id) {
         DataSourceConfig dataSourceConfig = dataSourceConfigRepository.findById(id).orElseThrow(ExceptionDataNotExists::new);
-//        DynamicTemplate dynamicTemplate = dynamicDataSourceUtil.getDynamicTemplate(dataSourceConfig.getType(), dataSourceConfig.getUrl(), dataSourceConfig.getUsername(), dataSourceConfig.getPassword());
-//        String sql = "";
-//        if ("mysql".equals(dataSourceConfig.getType())) {
-//            sql = "show tables";
-//        } else if ("oracle".equals(dataSourceConfig.getType())) {
-//            sql = "select table_name from user_tables";
-//        } else {
-//            throw new ExceptionValidation(400, "数据源类型不存在！");
-//        }
-//        List<Map<String, Object>> tables = dynamicTemplate.getJdbcTemplate().queryForList(sql);
-//        tables.forEach(table -> {
-//            table.entrySet().forEach(stringObjectEntry -> {
-//                result.add(stringObjectEntry.getValue().toString());
-//            });
-//        });
         DynamicDataSourceConfigService dynamicDataSourceConfigService = handlerContext.getInstance(dataSourceConfig.getType());
         List<String> result = dynamicDataSourceConfigService.findTableName(dataSourceConfig);
         return result;
@@ -103,34 +88,15 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
     @Override
     public List<String> findFeildNameByIdAndTableName(Long id, String tableName) {
         DataSourceConfig dataSourceConfig = dataSourceConfigRepository.findById(id).orElseThrow(ExceptionDataNotExists::new);
-//        DynamicTemplate dynamicTemplate = dynamicDataSourceUtil.getDynamicTemplate(dataSourceConfig.getType(), dataSourceConfig.getUrl(), dataSourceConfig.getUsername(), dataSourceConfig.getPassword());
-//        String sql = "";
-//        if ("mysql".equals(dataSourceConfig.getType())) {
-//            sql = "select COLUMN_NAME from information_schema.columns where TABLE_NAME='" + tableName + "'";
-//        } else if ("oracle".equals(dataSourceConfig.getType())) {
-//            sql = "select t.COLUMN_NAME from USER_TAB_COLUMNS t where t.TABLE_NAME = upper('" + tableName + "')";
-//        } else {
-//            throw new ExceptionValidation(400, "数据源类型不存在！");
-//        }
-//        List<Map<String, Object>> tables = dynamicTemplate.getJdbcTemplate().queryForList(sql);
-//        tables.forEach(table -> {
-//            table.entrySet().forEach(stringObjectEntry -> {
-//                result.add(stringObjectEntry.getValue().toString());
-//            });
-//        });
         DynamicDataSourceConfigService dynamicDataSourceConfigService = handlerContext.getInstance(dataSourceConfig.getType());
-        List<String> result = dynamicDataSourceConfigService.findFeildNameByIdAndTableName(tableName,dataSourceConfig);
+        List<String> result = dynamicDataSourceConfigService.findFeildNameByIdAndTableName(tableName, dataSourceConfig);
         return result;
     }
 
     private boolean testConnect(String url, String type, String username, String password) {
         boolean result = false;
         try {
-//            for (DatabaseDriverType databaseDriverType : DatabaseDriverType.values()) {
-//                if (databaseDriverType.getType().equals(type)) {
-                    Class.forName(DatabaseDriverType.getDatabaseDriver(type));
-//                }
-//            }
+            Class.forName(DatabaseDriverType.getDatabaseDriver(type));
         } catch (ClassNotFoundException e) {
             log.error("驱动类加载失败！");
             return false;
