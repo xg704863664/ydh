@@ -16,7 +16,7 @@ ydh 项目名
 mvn clean package -Dmaven.test.skip=true
 
 ### 如何运行
-nohup java  -Xmx3g -Xms3g -Xmn1g -Xss256k -XX:ParallelGCThreads=20 -XX:+UseConcMarkSweepGC -XX:+UseParNewGC  -jar ***-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev --spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848 --spring.cloud.nacos.config.server-addr=127.0.0.1:8848 >/dev/null 2>&1 &
+nohup java  -Xmx3g -Xms3g -Xmn1g -Xss256k -XX:ParallelGCThreads=8 -XX:+UseConcMarkSweepGC -XX:+UseParNewGC  -jar ***-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev --spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848 --spring.cloud.nacos.config.server-addr=127.0.0.1:8848 >/dev/null 2>&1 &
 
 ### 注意事项
     1.请在.gitignore文件中加入项目忽略提交文件
