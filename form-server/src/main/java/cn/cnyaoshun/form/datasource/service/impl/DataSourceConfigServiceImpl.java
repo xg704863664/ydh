@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Connection;
@@ -44,11 +45,13 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
     }
 
     @Override
+    @Transactional
     public DataSourceConfig save(DataSourceConfig dataSourceConfig) {
         return dataSourceConfigRepository.save(dataSourceConfig);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         dataSourceConfigRepository.deleteById(id);
     }

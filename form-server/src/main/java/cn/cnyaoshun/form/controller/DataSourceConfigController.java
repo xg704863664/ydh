@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/dataSource")
 @Api(description = "数据源管理")
-@AllArgsConstructor
 @Validated
 public class DataSourceConfigController {
 
