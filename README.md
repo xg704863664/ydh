@@ -10,6 +10,7 @@ ydh 项目名
     file-server  // 统一文件服务
     api-server   // 统一API服务
     admin-server // 服务监控
+    form-server  // 表单服务
 ```
 ### 如何编译
 mvn clean package -Dmaven.test.skip=true
