@@ -3,27 +3,22 @@ package cn.cnyaoshun.form.datasource.service.impl;
 import cn.cnyaoshun.form.common.DatabaseDriverType;
 import cn.cnyaoshun.form.common.PageDataDomain;
 import cn.cnyaoshun.form.common.exception.ExceptionDataNotExists;
-import cn.cnyaoshun.form.common.exception.ExceptionValidation;
-import cn.cnyaoshun.form.common.util.DynamicDataSourceUtil;
-import cn.cnyaoshun.form.common.util.DynamicTemplate;
 import cn.cnyaoshun.form.datasource.model.DataSourceConfig;
 import cn.cnyaoshun.form.datasource.repository.DataSourceConfigRepository;
 import cn.cnyaoshun.form.datasource.service.DataSourceConfigService;
 import cn.cnyaoshun.form.datasource.service.DynamicDataSourceConfigService;
 import cn.cnyaoshun.form.datasource.service.handler.HandlerContext;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -31,9 +26,6 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
 
     @Resource
     private HandlerContext handlerContext;
-
-    @Resource
-    private DynamicDataSourceUtil dynamicDataSourceUtil;
 
     @Resource
     private DataSourceConfigRepository dataSourceConfigRepository;
