@@ -1,4 +1,4 @@
-package cn.cnyaoshun.form.datasource.controller;
+package cn.cnyaoshun.form.controller;
 
 import cn.cnyaoshun.form.common.PageDataDomain;
 import cn.cnyaoshun.form.common.ReturnJsonData;
@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
