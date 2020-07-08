@@ -25,7 +25,7 @@ public class LoginInterceptor implements HandlerInterceptor  {
             throw new ExceptionAuth(ApiCode.NOT_FOUNT_ACCESS_TOKEN.getCode(), "token is not null");
         }
         ReturnJsonData<String> returnJsonData = oauthServerClient.checkToken(token);
-        if (417 == returnJsonData.getCode()) {
+        if (ApiCode.NOT_FOUNT_ACCESS_TOKEN.getCode() == returnJsonData.getCode()) {
             throw new ExceptionAuth(ApiCode.NOT_FOUNT_ACCESS_TOKEN.getCode(), ApiCode.NOT_FOUNT_ACCESS_TOKEN.getMsg());
         }
         return true;
