@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public enum DatabaseDriverType {
-    ORG_DEPARTMENT_TEMPLATE("mysql","com.mysql.cj.jdbc.Driver"),
-    ACCOUNT_TEMPLATE("oracle","oracle.jdbc.OracleDriver");
+    MYSQL("mysql","com.mysql.cj.jdbc.Driver"),
+    ORACLE("oracle","oracle.jdbc.OracleDriver");
     @Getter
     String type;
     @Getter
     String driverName;
 
     public static String getDatabaseDriver(String type) {
-        return Arrays.stream(DatabaseDriverType.class.getEnumConstants()).filter(downLoadExcelTemplateType -> type.equals(downLoadExcelTemplateType.getType())).map(DatabaseDriverType::getDriverName).collect(Collectors.joining());
+        return Arrays.stream(DatabaseDriverType.class.getEnumConstants()).filter(databaseDriverType -> type.equals(databaseDriverType.getType())).map(DatabaseDriverType::getDriverName).collect(Collectors.joining());
     }
 }
