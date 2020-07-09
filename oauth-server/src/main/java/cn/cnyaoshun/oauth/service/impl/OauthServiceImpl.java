@@ -65,4 +65,31 @@ public class OauthServiceImpl implements OauthService {
         });
         return oauthUserListDomain;
     }
+
+
+
+    /**
+     * 根据Token
+     * @param oAuth2Authentication
+     * @param projectId
+     * @return
+     */
+    @Override
+    public OauthUserListDomain getAllUserInfo(OAuth2Authentication oAuth2Authentication) {
+        OauthUserListDomain oauthUserListDomain = new OauthUserListDomain();
+        Authentication userAuthentication = oAuth2Authentication.getUserAuthentication();
+        UserDetailsImpl userAuthenticationPrincipal = (UserDetailsImpl)userAuthentication.getPrincipal();
+        String accountName = userAuthenticationPrincipal.getUsername();
+        Long accountId = userAuthenticationPrincipal.getId();
+        Account account = accountRepository.findByAccountName(accountName);
+        oauthUserListDomain.setAccountId(accountId);
+        Optional.ofNullable(account.getUserId()).ifPresent(userId -> {
+            Optional<User> userOptional = userRepository.findById(userId);
+            userOptional.ifPresent(user -> {
+                oauthUserListDomain.setUserName(user.getUserName());
+                oauthUserListDomain.setUserId(user.getId());
+            });
+        });
+        return oauthUserListDomain;
+    }
 }

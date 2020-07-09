@@ -60,4 +60,11 @@ public class OauthController {
         OauthUserListDomain allUserInfo = oauthService.getAllUserInfo(oAuth2Authentication, projectId);
         return ReturnJsonData.build(allUserInfo);
     }
+
+    @ApiOperation(value = "根据TOKEN获取账号信息",httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/getUserInfo",method = RequestMethod.GET)
+    public ReturnJsonData<OauthUserListDomain> getAllUserInfo(@ApiIgnore OAuth2Authentication oAuth2Authentication){
+        OauthUserListDomain allUserInfo = oauthService.getAllUserInfo(oAuth2Authentication);
+        return ReturnJsonData.build(allUserInfo);
+    }
 }

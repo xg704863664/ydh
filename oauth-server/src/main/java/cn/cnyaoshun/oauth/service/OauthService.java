@@ -9,4 +9,6 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 public interface OauthService {
 
     OauthUserListDomain getAllUserInfo(OAuth2Authentication oAuth2Authentication, Long projectId);
+
+    OauthUserListDomain getAllUserInfo(OAuth2Authentication oAuth2Authentication);
 }
