@@ -6,4 +6,5 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <include file="classpath:db/changelog/20200708104000_datasourceconfig.xml" relativeToChangelogFile="false"></include>
     <include file="classpath:db/changelog/20200708104400_designer.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200708183100_organization.xml" relativeToChangelogFile="false"></include>
 </databaseChangeLog>
