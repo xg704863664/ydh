@@ -26,19 +26,22 @@ import java.awt.*;
 public class OrganizationController {
     @Resource
     private OrganizationService organizationService;
-    @ApiOperation(value = "查询表单全部目录",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+
+    @ApiOperation(value = "查询表单全部目录", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping("/findAll")
-    public ReturnJsonData findAll(){
+    public ReturnJsonData findAll() {
         return ReturnJsonData.build(organizationService.getAll());
     }
-    @ApiOperation(value = "修改新增目录",httpMethod = "POST",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+
+    @ApiOperation(value = "修改新增目录", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("save")
-    public ReturnJsonData save(@ApiParam(value = "新增修改目录",required = true)@RequestBody @Valid Organization organization){
+    public ReturnJsonData save(@ApiParam(value = "新增修改目录", required = true) @RequestBody @Valid Organization organization) {
         return ReturnJsonData.build(organizationService.save(organization));
     }
-    @ApiOperation(value = "根据id删除目录",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+
+    @ApiOperation(value = "根据id删除目录", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @DeleteMapping("delete/{id}")
-    public ReturnJsonData delete(@ApiParam(value = "目录id",required = true) @PathVariable(value = "id")Long id){
+    public ReturnJsonData delete(@ApiParam(value = "目录id", required = true) @PathVariable(value = "id") Long id) {
         organizationService.delete(id);
         return ReturnJsonData.build();
     }
