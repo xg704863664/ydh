@@ -22,7 +22,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/form")
-@Api(description = "数据源管理")
+@Api(description = "表单管理")
 @Validated
 public class FormController {
 
