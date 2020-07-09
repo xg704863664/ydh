@@ -11,6 +11,12 @@ public class ReturnJsonData<T> {
     private String msg;
     private Integer code;
 
+    public static ReturnJsonData build(Integer code,String msg){
+        ReturnJsonData returnJsonData = new ReturnJsonData();
+        returnJsonData.setCode(code);
+        returnJsonData.setMsg(msg);
+        return returnJsonData;
+    }
     public static ReturnJsonData build(Object o){
         ReturnJsonData returnJsonData = new ReturnJsonData();
         returnJsonData.setCode(ApiCode.SUCCESS.getCode());
