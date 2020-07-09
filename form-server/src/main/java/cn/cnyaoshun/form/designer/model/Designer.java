@@ -4,7 +4,6 @@ import cn.cnyaoshun.form.common.entity.AbstractEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Data
@@ -28,6 +27,12 @@ public class Designer extends AbstractEntity {
      */
     @ApiModelProperty(value = "value")
     private String value;
+
+    /**
+     * 状态位
+     */
+    @ApiModelProperty(value = "status")
+    private boolean status;
 
     /**
      * 树id
