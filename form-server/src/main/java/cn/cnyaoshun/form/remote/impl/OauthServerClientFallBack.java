@@ -3,6 +3,7 @@ package cn.cnyaoshun.form.remote.impl;
 import cn.cnyaoshun.form.common.ApiCode;
 import cn.cnyaoshun.form.common.ReturnJsonData;
 import cn.cnyaoshun.form.common.domain.OauthUserListDomain;
+import cn.cnyaoshun.form.common.exception.ExceptionValidation;
 import cn.cnyaoshun.form.remote.OauthServerClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,6 @@ public class OauthServerClientFallBack implements OauthServerClient {
 
     @Override
     public ReturnJsonData<OauthUserListDomain> getUserInfo(String token) {
-        return null;
+       throw new ExceptionValidation(ApiCode.PARAMETER_ERROR.getCode(),"请求异常");
     }
 }

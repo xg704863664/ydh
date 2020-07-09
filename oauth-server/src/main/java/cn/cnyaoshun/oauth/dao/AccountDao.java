@@ -25,7 +25,7 @@ public class AccountDao {
 
     public List<AccountFindAllByRoleIdDomain> findAllByRoleId(Long roleId, String keyWord, Integer pageNumber, Integer pageSize){
         List<AccountFindAllByRoleIdDomain> accountFindAllByRoleIdDomainList = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT a.id ,a.account_name,u.user_name,a.state form account_role as ar left JOIN account as a on ar.account_id=a.id LEFT JOIN `user` as u on u.id=a.user_id where ar.role_id=? ");
+        StringBuilder sql = new StringBuilder("SELECT a.id ,a.account_name,u.user_name,a.state from account_role as ar left JOIN account as a on ar.account_id=a.id LEFT JOIN `user` as u on u.id=a.user_id where ar.role_id=? ");
         if (!StringUtils.isEmpty(keyWord)) {
             sql.append(" and (a.account_name like '%"+keyWord+"%' OR u.user_name LIKE '%"+keyWord+"%')");
         }
@@ -57,7 +57,7 @@ public class AccountDao {
 
     public Long countAccountByRoleId(Long roleId, String keyWord){
 
-        StringBuilder sql = new StringBuilder("SELECT count(1) form account_role as ar left JOIN account as a on ar.account_id=a.id LEFT JOIN `user` as u on u.id=a.user_id where ar.role_id=? ");
+        StringBuilder sql = new StringBuilder("SELECT count(1) from account_role as ar left JOIN account as a on ar.account_id=a.id LEFT JOIN `user` as u on u.id=a.user_id where ar.role_id=? ");
         if (!StringUtils.isEmpty(keyWord)) {
             sql.append(" and (a.account_name like '%"+keyWord+"%' OR u.user_name LIKE '%"+keyWord+"%')");
         }
