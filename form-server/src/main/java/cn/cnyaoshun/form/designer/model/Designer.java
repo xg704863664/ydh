@@ -32,7 +32,7 @@ public class Designer extends AbstractEntity {
      * 状态位
      */
     @ApiModelProperty(value = "status")
-    private String status;
+    private boolean status;
 
     /**
      * 树id
