@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class LoginInterceptor implements HandlerInterceptor  {
 
+    public static ThreadLocal<String> threadLocal = new ThreadLocal<>();
+
     @Autowired
     private OauthServerClient oauthServerClient;
 
@@ -26,6 +28,7 @@ public class LoginInterceptor implements HandlerInterceptor  {
         }
         ReturnJsonData<String> returnJsonData = oauthServerClient.checkToken(token);
         if (returnJsonData.getCode() == 0) {
+            threadLocal.set(token);
             return true;
         }
         throw new ExceptionAuth(returnJsonData.getCode(), returnJsonData.getMsg());

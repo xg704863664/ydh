@@ -1,10 +1,14 @@
 package cn.cnyaoshun.form.designer.service.impl;
 
 import cn.cnyaoshun.form.common.PageDataDomain;
+import cn.cnyaoshun.form.common.ReturnJsonData;
+import cn.cnyaoshun.form.common.domain.OauthUserListDomain;
 import cn.cnyaoshun.form.common.exception.ExceptionDataNotExists;
 import cn.cnyaoshun.form.designer.model.Designer;
 import cn.cnyaoshun.form.designer.repository.DesignerRepository;
 import cn.cnyaoshun.form.designer.service.DesignerService;
+import cn.cnyaoshun.form.interceptor.LoginInterceptor;
+import cn.cnyaoshun.form.remote.OauthServerClient;
 import com.alibaba.fastjson.JSON;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +26,9 @@ public class DesignerServiceImpl implements DesignerService {
     @Resource
     private DesignerRepository designerRepository;
 
+    @Resource
+    private OauthServerClient oauthServerClient;
+
     @Override
     public Designer findById(Long id) {
         return designerRepository.findById(id).orElseThrow(ExceptionDataNotExists::new);
@@ -33,9 +40,9 @@ public class DesignerServiceImpl implements DesignerService {
     }
 
     @Override
-    public PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize,Long orgId) {
+    public PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, Long orgId) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        Page<Designer> page = designerRepository.findByOrgId(orgId,pageable);
+        Page<Designer> page = designerRepository.findByOrgId(orgId, pageable);
         PageDataDomain<Designer> result = new PageDataDomain<Designer>();
         result.setCurrent(pageNum);
         result.setSize(pageSize);
@@ -47,6 +54,12 @@ public class DesignerServiceImpl implements DesignerService {
 
     @Override
     public Designer save(Designer designer) {
+        String token = LoginInterceptor.threadLocal.get();
+        ReturnJsonData<OauthUserListDomain> userInfo = oauthServerClient.getUserInfo(token);
+        if (designer.getId() == null) {
+            designer.setCreateUserName(userInfo.getCode() == 0 ? userInfo.getData().getUserName() : "");
+        }
+        designer.setUpdateUserName(userInfo.getCode() == 0 ? userInfo.getData().getUserName() : "");
         return designerRepository.save(designer);
     }
 
@@ -65,7 +78,7 @@ public class DesignerServiceImpl implements DesignerService {
     @Override
     public List<String> findFeildNameById(Long id) {
         Designer designer = designerRepository.findById(id).orElseThrow(ExceptionDataNotExists::new);
-        Map<String,Map<String,Object>> objects = (Map<String,Map<String,Object>>) JSON.parse(designer.getValue());
+        Map<String, Map<String, Object>> objects = (Map<String, Map<String, Object>>) JSON.parse(designer.getValue());
         List<String> result = new ArrayList<>();
         objects.entrySet().forEach(entry -> {
             result.add(entry.getKey());

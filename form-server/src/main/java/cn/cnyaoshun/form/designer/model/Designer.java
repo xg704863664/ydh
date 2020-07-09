@@ -35,6 +35,18 @@ public class Designer extends AbstractEntity {
     private boolean status;
 
     /**
+     * 创建人姓名
+     */
+    @ApiModelProperty(value = "createUserName")
+    private String createUserName;
+
+    /**
+     * 修改人姓名
+     */
+    @ApiModelProperty(value = "updateUserName")
+    private String updateUserName;
+
+    /**
      * 树id
      */
     @ApiModelProperty(value = "orgId")
