@@ -19,4 +19,6 @@ public interface DesignerService {
 
     Designer updateStatus(Long id,boolean status);
 
+    List<String> findFeildNameById(Long id);
+
 }

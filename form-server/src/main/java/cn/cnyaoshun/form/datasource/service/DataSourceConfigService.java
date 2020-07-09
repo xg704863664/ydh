@@ -4,7 +4,6 @@ import cn.cnyaoshun.form.common.PageDataDomain;
 import cn.cnyaoshun.form.datasource.model.DataSourceConfig;
 
 import java.util.List;
-import java.util.Map;
 
 public interface DataSourceConfigService {
 
@@ -23,5 +22,7 @@ public interface DataSourceConfigService {
     List<String> findTableNameById(Long id);
 
     List<String> findFeildNameByIdAndTableName(Long id,String tableName);
+
+    List<DataSourceConfig> findAll();
 
 }

@@ -21,7 +21,6 @@ public class DataSourceConfig extends AbstractEntity {
      * 编号
      */
     @ApiModelProperty(value = "数据源编号")
-    @NotBlank(message = "编号不能为空")
     private String code;
 
     /**

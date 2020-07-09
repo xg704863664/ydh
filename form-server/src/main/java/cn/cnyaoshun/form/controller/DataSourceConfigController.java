@@ -1,5 +1,6 @@
 package cn.cnyaoshun.form.controller;
 
+import cn.cnyaoshun.form.common.DatabaseDriverType;
 import cn.cnyaoshun.form.common.PageDataDomain;
 import cn.cnyaoshun.form.common.ReturnJsonData;
 import cn.cnyaoshun.form.datasource.model.DataSourceConfig;
@@ -7,7 +8,6 @@ import cn.cnyaoshun.form.datasource.service.DataSourceConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/dataSource")
@@ -58,14 +61,23 @@ public class DataSourceConfigController {
         return ReturnJsonData.build(dataSourceConfigService.connect(dataSourceConfig));
     }
 
-    /**
-     * 以下为测试方法
-     * 联调之后删除
-     */
-    @ApiOperation(value = "根据ID测试数据源是否连接成功",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @GetMapping(value = "/testConnect1/{id}")
-    public ReturnJsonData<Boolean> testConnect(@PathVariable(value = "id") Long id){
-        return ReturnJsonData.build(dataSourceConfigService.connectById(id));
+    @ApiOperation(value = "获取数据源类型",httpMethod = "POST",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/getDataSourceType")
+    public ReturnJsonData<Map<String,String>> getDataSourceType(){
+        List<Map<String,String>> result = new ArrayList<>();
+        for(DatabaseDriverType databaseDriverType : DatabaseDriverType.values()){
+            Map<String,String> map = new HashMap<>();
+            map.put("label",databaseDriverType.getType());
+            map.put("value",databaseDriverType.getType());
+            result.add(map);
+        }
+        return ReturnJsonData.build(result);
+    }
+
+    @ApiOperation(value = "获取所有数据源",httpMethod = "POST",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/findDataSource")
+    public ReturnJsonData<DataSourceConfig> findDataSource(){
+        return ReturnJsonData.build(dataSourceConfigService.findAll());
     }
 
     @ApiOperation(value = "根据数据源id查询表名",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -79,8 +91,4 @@ public class DataSourceConfigController {
     public ReturnJsonData<List<String>> findFeildNameByIdAndTableName(@PathVariable(value = "id") Long id,@PathVariable(value = "tablename") String tablename){
         return ReturnJsonData.build(dataSourceConfigService.findFeildNameByIdAndTableName(id,tablename));
     }
-
-    /**
-     * 测试方法结束
-     */
 }

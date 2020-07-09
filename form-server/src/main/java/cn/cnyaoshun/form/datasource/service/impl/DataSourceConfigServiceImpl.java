@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -85,6 +86,16 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
         DataSourceConfig dataSourceConfig = dataSourceConfigRepository.findById(id).orElseThrow(ExceptionDataNotExists::new);
         DynamicDataSourceConfigService dynamicDataSourceConfigService = handlerContext.getInstance(dataSourceConfig.getType());
         List<String> result = dynamicDataSourceConfigService.findFeildNameByIdAndTableName(tableName, dataSourceConfig);
+        return result;
+    }
+
+    @Override
+    public List<DataSourceConfig> findAll() {
+        List<DataSourceConfig> result = new ArrayList<>();
+        Iterable<DataSourceConfig> all = dataSourceConfigRepository.findAll();
+        all.forEach(dataSourceConfig->{
+            result.add(dataSourceConfig);
+        });
         return result;
     }
 
