@@ -56,4 +56,10 @@ public class DesignerController {
                                                  @ApiParam(value = "状态", required = true) @RequestParam(value = "status") boolean status) {
         return ReturnJsonData.build(designerService.updateStatus(id, status));
     }
+
+    @ApiOperation(value = "根据目录id查询目录下表单",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("getDesigners/{orgId}")
+    public ReturnJsonData getDesigners(@ApiParam(value = "目录id",required = true)@PathVariable(value = "orgId")Long orgId){
+        return ReturnJsonData.build(designerService.findByOrgIdAndStatus(orgId,true));
+    }
 }
