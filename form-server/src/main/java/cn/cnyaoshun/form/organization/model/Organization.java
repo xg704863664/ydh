@@ -16,11 +16,11 @@ import javax.validation.constraints.NotBlank;
 public class Organization extends AbstractEntity {
 
     @ApiModelProperty("表单组织目录名")
-    @NotBlank
+    @NotBlank(message = "目录名不能为空")
     private String name;
 
     @ApiModelProperty("描述")
-    @NotBlank
+    @NotBlank(message = "描述不能为空")
     private String description;
 
 }
