@@ -8,7 +8,6 @@ import cn.cnyaoshun.form.common.exception.ExceptionDataNotExists;
 import cn.cnyaoshun.form.designer.model.Designer;
 import cn.cnyaoshun.form.designer.repository.DesignerRepository;
 import cn.cnyaoshun.form.designer.service.DesignerService;
-import cn.cnyaoshun.form.interceptor.LoginInterceptor;
 import cn.cnyaoshun.form.remote.OauthServerClient;
 import com.alibaba.fastjson.JSON;
 import org.springframework.data.domain.Page;
