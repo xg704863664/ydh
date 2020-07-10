@@ -8,7 +8,6 @@ import cn.cnyaoshun.form.datasource.service.handler.HandlerContext;
 import cn.cnyaoshun.form.designer.model.Designer;
 import cn.cnyaoshun.form.designer.service.DesignerService;
 import cn.cnyaoshun.form.designer.service.FormService;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class FormServiceImpl implements FormService {
 
     @Resource
