@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 
 @Data
-@Entity(name = "datasourceconfig")
+@Entity(name = "data_source_config")
 public class DataSourceConfig extends AbstractEntity {
 
     /**
