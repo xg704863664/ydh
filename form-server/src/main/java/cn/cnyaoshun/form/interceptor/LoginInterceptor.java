@@ -5,7 +5,6 @@ import cn.cnyaoshun.form.common.AppContextAware;
 import cn.cnyaoshun.form.common.ReturnJsonData;
 import cn.cnyaoshun.form.common.exception.ExceptionAuth;
 import cn.cnyaoshun.form.remote.OauthServerClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
