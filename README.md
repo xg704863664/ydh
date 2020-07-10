@@ -22,19 +22,7 @@ nohup java  -Xmx3g -Xms3g -Xmn1g -Xss256k -XX:ParallelGCThreads=8 -XX:+UseConcMa
     1.请在.gitignore文件中加入项目忽略提交文件
     2.新建项目模块请勿修改公共pom依赖(SpringCloud Alibaba需要的相关依赖不用加)
     3.自己项目需要的依赖加在自己模块的POM文件中
+    4.开发或者通过IDEA运行时,需要先执行 bin/mvn-install-dependency.sh，安装oracle的依赖
 
 ### 其他
-oracle jdbc pom依赖
 
-1.根据自己ojdbc8.jar路径修改-Dfile
-```
-mvn install:install-file -Dfile=D:\workspace\VCPlatform\lib\ojdbc8.jar -DgroupId=com.oracle -DartifactId=ojdbc8 -Dversion=12.2.0.1 -Dpackaging=jar
-```
-2.添加项目依赖（已添加）
-```
-<dependency>
-　　<groupId>com.oracle</groupId>
-　　<artifactId>ojdbc8</artifactId>
-　　<version>12.2.0.1</version>
-</dependency>
-```

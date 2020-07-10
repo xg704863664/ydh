@@ -23,7 +23,7 @@
         <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
         <swagger.version>2.9.2</swagger.version>
         <out>${user.dir}/jar</out>
-        <sh>${user.dir}/sh</sh>
+        <bin>${user.dir}/bin</bin>
     </properties>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -139,7 +139,7 @@
                             </fileset>
                         </copy>
                         <copy todir="${out}">
-                            <fileset dir="${sh}">
+                            <fileset dir="${bin}">
                                 <include name="*.sh"/>
                             </fileset>
                         </copy>
