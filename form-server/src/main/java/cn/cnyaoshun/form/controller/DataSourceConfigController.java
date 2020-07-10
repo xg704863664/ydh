@@ -62,7 +62,7 @@ public class DataSourceConfigController {
     }
 
     @ApiOperation(value = "获取数据源类型",httpMethod = "POST",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @PostMapping(value = "/getDataSourceType")
+    @PostMapping(value = "/findDataSourceType")
     public ReturnJsonData<Map<String,String>> getDataSourceType(){
         List<Map<String,String>> result = new ArrayList<>();
         for(DatabaseDriverType databaseDriverType : DatabaseDriverType.values()){
@@ -81,13 +81,13 @@ public class DataSourceConfigController {
     }
 
     @ApiOperation(value = "根据数据源id查询表名",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @GetMapping(value = "/getTableName/{id}")
+    @GetMapping(value = "/findTableName/{id}")
     public ReturnJsonData<List<String>> getTableName(@PathVariable(value = "id") Long id){
         return ReturnJsonData.build(dataSourceConfigService.findTableNameById(id));
     }
 
     @ApiOperation(value = "根据数据源id和表名查询字段名",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @GetMapping(value = "/getTableName/{id}/{tablename}")
+    @GetMapping(value = "/findTableName/{id}/{tablename}")
     public ReturnJsonData<List<String>> findFeildNameByIdAndTableName(@PathVariable(value = "id") Long id,@PathVariable(value = "tablename") String tablename){
         return ReturnJsonData.build(dataSourceConfigService.findFeildNameByIdAndTableName(id,tablename));
     }

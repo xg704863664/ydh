@@ -58,7 +58,7 @@ public class DesignerController {
     }
 
     @ApiOperation(value = "根据目录id查询目录下表单",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @GetMapping("getDesigners/{orgId}")
+    @GetMapping("findDesigners/{orgId}")
     public ReturnJsonData getDesigners(@ApiParam(value = "目录id",required = true)@PathVariable(value = "orgId")Long orgId){
         return ReturnJsonData.build(designerService.findByOrgIdAndStatus(orgId,true));
     }

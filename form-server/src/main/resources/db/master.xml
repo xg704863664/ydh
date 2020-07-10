@@ -9,4 +9,7 @@
     <include file="classpath:db/changelog/20200708124500_designer_addcolumn.xml" relativeToChangelogFile="false"></include>
     <include file="classpath:db/changelog/20200708183100_organization.xml" relativeToChangelogFile="false"></include>
     <include file="classpath:db/changelog/20200709182100_designer_addcolumn.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200710111600_organization_update.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200710111100_data_source_config.xml" relativeToChangelogFile="false"></include>
+
 </databaseChangeLog>
