@@ -33,6 +33,11 @@ public class OauthController {
     @ApiOperation(value = "校验TOKEN是否有效",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @RequestMapping(value = "/check",method = RequestMethod.GET)
     public ReturnJsonData<String> checkToken(@ApiIgnore OAuth2Authentication oAuth2Authentication){
+        try {
+            Thread.sleep(9999);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (oAuth2Authentication == null){
             throw new ExceptionAuth(ApiCode.NOT_FOUNT_ACCESS_TOKEN.getCode(),ApiCode.NOT_FOUNT_ACCESS_TOKEN.getMsg());
         }
