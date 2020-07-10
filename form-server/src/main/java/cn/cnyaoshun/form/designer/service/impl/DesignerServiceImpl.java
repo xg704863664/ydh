@@ -1,5 +1,6 @@
 package cn.cnyaoshun.form.designer.service.impl;
 
+import cn.cnyaoshun.form.common.AccessTokenUtil;
 import cn.cnyaoshun.form.common.PageDataDomain;
 import cn.cnyaoshun.form.common.ReturnJsonData;
 import cn.cnyaoshun.form.common.domain.OauthUserListDomain;
@@ -54,7 +55,7 @@ public class DesignerServiceImpl implements DesignerService {
 
     @Override
     public Designer save(Designer designer) {
-        String token = LoginInterceptor.threadLocal.get();
+        String token = AccessTokenUtil.currentToken();
         ReturnJsonData<OauthUserListDomain> userInfo = oauthServerClient.getUserInfo(token);
         if (designer.getId() == null) {
             designer.setCreateUserName(userInfo.getCode() == 0 ? userInfo.getData().getUserName() : "");

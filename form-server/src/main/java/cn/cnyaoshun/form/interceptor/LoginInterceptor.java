@@ -16,11 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class LoginInterceptor implements HandlerInterceptor  {
 
-    public static ThreadLocal<String> threadLocal = new ThreadLocal<>();
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-
         String token = request.getHeader("Authorization");
         if (StringUtils.isEmpty(token)){
             throw new ExceptionAuth(ApiCode.NOT_FOUNT_ACCESS_TOKEN.getCode(), "token is not null");
@@ -28,7 +25,6 @@ public class LoginInterceptor implements HandlerInterceptor  {
         OauthServerClient oauthServerClient = AppContextAware.getApplicationContext().getBean(OauthServerClient.class);
         ReturnJsonData<String> returnJsonData = oauthServerClient.checkToken(token);
         if (returnJsonData.getCode() == 0) {
-            threadLocal.set(token);
             return true;
         }
         throw new ExceptionAuth(returnJsonData.getCode(), returnJsonData.getMsg());
