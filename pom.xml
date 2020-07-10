@@ -141,6 +141,7 @@
                         <copy todir="${out}">
                             <fileset dir="${bin}">
                                 <include name="*.sh"/>
+                                <exclude name="mvn-install-dependency.sh"/>
                             </fileset>
                         </copy>
                     </tasks>
