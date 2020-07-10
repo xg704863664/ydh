@@ -63,13 +63,13 @@ public class DesignerController {
     }
 
     @ApiOperation(value = "根据目录id查询目录下设计器模版",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @GetMapping("findDesigners/{orgId}")
+    @GetMapping("/findDesigners/{orgId}")
     public ReturnJsonData findDesigners(@ApiParam(value = "目录id",required = true)@PathVariable(value = "orgId")Long orgId){
         return ReturnJsonData.build(designerService.findByOrgIdAndStatus(orgId,true));
     }
 
     @ApiOperation(value = "根据设计器id查询字段名",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @GetMapping("findFeildNameById/{id}")
+    @GetMapping("/findFeildNameById/{id}")
     public ReturnJsonData<List<String>> findFeildNameById(@ApiParam(value = "设计器id",required = true)@PathVariable(value = "id")Long id){
         Designer designer = designerService.findById(id);
         List<String> result = dataSourceConfigService.findFeildNameByIdAndTableName(designer.getDataSourceId(), designer.getTableName());

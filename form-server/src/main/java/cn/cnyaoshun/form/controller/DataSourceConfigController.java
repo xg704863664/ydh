@@ -63,7 +63,7 @@ public class DataSourceConfigController {
 
     @ApiOperation(value = "获取数据源类型",httpMethod = "POST",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping(value = "/findDataSourceType")
-    public ReturnJsonData<Map<String,String>> getDataSourceType(){
+    public ReturnJsonData<Map<String,String>> findDataSourceType(){
         List<Map<String,String>> result = new ArrayList<>();
         for(DatabaseDriverType databaseDriverType : DatabaseDriverType.values()){
             Map<String,String> map = new HashMap<>();
@@ -82,7 +82,7 @@ public class DataSourceConfigController {
 
     @ApiOperation(value = "根据数据源id查询表名",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping(value = "/findTableName/{id}")
-    public ReturnJsonData<List<String>> getTableName(@PathVariable(value = "id") Long id){
+    public ReturnJsonData<List<String>> findTableName(@PathVariable(value = "id") Long id){
         return ReturnJsonData.build(dataSourceConfigService.findTableNameById(id));
     }
 }
