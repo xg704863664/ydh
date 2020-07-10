@@ -3,6 +3,7 @@ package cn.cnyaoshun.form.common.handler;
 import cn.cnyaoshun.form.common.ApiCode;
 import cn.cnyaoshun.form.common.ReturnJsonData;
 import cn.cnyaoshun.form.common.exception.ExceptionAuth;
+import cn.cnyaoshun.form.common.exception.ExceptionDataNotExists;
 import cn.cnyaoshun.form.common.exception.ExceptionValidation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,6 +29,12 @@ public class ExceptionHandle {
     @ExceptionHandler(ExceptionAuth.class)
     public ReturnJsonData doRequiredExceptionHandle(ExceptionAuth e) {
         return createReturnJsonData(e.getCode(), e.getMessage());
+    }
+
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(ExceptionDataNotExists.class)
+    public ReturnJsonData doRequiredExceptionHandle(ExceptionDataNotExists e) {
+        return createReturnJsonData(600, e.getMessage());
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
