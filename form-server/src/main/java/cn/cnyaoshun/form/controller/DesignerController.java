@@ -13,7 +13,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
@@ -30,13 +32,13 @@ public class DesignerController {
 
     @ApiOperation(value = "新增/修改保存", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("/save")
-    public ReturnJsonData<Designer> save(@RequestBody Designer designer) {
+    public ReturnJsonData<Designer> save(@Valid @RequestBody Designer designer) {
         return ReturnJsonData.build(designerService.save(designer));
     }
 
     @ApiOperation(value = "加载详情", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping("/findById/{id}")
-    public ReturnJsonData<Designer> findById(@PathVariable(value = "id") Long id) {
+    public ReturnJsonData<Designer> findById(@NotBlank @PathVariable(value = "id") Long id) {
         return ReturnJsonData.build(designerService.findById(id));
     }
 
@@ -50,27 +52,27 @@ public class DesignerController {
 
     @ApiOperation(value = "根据ID删除设计器模版", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @DeleteMapping(value = "/delete/{id}")
-    public ReturnJsonData delete(@ApiParam(value = "ID", required = true) @PathVariable(value = "id") Long id) {
+    public ReturnJsonData delete(@ApiParam(value = "ID", required = true) @NotBlank @PathVariable(value = "id") Long id) {
         designerService.delete(id);
         return ReturnJsonData.build();
     }
 
     @ApiOperation(value = "修改状态", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("/updateStatus")
-    public ReturnJsonData<Designer> updateStatus(@ApiParam(value = "id", required = true) @RequestParam(value = "id") Long id,
+    public ReturnJsonData<Designer> updateStatus(@ApiParam(value = "id", required = true) @NotBlank @RequestParam(value = "id") Long id,
                                                  @ApiParam(value = "状态", required = true) @RequestParam(value = "status") boolean status) {
         return ReturnJsonData.build(designerService.updateStatus(id, status));
     }
 
-    @ApiOperation(value = "根据目录id查询目录下设计器模版",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据目录id查询目录下设计器模版", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping("/findDesigners/{orgId}")
-    public ReturnJsonData findDesigners(@ApiParam(value = "目录id",required = true)@PathVariable(value = "orgId")Long orgId){
-        return ReturnJsonData.build(designerService.findByOrgIdAndStatus(orgId,true));
+    public ReturnJsonData findDesigners(@ApiParam(value = "目录id", required = true) @NotBlank @PathVariable(value = "orgId") Long orgId) {
+        return ReturnJsonData.build(designerService.findByOrgIdAndStatus(orgId, true));
     }
 
-    @ApiOperation(value = "根据设计器id查询字段名",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据设计器id查询字段名", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping("/findFeildNameById/{id}")
-    public ReturnJsonData<List<String>> findFeildNameById(@ApiParam(value = "设计器id",required = true)@PathVariable(value = "id")Long id){
+    public ReturnJsonData<List<String>> findFeildNameById(@ApiParam(value = "设计器id", required = true) @NotBlank @PathVariable(value = "id") Long id) {
         Designer designer = designerService.findById(id);
         List<String> result = dataSourceConfigService.findFeildNameByIdAndTableName(designer.getDataSourceId(), designer.getTableName());
         return ReturnJsonData.build(result);

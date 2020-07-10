@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,60 +30,60 @@ public class DataSourceConfigController {
     @Resource
     private DataSourceConfigService dataSourceConfigService;
 
-    @ApiOperation(value = "加载数据源分页列表",httpMethod = "POST",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "加载数据源分页列表", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("/findByPage")
-    public ReturnJsonData<PageDataDomain<DataSourceConfig>> findByPage(@Min(1) @ApiParam(value = "当前页",required = true)@RequestParam(value = "pageNumber") Integer pageNumber,
-                                                                       @Min(1) @ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")  Integer pageSize){
+    public ReturnJsonData<PageDataDomain<DataSourceConfig>> findByPage(@Min(1) @ApiParam(value = "当前页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
+                                                                       @Min(1) @ApiParam(value = "每页显示数量", required = true) @RequestParam(value = "pageSize") Integer pageSize) {
         return ReturnJsonData.build(dataSourceConfigService.findByPage(pageNumber, pageSize));
     }
 
-    @ApiOperation(value = "修改新增数据源",httpMethod = "POST" ,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "修改新增数据源", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("/save")
-    public ReturnJsonData<DataSourceConfig> save(@ApiParam(value = "修改新增数据源",required = true)@RequestBody @Valid DataSourceConfig dataSourceConfig){
+    public ReturnJsonData<DataSourceConfig> save(@ApiParam(value = "修改新增数据源", required = true) @RequestBody @Valid DataSourceConfig dataSourceConfig) {
         return ReturnJsonData.build(dataSourceConfigService.save(dataSourceConfig));
     }
 
-    @ApiOperation(value = "根据ID删除数据源",httpMethod = "DELETE",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据ID删除数据源", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @DeleteMapping(value = "/delete/{id}")
-    public ReturnJsonData delete(@ApiParam(value = "数据源ID",required = true)@PathVariable(value = "id") Long id){
+    public ReturnJsonData delete(@ApiParam(value = "数据源ID", required = true) @NotBlank @PathVariable(value = "id") Long id) {
         dataSourceConfigService.delete(id);
         return ReturnJsonData.build();
     }
 
-    @ApiOperation(value = "根据ID查询数据源信息",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据ID查询数据源信息", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping(value = "/findById/{id}")
-    public ReturnJsonData findById(@ApiParam(value = "数据源ID",required = true)@PathVariable(value = "id") Long id){
+    public ReturnJsonData findById(@ApiParam(value = "数据源ID", required = true) @NotBlank @PathVariable(value = "id") Long id) {
         return ReturnJsonData.build(dataSourceConfigService.findById(id));
     }
 
-    @ApiOperation(value = "测试数据源是否连接成功",httpMethod = "POST",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "测试数据源是否连接成功", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping(value = "/testConnect")
-    public ReturnJsonData<Boolean> testConnect(@RequestBody DataSourceConfig dataSourceConfig){
+    public ReturnJsonData<Boolean> testConnect(@RequestBody DataSourceConfig dataSourceConfig) {
         return ReturnJsonData.build(dataSourceConfigService.connect(dataSourceConfig));
     }
 
-    @ApiOperation(value = "获取数据源类型",httpMethod = "POST",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "获取数据源类型", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping(value = "/findDataSourceType")
-    public ReturnJsonData<Map<String,String>> findDataSourceType(){
-        List<Map<String,String>> result = new ArrayList<>();
-        for(DatabaseDriverType databaseDriverType : DatabaseDriverType.values()){
-            Map<String,String> map = new HashMap<>();
-            map.put("label",databaseDriverType.getType());
-            map.put("value",databaseDriverType.getType());
+    public ReturnJsonData<Map<String, String>> findDataSourceType() {
+        List<Map<String, String>> result = new ArrayList<>();
+        for (DatabaseDriverType databaseDriverType : DatabaseDriverType.values()) {
+            Map<String, String> map = new HashMap<>();
+            map.put("label", databaseDriverType.getType());
+            map.put("value", databaseDriverType.getType());
             result.add(map);
         }
         return ReturnJsonData.build(result);
     }
 
-    @ApiOperation(value = "获取所有数据源",httpMethod = "POST",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "获取所有数据源", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping(value = "/findDataSource")
-    public ReturnJsonData<DataSourceConfig> findDataSource(){
+    public ReturnJsonData<DataSourceConfig> findDataSource() {
         return ReturnJsonData.build(dataSourceConfigService.findAll());
     }
 
-    @ApiOperation(value = "根据数据源id查询表名",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据数据源id查询表名", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping(value = "/findTableName/{id}")
-    public ReturnJsonData<List<String>> findTableName(@PathVariable(value = "id") Long id){
+    public ReturnJsonData<List<String>> findTableName(@NotBlank @PathVariable(value = "id") Long id) {
         return ReturnJsonData.build(dataSourceConfigService.findTableNameById(id));
     }
 }
