@@ -5,6 +5,7 @@ import cn.cnyaoshun.form.common.ReturnJsonData;
 import cn.cnyaoshun.form.common.exception.ExceptionAuth;
 import cn.cnyaoshun.form.common.exception.ExceptionDataNotExists;
 import cn.cnyaoshun.form.common.exception.ExceptionValidation;
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
