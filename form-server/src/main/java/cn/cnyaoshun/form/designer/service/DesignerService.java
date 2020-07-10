@@ -19,6 +19,11 @@ public interface DesignerService {
 
     Designer updateStatus(Long id,boolean status);
 
+    /**
+     * 从设计器中取选定的字段名
+     * @param id
+     * @return
+     */
     List<String> findFeildNameById(Long id);
 
 }

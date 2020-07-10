@@ -85,10 +85,4 @@ public class DataSourceConfigController {
     public ReturnJsonData<List<String>> getTableName(@PathVariable(value = "id") Long id){
         return ReturnJsonData.build(dataSourceConfigService.findTableNameById(id));
     }
-
-    @ApiOperation(value = "根据数据源id和表名查询字段名",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @GetMapping(value = "/findTableName/{id}/{tablename}")
-    public ReturnJsonData<List<String>> findFeildNameByIdAndTableName(@PathVariable(value = "id") Long id,@PathVariable(value = "tablename") String tablename){
-        return ReturnJsonData.build(dataSourceConfigService.findFeildNameByIdAndTableName(id,tablename));
-    }
 }
