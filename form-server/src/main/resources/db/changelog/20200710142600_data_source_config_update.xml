@@ -9,7 +9,7 @@
     <property name="now" value="sysdate" dbms="oracle"/>
     <changeSet id="20200710142600" author="zyp">
 
-        <addColumn tableName="designer">
+        <addColumn tableName="data_source_config">
             <column name="create_user_name" type="varchar(50)" remarks="创建人名称"></column>
             <column name="update_user_name" type="varchar(50)" remarks="修改人名称"></column>
         </addColumn>
