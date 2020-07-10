@@ -14,7 +14,7 @@
             </not>
         </preConditions>
 
-        <createTable tableName="organization" remarks="数据源配置表">
+        <createTable tableName="organization" remarks="表单目录表">
             <column name="id" type="bigint" remarks="主键" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
