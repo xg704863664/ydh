@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +42,7 @@ public class FormController {
      */
     @ApiOperation(value = "加载表头", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping("/loadTableName/{designerId}")
-    public ReturnJsonData<List<Map<String, Object>>> loadTableName(@NotBlank @ApiParam(value = "设计器id", required = true) @PathVariable(value = "designerId") Long designerId) {
+    public ReturnJsonData<List<Map<String, Object>>> loadTableName(@NotNull @ApiParam(value = "设计器id", required = true) @PathVariable(value = "designerId") Long designerId) {
         Designer designer = designerService.findById(designerId);
         Map<String, Map<String, Object>> objects = (Map<String, Map<String, Object>>) JSON.parse(designer.getValue());
         List<Map<String, Object>> result = new ArrayList<>();
@@ -66,20 +67,20 @@ public class FormController {
     @PostMapping("/findByPage")
     public ReturnJsonData<PageDataDomain<Map<String, Object>>> findByPage(@Min(1) @ApiParam(value = "当前页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
                                                                           @Min(1) @ApiParam(value = "每页显示数量", required = true) @RequestParam(value = "pageSize") Integer pageSize,
-                                                                          @NotBlank @ApiParam(value = "设计器id", required = true) @RequestParam(value = "designerId") Long designerId) {
+                                                                          @NotNull @ApiParam(value = "设计器id", required = true) @RequestParam(value = "designerId") Long designerId) {
         return ReturnJsonData.build(formService.findByPage(pageNumber, pageSize, designerId));
     }
 
     @ApiOperation(value = "根据id查询数据", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping("/findById/{designerId}/{id}")
-    public ReturnJsonData<Map<String, Object>> findById(@NotBlank @ApiParam(value = "设计器id", required = true) @PathVariable(value = "designerId") Long designerId,
+    public ReturnJsonData<Map<String, Object>> findById(@NotNull @ApiParam(value = "设计器id", required = true) @PathVariable(value = "designerId") Long designerId,
                                                         @NotBlank @ApiParam(value = "本数据id", required = true) @PathVariable(value = "id") String id) {
         return ReturnJsonData.build(formService.findById(id, designerId));
     }
 
     @ApiOperation(value = "根据id删除数据", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @DeleteMapping("/delete/{designerId}/{id}")
-    public ReturnJsonData delete(@ApiParam(value = "设计器id", required = true) @NotBlank @PathVariable(value = "designerId") Long designerId,
+    public ReturnJsonData delete(@ApiParam(value = "设计器id", required = true) @NotNull @PathVariable(value = "designerId") Long designerId,
                                  @ApiParam(value = "本数据id", required = true) @NotBlank @PathVariable(value = "id") String id) {
         formService.delete(id, designerId);
         return ReturnJsonData.build();

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,14 +45,14 @@ public class DataSourceConfigController {
 
     @ApiOperation(value = "根据ID删除数据源", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @DeleteMapping(value = "/delete/{id}")
-    public ReturnJsonData delete(@ApiParam(value = "数据源ID", required = true) @NotBlank @PathVariable(value = "id") Long id) {
+    public ReturnJsonData delete(@ApiParam(value = "数据源ID", required = true) @NotNull @PathVariable(value = "id") Long id) {
         dataSourceConfigService.delete(id);
         return ReturnJsonData.build();
     }
 
     @ApiOperation(value = "根据ID查询数据源信息", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping(value = "/findById/{id}")
-    public ReturnJsonData findById(@ApiParam(value = "数据源ID", required = true) @NotBlank @PathVariable(value = "id") Long id) {
+    public ReturnJsonData findById(@ApiParam(value = "数据源ID", required = true) @NotNull @PathVariable(value = "id") Long id) {
         return ReturnJsonData.build(dataSourceConfigService.findById(id));
     }
 
@@ -83,7 +83,7 @@ public class DataSourceConfigController {
 
     @ApiOperation(value = "根据数据源id查询表名", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping(value = "/findTableName/{id}")
-    public ReturnJsonData<List<String>> findTableName(@NotBlank @PathVariable(value = "id") Long id) {
+    public ReturnJsonData<List<String>> findTableName(@NotNull @PathVariable(value = "id") Long id) {
         return ReturnJsonData.build(dataSourceConfigService.findTableNameById(id));
     }
 }
