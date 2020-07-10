@@ -1,7 +1,9 @@
 package cn.cnyaoshun.form.common.exception;
 
 import cn.cnyaoshun.form.common.ApiCode;
+import lombok.Data;
 
+@Data
 public class ExceptionDataNotExists extends RuntimeException{
     private Integer code;
     public ExceptionDataNotExists(){
