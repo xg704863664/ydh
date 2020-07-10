@@ -10,7 +10,6 @@ public enum ApiCode{
     PARAMETER_ERROR(400, "参数错误"),
     NETWORK_ERROR(404, "网络异常"),
     DATA_NOT_EXISTS(600, "数据不存在"),
-    ACCESSDENIED_ERROR(501,"无权访问"),
     FAILURE(999, "未知错误");
     @Getter
     private int code;

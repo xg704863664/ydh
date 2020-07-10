@@ -4,6 +4,7 @@ import cn.cnyaoshun.oauth.common.ApiCode;
 import cn.cnyaoshun.oauth.common.ReturnJsonData;
 import cn.cnyaoshun.oauth.common.exception.ExceptionAuth;
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,19 +31,19 @@ public class ExceptionHandle {
         return createReturnJsonData(e.getCode(), e.getMessage());
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.OK)
     @ExceptionHandler(Exception.class)
     public ReturnJsonData doRequiredExceptionHandle(Exception e) {
-        return createReturnJsonData(400, e.getMessage());
+        return createReturnJsonData(ApiCode.FAILURE.getCode(), e.getMessage());
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.OK)
     @ExceptionHandler(ConstraintViolationException.class)
     public ReturnJsonData doRequiredExceptionHandle(ConstraintViolationException e) {
         return createReturnJsonData(ApiCode.PARAMETER_ERROR.getCode(), e.getMessage().substring(e.getMessage().lastIndexOf(":") + 1).trim());
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.OK)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ReturnJsonData doRequiredExceptionHandle(MethodArgumentNotValidException e) {
         return createReturnJsonData(ApiCode.PARAMETER_ERROR.getCode(), e.getBindingResult().getFieldError().getDefaultMessage().trim());

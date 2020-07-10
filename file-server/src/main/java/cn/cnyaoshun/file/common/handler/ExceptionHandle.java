@@ -1,11 +1,10 @@
 package cn.cnyaoshun.file.common.handler;
 
 import cn.cnyaoshun.file.common.ApiCode;
-import cn.cnyaoshun.file.common.exception.ExceptionValidation;
 import cn.cnyaoshun.file.common.ReturnJsonData;
 import cn.cnyaoshun.file.common.exception.ExceptionAuth;
+import cn.cnyaoshun.file.common.exception.ExceptionValidation;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,33 +21,35 @@ public class ExceptionHandle {
     @ResponseStatus(value = HttpStatus.OK)
     @ExceptionHandler(ExceptionValidation.class)
     public ReturnJsonData doRequiredExceptionHandle(ExceptionValidation e) {
-        return createReturnJsonData(e.getCode(),e.getMessage());
+        return createReturnJsonData(e.getCode(), e.getMessage());
     }
 
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ExceptionAuth.class)
     public ReturnJsonData doRequiredExceptionHandle(ExceptionAuth e) {
-        return createReturnJsonData(e.getCode(),e.getMessage());
+        return createReturnJsonData(e.getCode(), e.getMessage());
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.OK)
     @ExceptionHandler(Exception.class)
     public ReturnJsonData doRequiredExceptionHandle(Exception e) {
-        return createReturnJsonData(400,"服务器错误,联系后端开发");
-    }
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ReturnJsonData doRequiredExceptionHandle(ConstraintViolationException e) {
-        return createReturnJsonData(ApiCode.PARAMETER_ERROR.getCode(),e.getMessage().substring(e.getMessage().lastIndexOf(":")+1).trim());
+        return createReturnJsonData(ApiCode.FAILURE.getCode(), e.getMessage());
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.OK)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ReturnJsonData doRequiredExceptionHandle(ConstraintViolationException e) {
+        return createReturnJsonData(ApiCode.PARAMETER_ERROR.getCode(), e.getMessage().substring(e.getMessage().lastIndexOf(":") + 1).trim());
+    }
+
+    @ResponseStatus(value = HttpStatus.OK)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ReturnJsonData doRequiredExceptionHandle(MethodArgumentNotValidException e) {
-            return createReturnJsonData(ApiCode.PARAMETER_ERROR.getCode(),e.getBindingResult().getFieldError().getDefaultMessage().trim());
+        return createReturnJsonData(ApiCode.PARAMETER_ERROR.getCode(), e.getBindingResult().getFieldError().getDefaultMessage().trim());
     }
-    private ReturnJsonData createReturnJsonData(int code,String msg){
-        ReturnJsonData returnJsonData= new ReturnJsonData();
+
+    private ReturnJsonData createReturnJsonData(int code, String msg) {
+        ReturnJsonData returnJsonData = new ReturnJsonData();
         returnJsonData.setCode(code);
         returnJsonData.setMsg(msg);
         return returnJsonData;
