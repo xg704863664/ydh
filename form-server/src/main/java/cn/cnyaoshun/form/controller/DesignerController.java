@@ -2,6 +2,7 @@ package cn.cnyaoshun.form.controller;
 
 import cn.cnyaoshun.form.common.PageDataDomain;
 import cn.cnyaoshun.form.common.ReturnJsonData;
+import cn.cnyaoshun.form.datasource.service.DataSourceConfigService;
 import cn.cnyaoshun.form.designer.model.Designer;
 import cn.cnyaoshun.form.designer.service.DesignerService;
 import io.swagger.annotations.Api;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.constraints.Min;
+import java.util.List;
 
 @RestController
 @RequestMapping("/designer")
@@ -22,6 +24,9 @@ public class DesignerController {
 
     @Resource
     private DesignerService designerService;
+
+    @Resource
+    private DataSourceConfigService dataSourceConfigService;
 
     @ApiOperation(value = "新增/修改保存", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("/save")
@@ -59,7 +64,15 @@ public class DesignerController {
 
     @ApiOperation(value = "根据目录id查询目录下设计器模版",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping("findDesigners/{orgId}")
-    public ReturnJsonData getDesigners(@ApiParam(value = "目录id",required = true)@PathVariable(value = "orgId")Long orgId){
+    public ReturnJsonData findDesigners(@ApiParam(value = "目录id",required = true)@PathVariable(value = "orgId")Long orgId){
         return ReturnJsonData.build(designerService.findByOrgIdAndStatus(orgId,true));
+    }
+
+    @ApiOperation(value = "根据设计器id查询字段名",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("findFeildNameById/{id}")
+    public ReturnJsonData<List<String>> findFeildNameById(@ApiParam(value = "设计器id",required = true)@PathVariable(value = "id")Long id){
+        Designer designer = designerService.findById(id);
+        List<String> result = dataSourceConfigService.findFeildNameByIdAndTableName(designer.getDataSourceId(), designer.getTableName());
+        return ReturnJsonData.build(result);
     }
 }
