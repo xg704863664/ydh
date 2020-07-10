@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Entity(name = "designer")
@@ -52,21 +53,21 @@ public class Designer extends AbstractEntity {
      * 树id
      */
     @ApiModelProperty(value = "orgId")
-    @NotBlank(message = "组织机构不能为空")
+    @NotNull(message = "组织机构不能为空")
     private Long orgId;
 
     /**
      * 数据源id
      */
     @ApiModelProperty(value = "dataSourceId")
-    @NotBlank(message = "数据库源不能为空")
+    @NotNull(message = "数据库源不能为空")
     private Long dataSourceId;
 
     /**
      * 表名
      */
     @ApiModelProperty(value = "tableName")
-    @NotBlank(message = "表名不能为空")
+    @NotNull(message = "表名不能为空")
     private String tableName;
 
 }
