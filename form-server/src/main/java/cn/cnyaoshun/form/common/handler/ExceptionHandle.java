@@ -34,13 +34,13 @@ public class ExceptionHandle {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ExceptionDataNotExists.class)
     public ReturnJsonData doRequiredExceptionHandle(ExceptionDataNotExists e) {
-        return createReturnJsonData(600, e.getMessage());
+        return createReturnJsonData(e.getCode(), e.getMessage());
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ReturnJsonData doRequiredExceptionHandle(Exception e) {
-        return createReturnJsonData(400, e.getMessage());
+        return createReturnJsonData(500, e.getMessage());
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
