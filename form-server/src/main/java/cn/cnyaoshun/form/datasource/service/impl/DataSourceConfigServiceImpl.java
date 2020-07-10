@@ -1,13 +1,17 @@
 package cn.cnyaoshun.form.datasource.service.impl;
 
+import cn.cnyaoshun.form.common.AccessTokenUtil;
 import cn.cnyaoshun.form.common.DatabaseDriverType;
 import cn.cnyaoshun.form.common.PageDataDomain;
+import cn.cnyaoshun.form.common.ReturnJsonData;
+import cn.cnyaoshun.form.common.domain.OauthUserListDomain;
 import cn.cnyaoshun.form.common.exception.ExceptionDataNotExists;
 import cn.cnyaoshun.form.datasource.model.DataSourceConfig;
 import cn.cnyaoshun.form.datasource.repository.DataSourceConfigRepository;
 import cn.cnyaoshun.form.datasource.service.DataSourceConfigService;
 import cn.cnyaoshun.form.datasource.service.DynamicDataSourceConfigService;
 import cn.cnyaoshun.form.datasource.service.handler.HandlerContext;
+import cn.cnyaoshun.form.remote.OauthServerClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +34,9 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
     private HandlerContext handlerContext;
 
     @Resource
+    private OauthServerClient oauthServerClient;
+
+    @Resource
     private DataSourceConfigRepository dataSourceConfigRepository;
 
     @Override
@@ -48,6 +55,12 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
     @Override
     @Transactional
     public DataSourceConfig save(DataSourceConfig dataSourceConfig) {
+        String token = AccessTokenUtil.currentToken();
+        ReturnJsonData<OauthUserListDomain> userInfo = oauthServerClient.getUserInfo(token);
+        if (dataSourceConfig.getId() == null) {
+            dataSourceConfig.setCreateUserName(userInfo.getCode() == 0 ? userInfo.getData().getUserName() : "");
+        }
+        dataSourceConfig.setUpdateUserName(userInfo.getCode() == 0 ? userInfo.getData().getUserName() : "");
         return dataSourceConfigRepository.save(dataSourceConfig);
     }
 

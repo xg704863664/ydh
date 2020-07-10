@@ -52,4 +52,14 @@ public class DataSourceConfig extends AbstractEntity {
     @NotBlank(message = "密码不能为空")
     private String password;
 
+    /**
+     * 创建人
+     */
+    private String createUserName;
+
+    /**
+     * 修改人
+     */
+    private String updateUserName;
+
 }
