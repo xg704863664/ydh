@@ -8,13 +8,13 @@ import cn.cnyaoshun.form.common.exception.ExceptionDataNotExists;
 import cn.cnyaoshun.form.designer.model.Designer;
 import cn.cnyaoshun.form.designer.repository.DesignerRepository;
 import cn.cnyaoshun.form.designer.service.DesignerService;
-import cn.cnyaoshun.form.interceptor.LoginInterceptor;
 import cn.cnyaoshun.form.remote.OauthServerClient;
 import com.alibaba.fastjson.JSON;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -54,6 +54,7 @@ public class DesignerServiceImpl implements DesignerService {
     }
 
     @Override
+    @Transactional
     public Designer save(Designer designer) {
         String token = AccessTokenUtil.currentToken();
         ReturnJsonData<OauthUserListDomain> userInfo = oauthServerClient.getUserInfo(token);
@@ -65,11 +66,13 @@ public class DesignerServiceImpl implements DesignerService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         designerRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public Designer updateStatus(Long id, boolean status) {
         Designer designer = designerRepository.findById(id).orElseThrow(ExceptionDataNotExists::new);
         designer.setStatus(status);
