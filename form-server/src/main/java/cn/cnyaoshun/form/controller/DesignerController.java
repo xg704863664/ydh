@@ -23,13 +23,13 @@ public class DesignerController {
     @Resource
     private DesignerService designerService;
 
-    @ApiOperation(value = "修改保存", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "新增/修改保存", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("/save")
     public ReturnJsonData<Designer> save(@RequestBody Designer designer) {
         return ReturnJsonData.build(designerService.save(designer));
     }
 
-    @ApiOperation(value = "根据ID查询信息", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "加载详情", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping("/findById/{id}")
     public ReturnJsonData<Designer> findById(@PathVariable(value = "id") Long id) {
         return ReturnJsonData.build(designerService.findById(id));
@@ -43,7 +43,7 @@ public class DesignerController {
         return ReturnJsonData.build(designerService.findByPage(pageNumber, pageSize, orgId));
     }
 
-    @ApiOperation(value = "根据ID删除设计器", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据ID删除设计器模版", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @DeleteMapping(value = "/delete/{id}")
     public ReturnJsonData delete(@ApiParam(value = "ID", required = true) @PathVariable(value = "id") Long id) {
         designerService.delete(id);
@@ -57,7 +57,7 @@ public class DesignerController {
         return ReturnJsonData.build(designerService.updateStatus(id, status));
     }
 
-    @ApiOperation(value = "根据目录id查询目录下表单",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value = "根据目录id查询目录下设计器模版",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping("findDesigners/{orgId}")
     public ReturnJsonData getDesigners(@ApiParam(value = "目录id",required = true)@PathVariable(value = "orgId")Long orgId){
         return ReturnJsonData.build(designerService.findByOrgIdAndStatus(orgId,true));
