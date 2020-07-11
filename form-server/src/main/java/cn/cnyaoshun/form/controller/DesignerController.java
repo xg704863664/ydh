@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -76,5 +77,14 @@ public class DesignerController {
         Designer designer = designerService.findById(id);
         List<String> result = dataSourceConfigService.findFeildNameByIdAndTableName(designer.getDataSourceId(), designer.getTableName());
         return ReturnJsonData.build(result);
+    }
+
+    @ApiOperation(value = "保存模版", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/saveValue")
+    public ReturnJsonData<Designer> saveValue(@ApiParam(value = "设计器id", required = true) @NotNull @RequestParam(value = "id") Long id,
+                                              @ApiParam(value = "设计器模版", required = true) @NotBlank @RequestParam(value = "value") String value){
+        Designer designer = designerService.findById(id);
+        designer.setValue(value);
+        return ReturnJsonData.build(designerService.save(designer));
     }
 }
