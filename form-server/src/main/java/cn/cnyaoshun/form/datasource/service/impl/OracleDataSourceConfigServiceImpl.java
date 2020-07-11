@@ -95,7 +95,7 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
             for (String name : feildName) {
                 feild += name + " = " + MapUtils.getString(map, name) + " , ";
             }
-            feild = feild.endsWith(",") ? feild.substring(0, feild.indexOf(feild.length())) : feild;
+            feild = feild.endsWith(",") ? feild.substring(0, feild.length()-1) : feild;
             sql = "update " + tableName + " set " + feild + " where id = " + id;
         } else {
             String feild = "id,";
@@ -105,7 +105,7 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
                 feildValue += MapUtils.getString(map, name) + ",";
             }
             feild = feild.endsWith(",") ? feild.substring(0, feild.indexOf(feild.length())) : feild;
-            feildValue = feildValue.endsWith(",") ? feildValue.substring(0, feildValue.indexOf(feildValue.length())) : feildValue;
+            feildValue = feildValue.endsWith(",") ? feildValue.substring(0, feildValue.length()-1) : feildValue;
             sql = "insert into " + tableName + "(" + feild + ") values(" + feildValue + ")";
         }
         execute(sql, dataSourceConfig);
