@@ -63,9 +63,11 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
         Long count = this.queryCount(countSql, dataSourceConfig);
         PageDataDomain<Map<String, Object>> result = new PageDataDomain<>();
         result.setTotal(count);
-        result.setPages(pageNumber);
+        int pages = Integer.parseInt(count + "") / pageSize + (Integer.parseInt(count + "") % pageSize > 0 ? 1 : 0);
+        result.setPages(pages);
         result.setSize(pageSize);
         result.setRecords(list);
+        result.setCurrent(pageNumber);
         return result;
     }
 
