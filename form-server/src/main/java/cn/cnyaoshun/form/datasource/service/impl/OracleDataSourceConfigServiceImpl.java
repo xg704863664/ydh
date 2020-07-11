@@ -56,7 +56,7 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
         for (String name : feildName) {
             feild += "t." + name + ",";
         }
-        feild = feild.endsWith(",") ? feild.substring(0, feild.indexOf(feild.length())) : feild;
+        feild = feild.endsWith(",") ? feild.substring(0, feild.length()-1) : feild;
         String dataSql = "SELECT * FROM (SELECT ROWNUM AS rowno, " + feild + " FROM " + tableName + " t WHERE ROWNUM <=" + pageNumber * pageSize + " ) table_alias WHERE table_alias.rowno >= " + ((pageNumber - 1) * pageSize + 1);
         String countSql = "SELECT COUNT(1) AS count FROM " + tableName + " where 1=1 ";
         List<Map<String, Object>> list = this.query(dataSql, dataSourceConfig);
