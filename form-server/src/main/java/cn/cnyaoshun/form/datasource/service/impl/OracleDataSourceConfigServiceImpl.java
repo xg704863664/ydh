@@ -106,7 +106,7 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
                 feild += name + ",";
                 feildValue += "'" + MapUtils.getString(map, name) + "',";
             }
-            feild = feild.endsWith(",") ? feild.substring(0, feild.indexOf(feild.length())) : feild;
+            feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
             feildValue = feildValue.endsWith(",") ? feildValue.substring(0, feildValue.length() - 1) : feildValue;
             sql = "insert into " + tableName + "(" + feild + ") values(" + feildValue + ")";
         }
