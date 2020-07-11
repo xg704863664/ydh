@@ -42,7 +42,7 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
         for (String name : feildName) {
             feild += name + ",";
         }
-        feild = feild.endsWith(",") ? feild.substring(0, feild.length()-1) : feild;
+        feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
         String dataSql = "select " + feild + " from " + tableName + " limit " + (pageNumber - 1) * pageSize + " , " + pageSize;
         String countSql = "select count(1) from " + tableName + " where 1=1 ";
         List<Map<String, Object>> list = queryData(dataSql, dataSourceConfig);
@@ -57,7 +57,7 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
 
     @Override
     public void deleteData(String id, DataSourceConfig dataSourceConfig, String tableName) {
-        String deleteSql = "DELETE FROM " + tableName + " WHERE id = " + id;
+        String deleteSql = "DELETE FROM " + tableName + " WHERE id = '" + id + "'";
         execute(deleteSql, dataSourceConfig);
     }
 
@@ -67,7 +67,7 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
         for (String name : feildName) {
             feild += name + ",";
         }
-        feild = feild.endsWith(",") ? feild.substring(0, feild.length()-1) : feild;
+        feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
         String sql = "select " + feild + " from " + tableName + "where id = " + id;
         return queryForObject(sql, dataSourceConfig);
     }
@@ -79,19 +79,19 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
         if (StringUtils.isNotBlank(id)) {
             String feild = "";
             for (String name : feildName) {
-                feild += name + " = " + MapUtils.getString(map, name) + " , ";
+                feild += name + " = '" + MapUtils.getString(map, name) + "' ,";
             }
-            feild = feild.endsWith(",") ? feild.substring(0, feild.length()-1) : feild;
+            feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
             sql = "update " + tableName + " set " + feild + " where id = " + id;
         } else {
             String feild = " id ,";
-            String feildValue = UUID.randomUUID().toString() + ",";
+            String feildValue = "'" + UUID.randomUUID().toString() + "',";
             for (String name : feildName) {
                 feild += name + ",";
-                feildValue += MapUtils.getString(map, name) + ",";
+                feildValue += "'" + MapUtils.getString(map, name) + "',";
             }
-            feild = feild.endsWith(",") ? feild.substring(0, feild.length()-1) : feild;
-            feildValue = feildValue.endsWith(",") ? feildValue.substring(0, feildValue.length()-1) : feildValue;
+            feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
+            feildValue = feildValue.endsWith(",") ? feildValue.substring(0, feildValue.length() - 1) : feildValue;
             sql = "insert into " + tableName + "(" + feild + ") values(" + feildValue + ")";
         }
         execute(sql, dataSourceConfig);

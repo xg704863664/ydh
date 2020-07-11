@@ -71,7 +71,7 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
 
     @Override
     public void deleteData(String id, DataSourceConfig dataSourceConfig, String tableName) {
-        String deleteSql = "DELETE FROM " + tableName + " WHERE id = " + id;
+        String deleteSql = "DELETE FROM " + tableName + " WHERE id = '" + id + "'";
         execute(deleteSql, dataSourceConfig);
     }
 
@@ -81,8 +81,8 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
         for (String name : feildName) {
             feild += name + ",";
         }
-        feild = feild.endsWith(",") ? feild.substring(0, feild.length()-1) : feild;
-        String sql = "select " + feild + " from " + tableName + "where id = " + id;
+        feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
+        String sql = "select " + feild + " from " + tableName + "where id = '" + id + "'";
         return queryForObject(sql, dataSourceConfig);
     }
 
@@ -93,19 +93,19 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
         if (StringUtils.isNotBlank(id)) {
             String feild = "";
             for (String name : feildName) {
-                feild += name + " = " + MapUtils.getString(map, name) + " , ";
+                feild += name + " = '" + MapUtils.getString(map, name) + "' ,";
             }
-            feild = feild.endsWith(",") ? feild.substring(0, feild.length()-1) : feild;
-            sql = "update " + tableName + " set " + feild + " where id = " + id;
+            feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
+            sql = "update " + tableName + " set " + feild + " where id = '" + id + "'";
         } else {
             String feild = "id,";
-            String feildValue = "'"+UUID.randomUUID().toString()+ "',";
+            String feildValue = "'" + UUID.randomUUID().toString() + "',";
             for (String name : feildName) {
                 feild += name + ",";
-                feildValue += MapUtils.getString(map, name) + ",";
+                feildValue += "'" + MapUtils.getString(map, name) + "',";
             }
             feild = feild.endsWith(",") ? feild.substring(0, feild.indexOf(feild.length())) : feild;
-            feildValue = feildValue.endsWith(",") ? feildValue.substring(0, feildValue.length()-1) : feildValue;
+            feildValue = feildValue.endsWith(",") ? feildValue.substring(0, feildValue.length() - 1) : feildValue;
             sql = "insert into " + tableName + "(" + feild + ") values(" + feildValue + ")";
         }
         execute(sql, dataSourceConfig);
