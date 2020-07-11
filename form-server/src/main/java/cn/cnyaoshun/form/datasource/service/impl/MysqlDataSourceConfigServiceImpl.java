@@ -42,7 +42,7 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
         for (String name : feildName) {
             feild += name + ",";
         }
-        feild = feild.endsWith(",") ? feild.substring(0, feild.indexOf(feild.length())) : feild;
+        feild = feild.endsWith(",") ? feild.substring(0, feild.length()-1) : feild;
         String dataSql = "select " + feild + " from " + tableName + " limit " + (pageNumber - 1) * pageSize + " , " + pageSize;
         String countSql = "select count(1) from " + tableName + " where 1=1 ";
         List<Map<String, Object>> list = queryData(dataSql, dataSourceConfig);
