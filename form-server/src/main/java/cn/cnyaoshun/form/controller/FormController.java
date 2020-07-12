@@ -88,7 +88,7 @@ public class FormController {
 
     @ApiOperation(value = "保存数据（修改数据时，需要传id）", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("/save")
-    public ReturnJsonData save(@ApiParam(value = "参数集合", required = true) @RequestParam Map<String, Object> map) {
+    public ReturnJsonData save(@RequestBody Map<String, Object> map) {
         formService.save(map);
         return ReturnJsonData.build();
     }

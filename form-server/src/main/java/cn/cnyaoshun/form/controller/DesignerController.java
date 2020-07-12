@@ -4,6 +4,7 @@ import cn.cnyaoshun.form.common.PageDataDomain;
 import cn.cnyaoshun.form.common.ReturnJsonData;
 import cn.cnyaoshun.form.datasource.service.DataSourceConfigService;
 import cn.cnyaoshun.form.designer.model.Designer;
+import cn.cnyaoshun.form.designer.model.DesignerDomain;
 import cn.cnyaoshun.form.designer.service.DesignerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -81,8 +81,9 @@ public class DesignerController {
 
     @ApiOperation(value = "保存模版", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("/saveValue")
-    public ReturnJsonData<Designer> saveValue(@ApiParam(value = "设计器id", required = true) @NotNull @RequestParam(value = "id") Long id,
-                                              @ApiParam(value = "设计器模版", required = true) @NotBlank @RequestParam(value = "value") String value){
+    public ReturnJsonData<Designer> saveValue(@Valid @RequestBody DesignerDomain designerDomain){
+        Long id = designerDomain.getId();
+        String value = designerDomain.getValue();
         Designer designer = designerService.findById(id);
         designer.setValue(value);
         return ReturnJsonData.build(designerService.save(designer));

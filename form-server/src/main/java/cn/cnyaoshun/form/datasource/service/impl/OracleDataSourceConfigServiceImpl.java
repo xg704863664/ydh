@@ -56,22 +56,24 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
         for (String name : feildName) {
             feild += "t." + name + ",";
         }
-        feild = feild.endsWith(",") ? feild.substring(0, feild.indexOf(feild.length())) : feild;
+        feild = feild.endsWith(",") ? feild.substring(0, feild.length()-1) : feild;
         String dataSql = "SELECT * FROM (SELECT ROWNUM AS rowno, " + feild + " FROM " + tableName + " t WHERE ROWNUM <=" + pageNumber * pageSize + " ) table_alias WHERE table_alias.rowno >= " + ((pageNumber - 1) * pageSize + 1);
         String countSql = "SELECT COUNT(1) AS count FROM " + tableName + " where 1=1 ";
         List<Map<String, Object>> list = this.query(dataSql, dataSourceConfig);
         Long count = this.queryCount(countSql, dataSourceConfig);
         PageDataDomain<Map<String, Object>> result = new PageDataDomain<>();
         result.setTotal(count);
-        result.setPages(pageNumber);
+        int pages = Integer.parseInt(count + "") / pageSize + (Integer.parseInt(count + "") % pageSize > 0 ? 1 : 0);
+        result.setPages(pages);
         result.setSize(pageSize);
         result.setRecords(list);
+        result.setCurrent(pageNumber);
         return result;
     }
 
     @Override
     public void deleteData(String id, DataSourceConfig dataSourceConfig, String tableName) {
-        String deleteSql = "DELETE FROM " + tableName + " WHERE id = " + id;
+        String deleteSql = "DELETE FROM " + tableName + " WHERE id = '" + id + "'";
         execute(deleteSql, dataSourceConfig);
     }
 
@@ -81,8 +83,8 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
         for (String name : feildName) {
             feild += name + ",";
         }
-        feild = feild.endsWith(",") ? feild.substring(0, feild.indexOf(feild.length())) : feild;
-        String sql = "select " + feild + " from " + tableName + "where id = " + id;
+        feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
+        String sql = "select " + feild + " from " + tableName + "where id = '" + id + "'";
         return queryForObject(sql, dataSourceConfig);
     }
 
@@ -93,19 +95,19 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
         if (StringUtils.isNotBlank(id)) {
             String feild = "";
             for (String name : feildName) {
-                feild += name + " = " + MapUtils.getString(map, name) + " , ";
+                feild += name + " = '" + MapUtils.getString(map, name) + "' ,";
             }
-            feild = feild.endsWith(",") ? feild.substring(0, feild.indexOf(feild.length())) : feild;
-            sql = "update " + tableName + " set " + feild + " where id = " + id;
+            feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
+            sql = "update " + tableName + " set " + feild + " where id = '" + id + "'";
         } else {
             String feild = "id,";
-            String feildValue = "'"+UUID.randomUUID().toString()+ "',";
+            String feildValue = "'" + UUID.randomUUID().toString() + "',";
             for (String name : feildName) {
                 feild += name + ",";
-                feildValue += MapUtils.getString(map, name) + ",";
+                feildValue += "'" + MapUtils.getString(map, name) + "',";
             }
-            feild = feild.endsWith(",") ? feild.substring(0, feild.indexOf(feild.length())) : feild;
-            feildValue = feildValue.endsWith(",") ? feildValue.substring(0, feildValue.indexOf(feildValue.length())) : feildValue;
+            feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
+            feildValue = feildValue.endsWith(",") ? feildValue.substring(0, feildValue.length() - 1) : feildValue;
             sql = "insert into " + tableName + "(" + feild + ") values(" + feildValue + ")";
         }
         execute(sql, dataSourceConfig);
