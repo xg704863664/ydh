@@ -39,7 +39,9 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
 
     @Override
     public List<String> findFeildNameByIdAndTableName(String tableName, DataSourceConfig dataSourceConfig) {
-        String sql = "select t.COLUMN_NAME from USER_TAB_COLUMNS t where t.TABLE_NAME = upper('" + tableName + "')";
+        String sql = "SELECT * FROM (SELECT column_name FROM user_tab_columns where table_name = upper('" + tableName + "')) t WHERE t.column_name NOT IN (" +
+                "select col.column_name from user_constraints con,user_cons_columns col where col.table_name=upper('" + tableName + "') and con.constraint_name=col.constraint_name and con.constraint_type = 'P'" +
+                ")";
         List<String> result = new ArrayList<>();
         List<Map<String, Object>> tables = query(sql, dataSourceConfig);
         tables.forEach(table -> {
