@@ -85,6 +85,9 @@ public class DesignerController {
         Long id = designerDomain.getId();
         String value = designerDomain.getValue();
         Designer designer = designerService.findById(id);
+        if(designer.isStatus()){
+            return ReturnJsonData.build(999,"已发布的数据，不可进行修改表单设计器的内容！");
+        }
         designer.setValue(value);
         return ReturnJsonData.build(designerService.save(designer));
     }

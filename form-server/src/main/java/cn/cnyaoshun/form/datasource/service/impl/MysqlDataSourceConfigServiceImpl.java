@@ -32,7 +32,7 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
 
     @Override
     public List<String> findFeildNameByIdAndTableName(String tableName, DataSourceConfig dataSourceConfig) {
-        String sql = "select COLUMN_NAME from information_schema.columns where TABLE_NAME='" + tableName + "'";
+        String sql = "SHOW FULL COLUMNS FROM `" + tableName+"` where `Key` <> 'PRI' ";
         return query(sql, dataSourceConfig);
     }
 
@@ -105,9 +105,10 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
         DynamicTemplate dynamicTemplate = dynamicDataSourceUtil.getDynamicTemplate(dataSourceConfig.getType(), dataSourceConfig.getUrl(), dataSourceConfig.getUsername(), dataSourceConfig.getPassword());
         List<Map<String, Object>> tables = dynamicTemplate.getJdbcTemplate().queryForList(sql);
         tables.forEach(table -> {
-            table.entrySet().forEach(stringObjectEntry -> {
-                result.add(stringObjectEntry.getValue().toString());
-            });
+            String field = MapUtils.getString(table, "Field");
+            if (StringUtils.isNotBlank(field)) {
+                result.add(field);
+            }
         });
         return result;
     }
