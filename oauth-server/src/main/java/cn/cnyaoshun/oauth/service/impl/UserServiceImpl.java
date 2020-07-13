@@ -112,13 +112,14 @@ public class UserServiceImpl implements UserService {
     public Long add(UserAddDomain userAddDomain) {
         Optional<Department> departOptional = departmentRepository.findById(userAddDomain.getDepartmentId());
         departOptional.ifPresent(department -> {
-            boolean existsDepartment = departmentRepository.existsByOrganizationIdAndId(department.getOrganizationId(), department.getId());
-            if(existsDepartment){
-                boolean existsByUserName = userRepository.existsByUserName(userAddDomain.getUserName());
-                if(existsByUserName){
+//            boolean existsDepartment = departmentRepository.existsByOrganizationIdAndId(department.getOrganizationId(), department.getId());
+//            if(existsDepartment){
+//                boolean existsByUserName = userRepository.existsByUserName(userAddDomain.getUserName());
+            boolean existsByPhone = userRepository.existsByPhone(userAddDomain.getPhone());
+                if(existsByPhone){
                     throw new ExceptionValidation(418,"用户已存在,请重新输入");
                 }
-            }
+//            }
         });
         User user = new User();
         user.setIdNo(userAddDomain.getIdNo());

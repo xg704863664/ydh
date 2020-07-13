@@ -12,4 +12,5 @@ public interface UserRepository extends PagingAndSortingRepository<User,Long>{
     void deleteAllByIdIn(Set<Long> ids);
     User findByPhone(String phone);
     boolean existsByUserName(String userName);
+    boolean existsByPhone(String phone);
 }
