@@ -90,7 +90,7 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
 
     @Override
     public void saveData(Map<String, Object> map, DataSourceConfig dataSourceConfig, String tableName, List<String> feildName) {
-        String id = MapUtils.getString(map, "id");
+        String id = MapUtils.getString(map, "ID");
         String sql = "";
         if (StringUtils.isNotBlank(id)) {
             String feild = "";

@@ -32,7 +32,7 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
 
     @Override
     public List<String> findFeildNameByIdAndTableName(String tableName, DataSourceConfig dataSourceConfig) {
-        String sql = "SHOW FULL COLUMNS FROM `" + tableName+"` where `Key` <> 'PRI' ";
+        String sql = "SHOW FULL COLUMNS FROM `" + tableName + "` where `Key` <> 'PRI' ";
         return query(sql, dataSourceConfig);
     }
 
@@ -84,7 +84,7 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
                 feild += name + " = '" + MapUtils.getString(map, name) + "' ,";
             }
             feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
-            sql = "update " + tableName + " set " + feild + " where id = " + id;
+            sql = "update " + tableName + " set " + feild + " where id = '" + id + "'";
         } else {
             String feild = " id ,";
             String feildValue = "'" + UUID.randomUUID().toString() + "',";
