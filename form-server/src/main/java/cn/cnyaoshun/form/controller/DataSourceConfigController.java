@@ -58,7 +58,7 @@ public class DataSourceConfigController {
 
     @ApiOperation(value = "测试数据源是否连接成功", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping(value = "/testConnect")
-    public ReturnJsonData<Boolean> testConnect(@RequestBody DataSourceConfig dataSourceConfig) {
+    public ReturnJsonData<Boolean> testConnect(@Valid @RequestBody DataSourceConfig dataSourceConfig) {
         return ReturnJsonData.build(dataSourceConfigService.connect(dataSourceConfig));
     }
 
