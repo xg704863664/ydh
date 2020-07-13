@@ -17,10 +17,7 @@ import javax.annotation.Resource;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/form")
@@ -52,6 +49,7 @@ public class FormController {
             map.put("label", entry.getValue().get("label"));
             result.add(map);
         });
+        Collections.reverse(result);
         return ReturnJsonData.build(result);
     }
 
