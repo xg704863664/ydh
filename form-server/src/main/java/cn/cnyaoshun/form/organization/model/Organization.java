@@ -20,7 +20,6 @@ public class Organization extends AbstractEntity {
     private String name;
 
     @ApiModelProperty("描述")
-    @NotBlank(message = "描述不能为空")
     private String description;
 
 }
