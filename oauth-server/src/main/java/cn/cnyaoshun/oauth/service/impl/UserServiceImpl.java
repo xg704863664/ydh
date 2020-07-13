@@ -112,14 +112,10 @@ public class UserServiceImpl implements UserService {
     public Long add(UserAddDomain userAddDomain) {
         Optional<Department> departOptional = departmentRepository.findById(userAddDomain.getDepartmentId());
         departOptional.ifPresent(department -> {
-//            boolean existsDepartment = departmentRepository.existsByOrganizationIdAndId(department.getOrganizationId(), department.getId());
-//            if(existsDepartment){
-//                boolean existsByUserName = userRepository.existsByUserName(userAddDomain.getUserName());
             boolean existsByPhone = userRepository.existsByPhone(userAddDomain.getPhone());
                 if(existsByPhone){
                     throw new ExceptionValidation(418,"用户已存在,请重新输入");
                 }
-//            }
         });
         User user = new User();
         user.setIdNo(userAddDomain.getIdNo());
@@ -130,14 +126,12 @@ public class UserServiceImpl implements UserService {
         user.setIdNo(userAddDomain.getIdNo());
         user.setPhone(userAddDomain.getPhone());
         userRepository.save(user);
-        log.info("用户添加成功");
         Account account = new Account();
         account.setUserId(user.getId());
         account.setState(true);
         account.setAccountName(userAddDomain.getPhone());
         account.setPassword(bCryptPasswordEncoder.encode(modifyPassword));
         accountRepository.save(account);
-        log.info("用户关联默认账户添加成功");
         if (userAddDomain.getDepartmentId() != null && userAddDomain.getDepartmentId() > 0){
                Long departmentId1 = userAddDomain.getDepartmentId();
             Optional<Department> departmentOptional = departmentRepository.findById(departmentId1);
@@ -147,7 +141,7 @@ public class UserServiceImpl implements UserService {
                 userDepartment.setDepartmentId(departmentId1);
                 userDepartment.setOrganizationId(department.getOrganizationId());
                 userDepartmentRepository.save(userDepartment);
-                log.info("用户关联账户关联关系添加成功");
+                log.info("用户添加成功");
             });
         }
         return user.getId();
