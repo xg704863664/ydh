@@ -2,8 +2,8 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.*;
-import cn.cnyaoshun.oauth.domain.DepartmentTreeDomain;
 import cn.cnyaoshun.oauth.domain.DepartmentAddDomain;
+import cn.cnyaoshun.oauth.domain.DepartmentTreeDomain;
 import cn.cnyaoshun.oauth.domain.DepartmentUpdateDomain;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.Department;
@@ -120,9 +120,9 @@ public class DepartmentServiceImpl implements DepartmentService {
             departmentList.forEach(depart -> departmentRepository.save(depart));
         });
         departmentRepository.deleteById(departmentId);
-        log.info("部门删除成功,删除的部门ID为:"+departmentId);
         DepartmentServiceImpl departmentService = (DepartmentServiceImpl) AopContext.currentProxy();
         departmentService.deleteUser(departmentId);
+        log.info("部门删除成功,删除的部门ID为:"+departmentId);
     }
 
     @Override
@@ -154,7 +154,6 @@ public class DepartmentServiceImpl implements DepartmentService {
             List<Account> accountList = accountRepository.findByUserId(userId);
             accountList.forEach(account -> accountRoleRepository.deleteAllByAccountId(account.getId()));
         });
-        log.info("部门关联信息删除成功");
     }
 
     /**
