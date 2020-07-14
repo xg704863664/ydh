@@ -125,7 +125,6 @@ public class PermissionServiceImpl implements PermissionService{
             permission1.setUpdateTime(new Date());
             permissionRepository.save(permission1);
         });
-        log.info("权限ID为:"+permissionUpdateDomain.getId() +"的权限信息修改成功");
         return permissionUpdateDomain.getId();
     }
 
@@ -147,7 +146,6 @@ public class PermissionServiceImpl implements PermissionService{
                 pageDataDomain.getRecords().add(permissionFindAllDomain);
             });
         });
-        log.info("权限信息获取成功!共有:"+pageDataDomain.getTotal() +"条数据");
         return  pageDataDomain;
     }
 }
