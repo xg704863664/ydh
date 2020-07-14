@@ -70,7 +70,7 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
             feild += name + ",";
         }
         feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
-        String sql = "select " + feild + " from " + tableName + "where id = " + id;
+        String sql = "select " + feild + " from " + tableName + "where id = '" + id + "'";
         return queryForObject(sql, dataSourceConfig);
     }
 
