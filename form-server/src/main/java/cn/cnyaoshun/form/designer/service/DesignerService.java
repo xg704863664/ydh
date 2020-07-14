@@ -11,7 +11,7 @@ public interface DesignerService {
 
     List<Designer> findByOrgIdAndStatus(Long orgId,boolean status);
 
-    PageDataDomain<Designer> findByPage(Integer pageNum,Integer pageSize,Long orgId);
+    PageDataDomain<Designer> findByPage(Integer pageNum,Integer pageSize,Long orgId,String searchValue);
 
     Designer save(Designer designer);
 

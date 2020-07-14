@@ -9,9 +9,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DesignerRepository extends PagingAndSortingRepository<Designer,Long> {
+public interface DesignerRepository extends PagingAndSortingRepository<Designer, Long> {
 
-    List<Designer> findByOrgIdAndStatus(Long orgId,boolean status);
+    List<Designer> findByOrgIdAndStatus(Long orgId, boolean status);
 
     Page<Designer> findByOrgId(Long orgId, Pageable page);
+
+    Page<Designer> findByOrgIdAndNameLike(Long orgId, String name, Pageable page);
 }

@@ -47,8 +47,9 @@ public class DesignerController {
     @PostMapping("/findByPage")
     public ReturnJsonData<PageDataDomain<Designer>> findByPage(@Min(1) @ApiParam(value = "当前页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
                                                                @Min(1) @ApiParam(value = "每页显示数量", required = true) @RequestParam(value = "pageSize") Integer pageSize,
-                                                               @NotNull @ApiParam(value = "组织机构id", required = true) @RequestParam(value = "orgId") Long orgId) {
-        return ReturnJsonData.build(designerService.findByPage(pageNumber, pageSize, orgId));
+                                                               @NotNull @ApiParam(value = "组织机构id", required = true) @RequestParam(value = "orgId") Long orgId,
+                                                                String searchValue) {
+        return ReturnJsonData.build(designerService.findByPage(pageNumber, pageSize, orgId,searchValue));
     }
 
     @ApiOperation(value = "根据ID删除设计器模版", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

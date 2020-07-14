@@ -10,6 +10,7 @@ import cn.cnyaoshun.form.designer.repository.DesignerRepository;
 import cn.cnyaoshun.form.designer.service.DesignerService;
 import cn.cnyaoshun.form.remote.OauthServerClient;
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,9 +42,14 @@ public class DesignerServiceImpl implements DesignerService {
     }
 
     @Override
-    public PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, Long orgId) {
+    public PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, Long orgId, String searchValue) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        Page<Designer> page = designerRepository.findByOrgId(orgId, pageable);
+        Page<Designer> page = null;
+        if(StringUtils.isNotBlank(searchValue)){
+            page = designerRepository.findByOrgIdAndNameLike(orgId,"%"+searchValue+"%",pageable);
+        }else{
+            page = designerRepository.findByOrgId(orgId, pageable);
+        }
         PageDataDomain<Designer> result = new PageDataDomain<Designer>();
         result.setCurrent(pageNum);
         result.setSize(pageSize);
