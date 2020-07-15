@@ -54,19 +54,16 @@ public class DesignerServiceImpl implements DesignerService {
     @Override
     public PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, Long orgId, String searchValue) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        Specification<Designer> specification = new Specification<Designer>() {
-            @Override
-            public Predicate toPredicate(Root<Designer> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new ArrayList<Predicate>();
-                if (orgId != null) {
-                    predicates.add(criteriaBuilder.equal(root.get("orgId"), orgId));
-                }
-                if (StringUtils.isNotBlank(searchValue)) {
-                    predicates.add(criteriaBuilder.like(root.get("name"), "%" + searchValue + "%"));
-                }
-                criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
-                return null;
+        Specification<Designer> specification = (Specification<Designer>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (orgId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("orgId"), orgId));
             }
+            if (StringUtils.isNotBlank(searchValue)) {
+                predicates.add(criteriaBuilder.like(root.get("name"), "%" + searchValue + "%"));
+            }
+            criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
+            return null;
         };
         Page<Designer> page = designerRepository.findAll(specification, pageable);
         PageDataDomain<Designer> result = new PageDataDomain<Designer>();
