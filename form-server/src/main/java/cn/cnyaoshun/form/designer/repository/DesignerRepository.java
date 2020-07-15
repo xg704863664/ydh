@@ -11,5 +11,6 @@ import java.util.List;
 public interface DesignerRepository extends PagingAndSortingRepository<Designer, Long>, JpaSpecificationExecutor<Designer> {
 
     List<Designer> findByOrgIdAndStatus(Long orgId, boolean status);
+    int countByOrgId(Long orgId);
 
 }

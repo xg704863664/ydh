@@ -37,6 +37,11 @@ public class DesignerServiceImpl implements DesignerService {
     private OauthServerClient oauthServerClient;
 
     @Override
+    public int countByOrgId(Long orgId) {
+        return designerRepository.countByOrgId(orgId);
+    }
+
+    @Override
     public Designer findById(Long id) {
         return designerRepository.findById(id).orElseThrow(ExceptionDataNotExists::new);
     }
