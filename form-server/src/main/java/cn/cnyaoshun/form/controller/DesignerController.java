@@ -47,8 +47,8 @@ public class DesignerController {
     @PostMapping("/findByPage")
     public ReturnJsonData<PageDataDomain<Designer>> findByPage(@Min(1) @ApiParam(value = "当前页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
                                                                @Min(1) @ApiParam(value = "每页显示数量", required = true) @RequestParam(value = "pageSize") Integer pageSize,
-                                                               @NotNull @ApiParam(value = "组织机构id", required = true) @RequestParam(value = "orgId") Long orgId) {
-        return ReturnJsonData.build(designerService.findByPage(pageNumber, pageSize, orgId));
+                                                               Long orgId, String searchValue) {
+        return ReturnJsonData.build(designerService.findByPage(pageNumber, pageSize, orgId, searchValue));
     }
 
     @ApiOperation(value = "根据ID删除设计器模版", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -81,12 +81,12 @@ public class DesignerController {
 
     @ApiOperation(value = "保存模版", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("/saveValue")
-    public ReturnJsonData<Designer> saveValue(@Valid @RequestBody DesignerDomain designerDomain){
+    public ReturnJsonData<Designer> saveValue(@Valid @RequestBody DesignerDomain designerDomain) {
         Long id = designerDomain.getId();
         String value = designerDomain.getValue();
         Designer designer = designerService.findById(id);
-        if(designer.isStatus()){
-            return ReturnJsonData.build(999,"已发布的数据，不可进行修改表单设计器的内容！");
+        if (designer.isStatus()) {
+            return ReturnJsonData.build(999, "已发布的数据，不可进行修改表单设计器的内容！");
         }
         designer.setValue(value);
         return ReturnJsonData.build(designerService.save(designer));

@@ -105,10 +105,11 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
         DynamicTemplate dynamicTemplate = dynamicDataSourceUtil.getDynamicTemplate(dataSourceConfig.getType(), dataSourceConfig.getUrl(), dataSourceConfig.getUsername(), dataSourceConfig.getPassword());
         List<Map<String, Object>> tables = dynamicTemplate.getJdbcTemplate().queryForList(sql);
         tables.forEach(table -> {
-            String field = MapUtils.getString(table, "Field");
-            if (StringUtils.isNotBlank(field)) {
-                result.add(field);
-            }
+            table.entrySet().forEach((value) -> {
+                if (value.getValue() != null) {
+                    result.add(value.getValue().toString());
+                }
+            });
         });
         return result;
     }

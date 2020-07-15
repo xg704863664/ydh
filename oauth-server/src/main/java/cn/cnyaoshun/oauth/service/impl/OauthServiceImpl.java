@@ -71,7 +71,7 @@ public class OauthServiceImpl implements OauthService {
     /**
      * 根据Token
      * @param oAuth2Authentication
-     * @param projectId
+     * @param oAuth2Authentication
      * @return
      */
     @Override
