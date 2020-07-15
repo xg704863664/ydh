@@ -10,6 +10,7 @@ import cn.cnyaoshun.form.designer.repository.DesignerRepository;
 import cn.cnyaoshun.form.designer.service.DesignerService;
 import cn.cnyaoshun.form.remote.OauthServerClient;
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +56,7 @@ public class DesignerServiceImpl implements DesignerService {
                 if (orgId != null) {
                     predicates.add(criteriaBuilder.equal(root.get("orgId"), orgId));
                 }
-                if (searchValue != null) {
+                if (StringUtils.isNotBlank(searchValue)) {
                     predicates.add(criteriaBuilder.like(root.get("name"), "%" + searchValue + "%"));
                 }
                 criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
