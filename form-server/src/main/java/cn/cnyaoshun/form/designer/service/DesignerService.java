@@ -6,21 +6,23 @@ import cn.cnyaoshun.form.designer.model.Designer;
 import java.util.List;
 
 public interface DesignerService {
+    int countByOrgId(Long orgId);
 
     Designer findById(Long id);
 
-    List<Designer> findByOrgIdAndStatus(Long orgId,boolean status);
+    List<Designer> findByOrgIdAndStatus(Long orgId, boolean status);
 
-    PageDataDomain<Designer> findByPage(Integer pageNum,Integer pageSize,Long orgId,String searchValue);
+    PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, Long orgId, String searchValue);
 
     Designer save(Designer designer);
 
     void delete(Long id);
 
-    Designer updateStatus(Long id,boolean status);
+    Designer updateStatus(Long id, boolean status);
 
     /**
      * 从设计器中取选定的字段名
+     *
      * @param id
      * @return
      */

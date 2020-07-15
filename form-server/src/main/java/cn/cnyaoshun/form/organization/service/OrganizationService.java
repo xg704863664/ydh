@@ -1,5 +1,6 @@
 package cn.cnyaoshun.form.organization.service;
 
+import cn.cnyaoshun.form.common.PageDataDomain;
 import cn.cnyaoshun.form.organization.model.Organization;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface OrganizationService {
     Organization save(Organization organization);
     List<Organization> getAll();
     void delete(Long id);
+    PageDataDomain<Organization> findByPage(Integer pageNum, Integer pageSize,String name);
+
 }
