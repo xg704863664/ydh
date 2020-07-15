@@ -28,4 +28,7 @@ public class OauthUserListDomain {
 
     @ApiModelProperty(value = "用户名称")
     private String userName;
+
+    @ApiModelProperty(value = "组织机构id")
+    private Long orgId;
 }
