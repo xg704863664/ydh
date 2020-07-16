@@ -8,5 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface OrganizationRepository extends JpaRepository<Organization,Long> {
     boolean existsById(Long organizationId);
+    boolean existsByOrganizationName(String organizationName);
+    boolean existsByOrganizationNameAndIdNot(String organizationName,long id);
     Organization findByOrganizationName(String orgName);
 }

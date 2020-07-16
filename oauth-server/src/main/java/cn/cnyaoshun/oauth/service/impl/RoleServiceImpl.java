@@ -158,7 +158,7 @@ public class RoleServiceImpl implements RoleService {
      * @return
      */
     @Override
-    public PageDataDomain<RoleFindAllByProjectIdAndAccountDomain> findAll(Integer pageNumber, Integer pageSize,String roleName) {
+    public PageDataDomain<RoleFindAllByProjectIdAndAccountDomain> findAll(Integer pageNumber, Integer pageSize,String keyWord) {
         PageDataDomain<RoleFindAllByProjectIdAndAccountDomain> pageDataDomain = new PageDataDomain();
         Sort sort = Sort.by(Sort.Direction.DESC,"id");
         PageRequest page = PageRequest.of(pageNumber - 1, pageSize, sort);
@@ -166,8 +166,8 @@ public class RoleServiceImpl implements RoleService {
             @Override
             public Predicate toPredicate(Root<Role> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
                 Predicate restrictions = cb.conjunction();
-                if(!StringUtils.isEmpty(roleName)){
-                    restrictions = cb.like(root.get("roleName"),"%"+roleName+"%");
+                if(!StringUtils.isEmpty(keyWord)){
+                    restrictions = cb.like(root.get("roleName"),"%"+keyWord+"%");
                 }
                 return cb.and(restrictions);
             }
