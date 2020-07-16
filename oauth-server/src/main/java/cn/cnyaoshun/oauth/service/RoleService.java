@@ -17,6 +17,6 @@ public interface RoleService {
     Long delete(Long roleId);
     List<RoleUpdateDomain> findAllByProjectId(Long projectId);
     Long update(RoleUpdateDomain roleUpdateDomain);
-    PageDataDomain<RoleFindAllByProjectIdAndAccountDomain> findAll(Integer pageNumber, Integer pageSize,String roleName);
+    PageDataDomain<RoleFindAllByProjectIdAndAccountDomain> findAll(Integer pageNumber, Integer pageSize,String keyWord);
     List<ProjectRoleTreeDomain> findAllRoleTree();
 }

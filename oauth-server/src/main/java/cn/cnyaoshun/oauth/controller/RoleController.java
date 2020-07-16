@@ -66,8 +66,8 @@ public class RoleController {
     @RequestMapping(value = "/findAllRoleNameAndId", method = RequestMethod.GET)
     public ReturnJsonData<PageDataDomain<RoleFindAllByProjectIdAndAccountDomain>> findAllRoleNameAndId(@Min(1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber")Integer pageNumber,
                                                                                                        @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")Integer pageSize,
-                                                                                                       @ApiParam(value = "条件筛选角色名称")@RequestParam(value = "RoleName",required = false) String roleName){
-        PageDataDomain<RoleFindAllByProjectIdAndAccountDomain> all = roleService.findAll(pageNumber,pageSize,roleName);
+                                                                                                       @ApiParam(value = "条件筛选角色名称")@RequestParam(value = "keyWord",required = false) String keyWord){
+        PageDataDomain<RoleFindAllByProjectIdAndAccountDomain> all = roleService.findAll(pageNumber,pageSize,keyWord);
         return ReturnJsonData.build(all);
     }
 
