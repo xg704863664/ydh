@@ -5,7 +5,7 @@ import cn.cnyaoshun.form.common.ReturnJsonData;
 import cn.cnyaoshun.form.designer.model.Designer;
 import cn.cnyaoshun.form.designer.service.DesignerService;
 import cn.cnyaoshun.form.designer.service.FormService;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -41,7 +41,7 @@ public class FormController {
     @GetMapping("/loadTableName/{designerId}")
     public ReturnJsonData<List<Map<String, Object>>> loadTableName(@NotNull @ApiParam(value = "设计器id", required = true) @PathVariable(value = "designerId") Long designerId) {
         Designer designer = designerService.findById(designerId);
-        Map<String, Map<String, Object>> objects = (Map<String, Map<String, Object>>) JSON.parse(designer.getValue());
+        LinkedHashMap<String, Map<String, Object>> objects = JSONObject.parseObject(designer.getValue(), LinkedHashMap.class);
         List<Map<String, Object>> result = new ArrayList<>();
         objects.entrySet().forEach(entry -> {
             Map<String, Object> map = new HashMap<>();
@@ -49,7 +49,6 @@ public class FormController {
             map.put("label", entry.getValue().get("label"));
             result.add(map);
         });
-        Collections.reverse(result);
         return ReturnJsonData.build(result);
     }
 

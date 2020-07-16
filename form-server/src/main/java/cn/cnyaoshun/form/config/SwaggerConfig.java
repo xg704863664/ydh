@@ -29,7 +29,7 @@ public class SwaggerConfig {
         List<Parameter> parameterList = new ArrayList<>();
         ticketPar.name("Authorization").description("user token")
                 .modelRef(new ModelRef("string")).parameterType("header")
-                .required(true).build(); //header中的ticket参数非必填，传空也可以
+                .required(true).build(); //header中的Authorization参数必填
         parameterList.add(ticketPar.build());    //根据每个方法名也知道当前方法在设置什么参数
         return new Docket(DocumentationType.SWAGGER_2)
                 .enable(true)

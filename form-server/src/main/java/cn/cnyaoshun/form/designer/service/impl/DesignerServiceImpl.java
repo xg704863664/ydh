@@ -14,10 +14,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +37,11 @@ public class DesignerServiceImpl implements DesignerService {
     private OauthServerClient oauthServerClient;
 
     @Override
+    public int countByOrgId(Long orgId) {
+        return designerRepository.countByOrgId(orgId);
+    }
+
+    @Override
     public Designer findById(Long id) {
         return designerRepository.findById(id).orElseThrow(ExceptionDataNotExists::new);
     }
@@ -44,12 +54,18 @@ public class DesignerServiceImpl implements DesignerService {
     @Override
     public PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, Long orgId, String searchValue) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        Page<Designer> page = null;
-        if(StringUtils.isNotBlank(searchValue)){
-            page = designerRepository.findByOrgIdAndNameLike(orgId,"%"+searchValue+"%",pageable);
-        }else{
-            page = designerRepository.findByOrgId(orgId, pageable);
-        }
+        Specification<Designer> specification = (Specification<Designer>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (orgId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("orgId"), orgId));
+            }
+            if (StringUtils.isNotBlank(searchValue)) {
+                predicates.add(criteriaBuilder.like(root.get("name"), "%" + searchValue + "%"));
+            }
+            criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
+            return null;
+        };
+        Page<Designer> page = designerRepository.findAll(specification, pageable);
         PageDataDomain<Designer> result = new PageDataDomain<Designer>();
         result.setCurrent(pageNum);
         result.setSize(pageSize);

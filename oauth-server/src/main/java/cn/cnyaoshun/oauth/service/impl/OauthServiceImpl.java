@@ -2,12 +2,14 @@ package cn.cnyaoshun.oauth.service.impl;
 
 import cn.cnyaoshun.oauth.dao.AccountRepository;
 import cn.cnyaoshun.oauth.dao.OauthUserListDao;
+import cn.cnyaoshun.oauth.dao.UserDepartmentRepository;
 import cn.cnyaoshun.oauth.dao.UserRepository;
 import cn.cnyaoshun.oauth.domain.OauthUserListDomain;
 import cn.cnyaoshun.oauth.domain.PermissionOauthUserListDomain;
 import cn.cnyaoshun.oauth.domain.RoleFindAllByOauthDomain;
 import cn.cnyaoshun.oauth.entity.Account;
 import cn.cnyaoshun.oauth.entity.User;
+import cn.cnyaoshun.oauth.entity.UserDepartment;
 import cn.cnyaoshun.oauth.entity.UserDetailsImpl;
 import cn.cnyaoshun.oauth.service.OauthService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class OauthServiceImpl implements OauthService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final OauthUserListDao oauthUserListDao;
+    private final UserDepartmentRepository userDepartmentRepository;
 
     /**
      * 根据Token和项目ID获取账户信息及权限
@@ -62,6 +65,11 @@ public class OauthServiceImpl implements OauthService {
                 oauthUserListDomain.setUserName(user.getUserName());
                 oauthUserListDomain.setUserId(user.getId());
             });
+            List<UserDepartment> userDepartmentList = userDepartmentRepository.findAllByUserId(userId);
+            for (UserDepartment userDepartment:userDepartmentList) {
+                oauthUserListDomain.setOrgId(userDepartment.getOrganizationId());
+                break;
+            }
         });
         return oauthUserListDomain;
     }
@@ -89,6 +97,11 @@ public class OauthServiceImpl implements OauthService {
                 oauthUserListDomain.setUserName(user.getUserName());
                 oauthUserListDomain.setUserId(user.getId());
             });
+            List<UserDepartment> userDepartmentList = userDepartmentRepository.findAllByUserId(userId);
+            for (UserDepartment userDepartment:userDepartmentList) {
+                oauthUserListDomain.setOrgId(userDepartment.getOrganizationId());
+                break;
+            }
         });
         return oauthUserListDomain;
     }
