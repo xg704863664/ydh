@@ -102,6 +102,21 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public PageDataDomain<UserFindAllByOrgDomain> findAllUserByOrg(Long organizationId, String keyWord, Integer pageNumber, Integer pageSize) {
+        PageDataDomain<UserFindAllByOrgDomain> pageDataDomain = new PageDataDomain<>();
+        Integer startPage = (pageNumber-1)*pageSize;
+        List<UserFindAllByOrgDomain> userList = userDao.userFindAllByOrgDomain(organizationId, keyWord, startPage, pageSize);
+        pageDataDomain.setCurrent(pageNumber);
+        pageDataDomain.setSize(pageSize);
+        Long number = userDao.countUserNumber(organizationId, keyWord);
+        Integer total=Integer.parseInt(number+"")/pageSize+(Integer.parseInt(number+"")%pageSize>0?1:0);
+        pageDataDomain.setPages(total);
+        pageDataDomain.setTotal(number);
+        pageDataDomain.getRecords().addAll(userList);
+        return pageDataDomain;
+    }
+
     /**
      * 添加用户
      * @param userAddDomain

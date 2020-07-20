@@ -51,7 +51,7 @@ public class OrganizationServiceImpl implements OrganizationService{
     public Long add(OrganizationAddDomain organizationAddDomain){
         boolean existsByOrganizationName = organizationRepository.existsByOrganizationName(organizationAddDomain.getOrganizationName());
         if(existsByOrganizationName){
-            throw new ExceptionValidation(418,"组织已存在,请重新输入");
+            throw new ExceptionValidation(418,"组织机构已存在,请重新输入");
         }
         Organization organization = new Organization();
         BeanUtils.copyProperties(organizationAddDomain, organization);

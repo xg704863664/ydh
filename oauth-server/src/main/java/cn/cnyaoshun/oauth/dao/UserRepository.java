@@ -3,6 +3,7 @@ package cn.cnyaoshun.oauth.dao;
 import cn.cnyaoshun.oauth.entity.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.List;
 import java.util.Set;
 
 /**

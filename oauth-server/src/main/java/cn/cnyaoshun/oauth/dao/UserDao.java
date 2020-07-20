@@ -1,6 +1,7 @@
 package cn.cnyaoshun.oauth.dao;
 
 import cn.cnyaoshun.oauth.domain.UserFindAllByDepartmentIdDomain;
+import cn.cnyaoshun.oauth.domain.UserFindAllByOrgDomain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -68,4 +69,61 @@ public class UserDao {
         String count = nativeQuery.getSingleResult().toString();
         return Long.valueOf(count);
     }
+
+    public List<UserFindAllByOrgDomain> userFindAllByOrgDomain(Long organizationId, String keyWord, Integer pageNumber, Integer pageSize){
+        List<UserFindAllByOrgDomain> userFindAllByOrgDomains = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT de.department_name,u.id,u.user_name,u.sex ,u.age,u.phone,u.email,u.id_no FROM user_department AS ud  LEFT JOIN department AS de ON de.id = ud.department_id LEFT JOIN  `user` AS u  on ud.user_id = u.id WHERE ud.organization_id = ? ");
+        if(!StringUtils.isEmpty(keyWord)){
+            sql.append(" and u.user_name like '%"+keyWord+"%' OR de.department_name like '%"+keyWord+ "%'" );
+        }
+        sql.append(" ORDER BY u.id DESC LIMIT ?,?");
+        Query nativeQuery = entityManager.createNativeQuery(sql.toString());
+        nativeQuery.setParameter(1,organizationId);
+        nativeQuery.setParameter(2,pageNumber);
+        nativeQuery.setParameter(3,pageSize);
+        List<Object[]> objects =  nativeQuery.getResultList();
+        Field[] declaredFields = UserFindAllByOrgDomain.class.getDeclaredFields();
+
+        objects.forEach(array -> {
+            UserFindAllByOrgDomain userDomain = new UserFindAllByOrgDomain();
+                    try {
+                        declaredFields[0].setAccessible(true);
+                        declaredFields[0].set(userDomain, array[0].toString());
+                        declaredFields[1].setAccessible(true);
+                        declaredFields[1].set(userDomain, Long.valueOf(array[1].toString()));
+                        declaredFields[2].setAccessible(true);
+                        declaredFields[2].set(userDomain, array[2].toString());
+                        declaredFields[3].setAccessible(true);
+                        declaredFields[3].set(userDomain, array[3].toString());
+                        declaredFields[4].setAccessible(true);
+                        declaredFields[4].set(userDomain, Integer.valueOf(array[4].toString()));
+                        declaredFields[5].setAccessible(true);
+                        declaredFields[5].set(userDomain, array[5].toString());
+                        if (array[6] != null) {
+                            declaredFields[6].setAccessible(true);
+                            declaredFields[6].set(userDomain, array[6].toString());
+                        }
+                        if(array[7] != null){
+                            declaredFields[7].setAccessible(true);
+                            declaredFields[7].set(userDomain, array[7].toString());
+                        }
+                    }catch(IllegalAccessException e) {
+                        e.fillInStackTrace();
+                    }
+                userFindAllByOrgDomains.add(userDomain);
+        });
+        return  userFindAllByOrgDomains;
+    }
+
+    public Long countUserNumber(Long organizationId, String keyWord){
+        StringBuilder sql = new StringBuilder("SELECT count(1) FROM user_department AS ud  LEFT JOIN department AS de ON de.id = ud.department_id LEFT JOIN  `user` AS u  on ud.user_id = u.id WHERE ud.organization_id = ? ");
+        if(!StringUtils.isEmpty(keyWord)){
+            sql.append(" and u.user_name like '%"+keyWord+"%' OR de.department_name like '%"+ keyWord+ "%'" );
+        }
+        Query nativeQuery = entityManager.createNativeQuery(sql.toString());
+        nativeQuery.setParameter(1,organizationId);
+        String count = nativeQuery.getSingleResult().toString();
+        return  Long.valueOf(count);
+    }
+
 }
