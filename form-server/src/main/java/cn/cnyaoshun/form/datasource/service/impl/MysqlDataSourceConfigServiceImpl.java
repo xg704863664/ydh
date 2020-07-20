@@ -33,7 +33,7 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
     @Override
     public List<String> findFeildNameByIdAndTableName(String tableName, DataSourceConfig dataSourceConfig) {
         String sql = "SHOW FULL COLUMNS FROM `" + tableName + "` where `Key` <> 'PRI' ";
-        return query(sql, dataSourceConfig);
+        return queryFeild(sql, dataSourceConfig);
     }
 
     @Override
@@ -99,6 +99,18 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
         execute(sql, dataSourceConfig);
     }
 
+    private List<String> queryFeild(String sql, DataSourceConfig dataSourceConfig){
+        List<String> result = new ArrayList<>();
+        DynamicTemplate dynamicTemplate = dynamicDataSourceUtil.getDynamicTemplate(dataSourceConfig.getType(), dataSourceConfig.getUrl(), dataSourceConfig.getUsername(), dataSourceConfig.getPassword());
+        List<Map<String, Object>> tables = dynamicTemplate.getJdbcTemplate().queryForList(sql);
+        tables.forEach(table -> {
+            String name = MapUtils.getString(table,"Field");
+            if(StringUtils.isNotBlank(name)){
+                result.add(name);
+            }
+        });
+        return result;
+    }
 
     private List<String> query(String sql, DataSourceConfig dataSourceConfig) {
         List<String> result = new ArrayList<>();

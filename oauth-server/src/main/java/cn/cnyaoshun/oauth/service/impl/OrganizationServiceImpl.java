@@ -1,5 +1,6 @@
 package cn.cnyaoshun.oauth.service.impl;
 
+import cn.cnyaoshun.oauth.common.exception.ExceptionValidation;
 import cn.cnyaoshun.oauth.dao.*;
 import cn.cnyaoshun.oauth.domain.OrganizationAddDomain;
 import cn.cnyaoshun.oauth.domain.OrganizationFindAllDomain;
@@ -48,6 +49,10 @@ public class OrganizationServiceImpl implements OrganizationService{
     @Override
     @Transactional
     public Long add(OrganizationAddDomain organizationAddDomain){
+        boolean existsByOrganizationName = organizationRepository.existsByOrganizationName(organizationAddDomain.getOrganizationName());
+        if(existsByOrganizationName){
+            throw new ExceptionValidation(418,"组织已存在,请重新输入");
+        }
         Organization organization = new Organization();
         BeanUtils.copyProperties(organizationAddDomain, organization);
         Organization SaveOrganization = organizationRepository.save(organization);
@@ -62,6 +67,10 @@ public class OrganizationServiceImpl implements OrganizationService{
     @Override
     @Transactional
     public Long update(OrganizationUpdateDomain organizationUpdateDomain){
+        boolean organizationUpdate = organizationRepository.existsByOrganizationNameAndIdNot(organizationUpdateDomain.getOrganizationName(), organizationUpdateDomain.getId());
+        if(organizationUpdate){
+            throw new ExceptionValidation(418,"组织机构已存在,请重新输入");
+        }
         Optional<Organization> organizationOptional = organizationRepository.findById(organizationUpdateDomain.getId());
         //满足条件时(organizationOptional为true时)进入下面条件
         organizationOptional.ifPresent(organization -> {
