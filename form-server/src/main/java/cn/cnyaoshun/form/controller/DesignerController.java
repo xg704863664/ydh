@@ -56,7 +56,7 @@ public class DesignerController {
     @PostMapping("/findByPage")
     public ReturnJsonData<PageDataDomain<Designer>> findByPage(@Min(1) @ApiParam(value = "当前页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
                                                                @Min(1) @ApiParam(value = "每页显示数量", required = true) @RequestParam(value = "pageSize") Integer pageSize,
-                                                               @ApiParam(value = "searchValue根据关键字搜索") @RequestParam(value = "pageSize",required = false)String searchValue) {
+                                                               @ApiParam(value = "searchValue根据关键字搜索") @RequestParam(value = "searchValue",required = false)String searchValue) {
         return ReturnJsonData.build(designerService.findByPage(pageNumber, pageSize, searchValue));
     }
 
