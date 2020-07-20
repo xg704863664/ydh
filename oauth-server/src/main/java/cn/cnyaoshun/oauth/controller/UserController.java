@@ -80,4 +80,14 @@ public class UserController {
         return ReturnJsonData.build(b);
     }
 
+    @ApiOperation(value = "根据组织机构ID获取用户信息",httpMethod = "GET",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping("/organization/list")
+    public ReturnJsonData<PageDataDomain<UserFindAllByOrgDomain>> userFindAllByOrgId(@Min (1)@ApiParam(value = "起始页",required = true)@RequestParam(value = "pageNumber") Integer pageNumber,
+                                                                                     @Min (1)@ApiParam(value = "每页显示数量", required = true)@RequestParam(value = "pageSize")  Integer pageSize,
+                                                                                     @NotNull @ApiParam(value = "组织机构ID", required = true)@RequestParam(value = "organizationId")  Long organizationId,
+                                                                                     @ApiParam(value = "根据用户名或部门名称搜索用户信息")@RequestParam(value = "keyWord",required = false) String keyWord){
+        PageDataDomain<UserFindAllByOrgDomain> userByOrg = userService.findAllUserByOrg(organizationId, keyWord, pageNumber, pageSize);
+        return ReturnJsonData.build(userByOrg);
+    }
+
 }
