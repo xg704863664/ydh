@@ -1,14 +1,20 @@
 package cn.cnyaoshun.form.controller;
 
+import cn.cnyaoshun.form.common.AccessTokenUtil;
+import cn.cnyaoshun.form.common.ApiCode;
 import cn.cnyaoshun.form.common.PageDataDomain;
 import cn.cnyaoshun.form.common.ReturnJsonData;
+import cn.cnyaoshun.form.common.domain.OauthUserListDomain;
+import cn.cnyaoshun.form.common.exception.ExceptionValidation;
 import cn.cnyaoshun.form.datasource.service.DataSourceConfigService;
 import cn.cnyaoshun.form.designer.model.Designer;
 import cn.cnyaoshun.form.designer.model.DesignerDomain;
 import cn.cnyaoshun.form.designer.service.DesignerService;
+import cn.cnyaoshun.form.remote.OauthServerClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +33,9 @@ public class DesignerController {
 
     @Resource
     private DesignerService designerService;
+
+    @Autowired
+    private OauthServerClient oauthServerClient;
 
     @Resource
     private DataSourceConfigService dataSourceConfigService;
@@ -47,8 +56,8 @@ public class DesignerController {
     @PostMapping("/findByPage")
     public ReturnJsonData<PageDataDomain<Designer>> findByPage(@Min(1) @ApiParam(value = "当前页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
                                                                @Min(1) @ApiParam(value = "每页显示数量", required = true) @RequestParam(value = "pageSize") Integer pageSize,
-                                                               Long orgId, String searchValue) {
-        return ReturnJsonData.build(designerService.findByPage(pageNumber, pageSize, orgId, searchValue));
+                                                               @ApiParam(value = "searchValue根据关键字搜索") @RequestParam(value = "pageSize",required = false)String searchValue) {
+        return ReturnJsonData.build(designerService.findByPage(pageNumber, pageSize, searchValue));
     }
 
     @ApiOperation(value = "根据ID删除设计器模版", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -60,14 +69,22 @@ public class DesignerController {
 
     @ApiOperation(value = "修改状态", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("/updateStatus")
-    public ReturnJsonData<Designer> updateStatus(@ApiParam(value = "id", required = true) @NotNull @RequestParam(value = "id") Long id,
+    public ReturnJsonData<Designer> updateStatus(@NotNull @ApiParam(value = "id", required = true) @NotNull @RequestParam(value = "id") Long id,
+                                                 @NotNull @ApiParam(value = "orgId 单位id", required = true) @RequestParam(value = "orgId") Long orgId,
                                                  @ApiParam(value = "状态", required = true) @RequestParam(value = "status") boolean status) {
-        return ReturnJsonData.build(designerService.updateStatus(id, status));
+        return ReturnJsonData.build(designerService.updateStatus(id, status,orgId));
     }
 
-    @ApiOperation(value = "根据目录id查询目录下设计器模版", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @GetMapping("/findDesigners/{orgId}")
-    public ReturnJsonData findDesigners(@ApiParam(value = "目录id", required = true) @NotNull @PathVariable(value = "orgId") Long orgId) {
+
+    @ApiOperation(value = "上报系统根据用户信息获取表单列表", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping("/findDesigners")
+    public ReturnJsonData findDesigners() {
+        String token = AccessTokenUtil.currentToken();
+        ReturnJsonData<OauthUserListDomain> userInfo = oauthServerClient.getUserInfo(token);
+        Long orgId = userInfo.getData().getOrgId();
+        if (orgId == null){
+            throw new ExceptionValidation(ApiCode.DATA_NOT_EXISTS.getCode(),"此用户不在组织机构下");
+        }
         return ReturnJsonData.build(designerService.findByOrgIdAndStatus(orgId, true));
     }
 

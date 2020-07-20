@@ -53,7 +53,6 @@ public class Designer extends AbstractEntity {
      * 树id
      */
     @ApiModelProperty(value = "orgId")
-    @NotNull(message = "组织机构不能为空")
     private Long orgId;
 
     /**

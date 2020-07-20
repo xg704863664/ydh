@@ -52,13 +52,10 @@ public class DesignerServiceImpl implements DesignerService {
     }
 
     @Override
-    public PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, Long orgId, String searchValue) {
+    public PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, String searchValue) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         Specification<Designer> specification = (Specification<Designer>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            if (orgId != null) {
-                predicates.add(criteriaBuilder.equal(root.get("orgId"), orgId));
-            }
             if (StringUtils.isNotBlank(searchValue)) {
                 predicates.add(criteriaBuilder.like(root.get("name"), "%" + searchValue + "%"));
             }
@@ -95,9 +92,10 @@ public class DesignerServiceImpl implements DesignerService {
 
     @Override
     @Transactional
-    public Designer updateStatus(Long id, boolean status) {
+    public Designer updateStatus(Long id, boolean status,Long orgId) {
         Designer designer = designerRepository.findById(id).orElseThrow(ExceptionDataNotExists::new);
         designer.setStatus(status);
+        designer.setOrgId(orgId);
         return designerRepository.save(designer);
     }
 

@@ -12,13 +12,13 @@ public interface DesignerService {
 
     List<Designer> findByOrgIdAndStatus(Long orgId, boolean status);
 
-    PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, Long orgId, String searchValue);
+    PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, String searchValue);
 
     Designer save(Designer designer);
 
     void delete(Long id);
 
-    Designer updateStatus(Long id, boolean status);
+    Designer updateStatus(Long id, boolean status,Long orgId);
 
     /**
      * 从设计器中取选定的字段名
