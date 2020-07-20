@@ -28,24 +28,28 @@ import java.util.List;
 @RequestMapping("/organization")
 @Api(description = "表单组织目录")
 @Validated
+@Deprecated
 public class OrganizationController {
     @Resource
     private OrganizationService organizationService;
     @Resource
     private DesignerService designerService;
 
+    @Deprecated
     @ApiOperation(value = "查询表单全部目录", httpMethod = "GET", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @GetMapping("/findAll")
     public ReturnJsonData findAll() {
         return ReturnJsonData.build(organizationService.getAll());
     }
 
+    @Deprecated
     @ApiOperation(value = "修改新增目录", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("save")
     public ReturnJsonData save(@ApiParam(value = "新增修改目录", required = true) @RequestBody @Valid Organization organization) {
         return ReturnJsonData.build(organizationService.save(organization));
     }
 
+    @Deprecated
     @ApiOperation(value = "根据id删除目录", httpMethod = "DELETE", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @DeleteMapping("delete/{id}")
     public ReturnJsonData delete(@ApiParam(value = "目录id", required = true) @PathVariable(value = "id") Long id) {
@@ -56,6 +60,8 @@ public class OrganizationController {
         organizationService.delete(id);
         return ReturnJsonData.build();
     }
+
+    @Deprecated
     @ApiOperation(value = "加载分页列表", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PostMapping("/findByPage")
     public ReturnJsonData<PageDataDomain<Organization>> findByPage(@Min(1) @ApiParam(value = "当前页", required = true) @RequestParam(value = "pageNumber") Integer pageNumber,
