@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,7 +103,7 @@ public class OrganizationServiceImpl implements OrganizationService{
     @Override
     public List<OrganizationFindAllDomain> findAll(){
 
-        List<Organization> organizationList = organizationRepository.findAll();
+        List<Organization> organizationList = organizationRepository.findAll(Sort.by(Sort.Direction.DESC, "createTime"));
         List<OrganizationFindAllDomain> organizationDaomainList = new ArrayList<>();
         organizationList.forEach(organization -> {
             OrganizationFindAllDomain organizationFindAllDomain = new OrganizationFindAllDomain();
