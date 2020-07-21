@@ -87,18 +87,30 @@ public class UserDao {
         objects.forEach(array -> {
             UserFindAllByOrgDomain userDomain = new UserFindAllByOrgDomain();
                     try {
-                        declaredFields[0].setAccessible(true);
-                        declaredFields[0].set(userDomain, array[0].toString());
-                        declaredFields[1].setAccessible(true);
-                        declaredFields[1].set(userDomain, Long.valueOf(array[1].toString()));
-                        declaredFields[2].setAccessible(true);
-                        declaredFields[2].set(userDomain, array[2].toString());
-                        declaredFields[3].setAccessible(true);
-                        declaredFields[3].set(userDomain, array[3].toString());
-                        declaredFields[4].setAccessible(true);
-                        declaredFields[4].set(userDomain, Integer.valueOf(array[4].toString()));
-                        declaredFields[5].setAccessible(true);
-                        declaredFields[5].set(userDomain, array[5].toString());
+                        if(array[0] != null){
+                            declaredFields[0].setAccessible(true);
+                            declaredFields[0].set(userDomain, array[0].toString());
+                        }
+                        if(array[1] != null){
+                            declaredFields[1].setAccessible(true);
+                            declaredFields[1].set(userDomain, Long.valueOf(array[1].toString()));
+                        }
+                        if(array[2] != null){
+                            declaredFields[2].setAccessible(true);
+                            declaredFields[2].set(userDomain, array[2].toString());
+                        }
+                        if (array[3] != null) {
+                            declaredFields[3].setAccessible(true);
+                            declaredFields[3].set(userDomain, array[3].toString());
+                        }
+                        if(array[4] != null){
+                            declaredFields[4].setAccessible(true);
+                            declaredFields[4].set(userDomain, Integer.valueOf(array[4].toString()));
+                        }
+                        if(array[5] != null){
+                            declaredFields[5].setAccessible(true);
+                            declaredFields[5].set(userDomain, array[5].toString());
+                        }
                         if (array[6] != null) {
                             declaredFields[6].setAccessible(true);
                             declaredFields[6].set(userDomain, array[6].toString());
