@@ -78,7 +78,7 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
         formId = formId.endsWith(",") ? formId.substring(0, formId.length() - 1) : formId;
         orderByStr = orderByStr.endsWith(",") ? orderByStr.substring(0, orderByStr.length() - 1) : orderByStr;
         feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
-        String dataSql = "SELECT * FROM (SELECT ROWNUM AS rowno, " + feild + " FROM " + tableName + " t WHERE t.ID IN (" + formId + ") ORDER BY INSTR('" + orderByStr + "') and ROWNUM <=" + pageNumber * pageSize + " ) table_alias WHERE table_alias.rowno >= " + ((pageNumber - 1) * pageSize + 1);
+        String dataSql = "SELECT * FROM (SELECT ROWNUM AS rowno, " + feild + " FROM " + tableName + " t WHERE t.ID IN (" + formId + ") ORDER BY INSTR('" + orderByStr + "',ID) and ROWNUM <=" + pageNumber * pageSize + " ) table_alias WHERE table_alias.rowno >= " + ((pageNumber - 1) * pageSize + 1);
         String countSql = "SELECT COUNT(1) AS count FROM " + tableName + " where 1=1 and ID IN (" + formId + ")";
         List<Map<String, Object>> list = this.query(dataSql, dataSourceConfig);
         Long count = this.queryCount(countSql, dataSourceConfig);
