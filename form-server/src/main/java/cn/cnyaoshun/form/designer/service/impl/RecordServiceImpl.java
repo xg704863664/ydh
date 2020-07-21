@@ -51,6 +51,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    @Transactional
     public void deleteByFormId(String formId) {
         List<Record> recordList = recordRepository.findByFormId(formId);
         if (recordList.size() > 0) {
