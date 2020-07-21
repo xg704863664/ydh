@@ -28,4 +28,6 @@ public interface DesignerService {
      */
     List<String> findFeildNameById(Long id);
 
+    List<Designer> findByName(String name);
+
 }

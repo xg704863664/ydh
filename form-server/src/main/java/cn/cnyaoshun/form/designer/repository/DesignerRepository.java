@@ -12,5 +12,6 @@ public interface DesignerRepository extends PagingAndSortingRepository<Designer,
 
     List<Designer> findByOrgIdAndStatus(Long orgId, boolean status);
     int countByOrgId(Long orgId);
+    List<Designer> findByName(String name);
 
 }

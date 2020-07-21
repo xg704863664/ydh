@@ -108,4 +108,9 @@ public class DesignerServiceImpl implements DesignerService {
         });
         return result;
     }
+
+    @Override
+    public List<Designer> findByName(String name) {
+        return designerRepository.findByName(name);
+    }
 }

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -107,5 +108,16 @@ public class DesignerController {
         }
         designer.setValue(value);
         return ReturnJsonData.build(designerService.save(designer));
+    }
+
+    @ApiOperation(value = "校验名字是否重复", httpMethod = "POST", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/checkName")
+    public ReturnJsonData checkName(@NotBlank @ApiParam(value = "name", required = true) @RequestParam(value = "name") String name){
+        List<Designer> byName = designerService.findByName(name);
+        if(byName.size()>0){
+            return ReturnJsonData.build(999,"名字已被重复");
+        }else{
+            return ReturnJsonData.build("名字可用！");
+        }
     }
 }
