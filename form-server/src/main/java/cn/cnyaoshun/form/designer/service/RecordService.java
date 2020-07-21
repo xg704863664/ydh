@@ -16,4 +16,6 @@ public interface RecordService {
 
     Record findById(Long id);
 
+    void deleteByFormId(String formId);
+
 }
