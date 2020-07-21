@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface RecordRepository extends PagingAndSortingRepository<Record, Long>, JpaSpecificationExecutor<Record> {
 
-    List<Record> findByDataSourceIdAndTableNameOrderByCreateTimeDesc(Long dataSourceId,String tableName);
+    List<Record> findByDesignerIdOrderByCreateTimeDesc(Long designerId);
 
     List<Record> findByFormId(String formId);
 

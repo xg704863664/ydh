@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RecordService {
 
-    List<String> findFormIdByDataSourceIdAndTableName(Long dataSourceId,String tableName);
+    List<String> findFormIdByDesignerId(Long designerId);
 
     void save(Record record);
 

@@ -18,8 +18,8 @@ public class RecordServiceImpl implements RecordService {
     private RecordRepository recordRepository;
 
     @Override
-    public List<String> findFormIdByDataSourceIdAndTableName(Long dataSourceId, String tableName) {
-        List<Record> recordList = recordRepository.findByDataSourceIdAndTableNameOrderByCreateTimeDesc(dataSourceId, tableName);
+    public List<String> findFormIdByDesignerId(Long designerId) {
+        List<Record> recordList = recordRepository.findByDesignerIdOrderByCreateTimeDesc(designerId);
         List<String> result = new ArrayList<>();
         recordList.forEach(record -> {
             result.add(record.getFormId());
