@@ -12,5 +12,6 @@
     <include file="classpath:db/changelog/20200710111600_organization_update.xml" relativeToChangelogFile="false"></include>
     <include file="classpath:db/changelog/20200710111100_data_source_config.xml" relativeToChangelogFile="false"></include>
     <include file="classpath:db/changelog/20200710142600_data_source_config_update.xml" relativeToChangelogFile="false"></include>
+    <include file="classpath:db/changelog/20200721142600_record.xml" relativeToChangelogFile="false"></include>
 
 </databaseChangeLog>

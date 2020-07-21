@@ -37,17 +37,25 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
     }
 
     @Override
-    public PageDataDomain<Map<String, Object>> findByPage(Integer pageNumber, Integer pageSize, DataSourceConfig dataSourceConfig, String tableName, List<String> feildName) {
+    public PageDataDomain<Map<String, Object>> findByPage(Integer pageNumber, Integer pageSize, DataSourceConfig dataSourceConfig, String tableName, List<String> feildName, List<String> formIdList) {
+        PageDataDomain<Map<String, Object>> result = new PageDataDomain<>();
+        if (formIdList.size() == 0) {
+            result.setCurrent(pageNumber);
+            result.setRecords(new ArrayList<>());
+            result.setSize(pageSize);
+            result.setPages(0);
+            result.setTotal(0L);
+            return result;
+        }
         String feild = "id,";
         for (String name : feildName) {
             feild += name + ",";
         }
         feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
-        String dataSql = "select " + feild + " from " + tableName + " limit " + (pageNumber - 1) * pageSize + " , " + pageSize;
+        String dataSql = "select " + feild + " from " + tableName + " where id in (" + formIdList + ") limit " + (pageNumber - 1) * pageSize + " , " + pageSize;
         String countSql = "select count(1) from " + tableName + " where 1=1 ";
         List<Map<String, Object>> list = queryData(dataSql, dataSourceConfig);
         Long count = queryCount(countSql, dataSourceConfig);
-        PageDataDomain<Map<String, Object>> result = new PageDataDomain<>();
         result.setTotal(count);
         int pages = Integer.parseInt(count + "") / pageSize + (Integer.parseInt(count + "") % pageSize > 0 ? 1 : 0);
         result.setPages(pages);
@@ -75,7 +83,7 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
     }
 
     @Override
-    public void saveData(Map<String, Object> map, DataSourceConfig dataSourceConfig, String tableName, List<String> feildName) {
+    public String saveData(Map<String, Object> map, DataSourceConfig dataSourceConfig, String tableName, List<String> feildName) {
         String id = MapUtils.getString(map, "id");
         String sql = "";
         if (StringUtils.isNotBlank(id)) {
@@ -87,7 +95,8 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
             sql = "update " + tableName + " set " + feild + " where id = '" + id + "'";
         } else {
             String feild = " id ,";
-            String feildValue = "'" + UUID.randomUUID().toString() + "',";
+            id = UUID.randomUUID().toString();
+            String feildValue = "'" + id + "',";
             for (String name : feildName) {
                 feild += name + ",";
                 feildValue += "'" + MapUtils.getString(map, name) + "',";
@@ -97,15 +106,16 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
             sql = "insert into " + tableName + "(" + feild + ") values(" + feildValue + ")";
         }
         execute(sql, dataSourceConfig);
+        return id;
     }
 
-    private List<String> queryFeild(String sql, DataSourceConfig dataSourceConfig){
+    private List<String> queryFeild(String sql, DataSourceConfig dataSourceConfig) {
         List<String> result = new ArrayList<>();
         DynamicTemplate dynamicTemplate = dynamicDataSourceUtil.getDynamicTemplate(dataSourceConfig.getType(), dataSourceConfig.getUrl(), dataSourceConfig.getUsername(), dataSourceConfig.getPassword());
         List<Map<String, Object>> tables = dynamicTemplate.getJdbcTemplate().queryForList(sql);
         tables.forEach(table -> {
-            String name = MapUtils.getString(table,"Field");
-            if(StringUtils.isNotBlank(name)){
+            String name = MapUtils.getString(table, "Field");
+            if (StringUtils.isNotBlank(name)) {
                 result.add(name);
             }
         });

@@ -6,10 +6,10 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 47.94.92.201:15005
+        server-addr: 127.0.0.1:8848 #47.94.92.201:15005
         file-extension: yml
       discovery:
-        server-addr: 47.94.92.201:15005
+        server-addr: 127.0.0.1:8848 #47.94.92.201:15005
         metadata:
           management:
             context-path: ${server.servlet.context-path}/actuator

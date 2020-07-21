@@ -14,15 +14,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +51,8 @@ public class DesignerServiceImpl implements DesignerService {
 
     @Override
     public PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, String searchValue) {
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        Sort sort = new Sort(Sort.Direction.ASC, "updateTime");
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
         Specification<Designer> specification = (Specification<Designer>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (StringUtils.isNotBlank(searchValue)) {

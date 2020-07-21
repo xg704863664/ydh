@@ -12,12 +12,12 @@ public interface DynamicDataSourceConfigService {
 
     List<String> findFeildNameByIdAndTableName(String tableName, DataSourceConfig dataSourceConfig);
 
-    PageDataDomain<Map<String, Object>> findByPage(Integer pageNumber, Integer pageSize, DataSourceConfig dataSourceConfig, String tableName,List<String> feildName);
+    PageDataDomain<Map<String, Object>> findByPage(Integer pageNumber, Integer pageSize, DataSourceConfig dataSourceConfig, String tableName,List<String> feildName,List<String> formIdList);
 
     void deleteData(String id, DataSourceConfig dataSourceConfig, String tableName);
 
     Map<String, Object> findById(String id,DataSourceConfig dataSourceConfig, String tableName,List<String> feildName);
 
-    void saveData(Map<String,Object> map,DataSourceConfig dataSourceConfig, String tableName, List<String> feildName);
+    String saveData(Map<String,Object> map,DataSourceConfig dataSourceConfig, String tableName, List<String> feildName);
 
 }

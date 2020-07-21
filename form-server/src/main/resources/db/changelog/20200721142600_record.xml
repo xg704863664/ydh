@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="now" value="sysdate" dbms="oracle"/>
+    <changeSet id="20200721142600" author="zyp">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="record"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="record" remarks="数据源配置表">
+            <column name="id" type="bigint" remarks="主键" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="form_id" type="varchar(50)" remarks="填报数据id"/>
+            <column name="filler" type="varchar(50)" remarks="填报人"/>
+            <column name="data_source_id" type="bigint" remarks="数据源id" />
+            <column name="table_name" type="varchar(255)"  remarks="表名"/>
+            <column name="create_time" type="DATETIME" defaultValueDate="${now}" remarks="创建时间"/>
+            <column name="update_time" type="DATETIME" defaultValue="${now}" remarks="最后修改时间"/>
+        </createTable>
+
+    </changeSet>
+</databaseChangeLog>

@@ -53,17 +53,25 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
     }
 
     @Override
-    public PageDataDomain<Map<String, Object>> findByPage(Integer pageNumber, Integer pageSize, DataSourceConfig dataSourceConfig, String tableName, List<String> feildName) {
+    public PageDataDomain<Map<String, Object>> findByPage(Integer pageNumber, Integer pageSize, DataSourceConfig dataSourceConfig, String tableName, List<String> feildName, List<String> formIdList) {
+        PageDataDomain<Map<String, Object>> result = new PageDataDomain<>();
+        if (formIdList.size() == 0) {
+            result.setCurrent(pageNumber);
+            result.setRecords(new ArrayList<>());
+            result.setSize(pageSize);
+            result.setPages(0);
+            result.setTotal(0L);
+            return result;
+        }
         String feild = "t.id, ";
         for (String name : feildName) {
             feild += "t." + name + ",";
         }
-        feild = feild.endsWith(",") ? feild.substring(0, feild.length()-1) : feild;
-        String dataSql = "SELECT * FROM (SELECT ROWNUM AS rowno, " + feild + " FROM " + tableName + " t WHERE ROWNUM <=" + pageNumber * pageSize + " ) table_alias WHERE table_alias.rowno >= " + ((pageNumber - 1) * pageSize + 1);
+        feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
+        String dataSql = "SELECT * FROM (SELECT ROWNUM AS rowno, " + feild + " FROM " + tableName + " t WHERE t.ID IN (" + formIdList + ") and ROWNUM <=" + pageNumber * pageSize + " ) table_alias WHERE table_alias.rowno >= " + ((pageNumber - 1) * pageSize + 1);
         String countSql = "SELECT COUNT(1) AS count FROM " + tableName + " where 1=1 ";
         List<Map<String, Object>> list = this.query(dataSql, dataSourceConfig);
         Long count = this.queryCount(countSql, dataSourceConfig);
-        PageDataDomain<Map<String, Object>> result = new PageDataDomain<>();
         result.setTotal(count);
         int pages = Integer.parseInt(count + "") / pageSize + (Integer.parseInt(count + "") % pageSize > 0 ? 1 : 0);
         result.setPages(pages);
@@ -91,7 +99,7 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
     }
 
     @Override
-    public void saveData(Map<String, Object> map, DataSourceConfig dataSourceConfig, String tableName, List<String> feildName) {
+    public String saveData(Map<String, Object> map, DataSourceConfig dataSourceConfig, String tableName, List<String> feildName) {
         String id = MapUtils.getString(map, "ID");
         String sql = "";
         if (StringUtils.isNotBlank(id)) {
@@ -103,7 +111,8 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
             sql = "update " + tableName + " set " + feild + " where id = '" + id + "'";
         } else {
             String feild = "id,";
-            String feildValue = "'" + UUID.randomUUID().toString() + "',";
+            id = UUID.randomUUID().toString();
+            String feildValue = "'" + id + "',";
             for (String name : feildName) {
                 feild += name + ",";
                 feildValue += "'" + MapUtils.getString(map, name) + "',";
@@ -113,6 +122,7 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
             sql = "insert into " + tableName + "(" + feild + ") values(" + feildValue + ")";
         }
         execute(sql, dataSourceConfig);
+        return id;
     }
 
 

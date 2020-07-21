@@ -1,13 +1,19 @@
 package cn.cnyaoshun.form.designer.service.impl;
 
+import cn.cnyaoshun.form.common.AccessTokenUtil;
 import cn.cnyaoshun.form.common.PageDataDomain;
+import cn.cnyaoshun.form.common.ReturnJsonData;
+import cn.cnyaoshun.form.common.domain.OauthUserListDomain;
 import cn.cnyaoshun.form.datasource.model.DataSourceConfig;
 import cn.cnyaoshun.form.datasource.service.DataSourceConfigService;
 import cn.cnyaoshun.form.datasource.service.DynamicDataSourceConfigService;
 import cn.cnyaoshun.form.datasource.service.handler.HandlerContext;
 import cn.cnyaoshun.form.designer.model.Designer;
+import cn.cnyaoshun.form.designer.model.Record;
 import cn.cnyaoshun.form.designer.service.DesignerService;
 import cn.cnyaoshun.form.designer.service.FormService;
+import cn.cnyaoshun.form.designer.service.RecordService;
+import cn.cnyaoshun.form.remote.OauthServerClient;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +31,12 @@ public class FormServiceImpl implements FormService {
     private DesignerService designerService;
 
     @Resource
+    private RecordService recordService;
+
+    @Resource
+    private OauthServerClient oauthServerClient;
+
+    @Resource
     private DataSourceConfigService dataSourceConfigService;
 
     @Override
@@ -35,7 +47,8 @@ public class FormServiceImpl implements FormService {
         DataSourceConfig dataSourceConfig = dataSourceConfigService.findById(dataSourceId);
         DynamicDataSourceConfigService dynamicDataSourceConfigService = handlerContext.getInstance(dataSourceConfig.getType());
         List<String> feildName = designerService.findFeildNameById(designerId);
-        return dynamicDataSourceConfigService.findByPage(pageNumber, pageSize, dataSourceConfig, tableName, feildName);
+        List<String> formIdList = recordService.findFormIdByDataSourceIdAndTableName(dataSourceId, tableName);
+        return dynamicDataSourceConfigService.findByPage(pageNumber, pageSize, dataSourceConfig, tableName, feildName, formIdList);
     }
 
     @Override
@@ -57,7 +70,15 @@ public class FormServiceImpl implements FormService {
         DataSourceConfig dataSourceConfig = dataSourceConfigService.findById(dataSourceId);
         DynamicDataSourceConfigService dynamicDataSourceConfigService = handlerContext.getInstance(dataSourceConfig.getType());
         List<String> feildName = designerService.findFeildNameById(designerId);
-        dynamicDataSourceConfigService.saveData(map, dataSourceConfig, tableName, feildName);
+        String id = dynamicDataSourceConfigService.saveData(map, dataSourceConfig, tableName, feildName);
+        Record record = recordService.findByFormId(id);
+        record = record == null ? new Record() : record;
+        record.setDataSourceId(designerId);
+        String token = AccessTokenUtil.currentToken();
+        ReturnJsonData<OauthUserListDomain> userInfo = oauthServerClient.getUserInfo(token);
+        record.setFiller(userInfo.getData().getUserName());
+        record.setFormId(id);
+        recordService.save(record);
     }
 
     @Override
