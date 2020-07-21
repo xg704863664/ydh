@@ -78,6 +78,7 @@ public class FormServiceImpl implements FormService {
         ReturnJsonData<OauthUserListDomain> userInfo = oauthServerClient.getUserInfo(token);
         record.setFiller(userInfo.getData().getUserName());
         record.setFormId(id);
+        record.setTableName(tableName);
         recordService.save(record);
     }
 
