@@ -60,7 +60,7 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
             formId = formId.substring(0, formId.length() - 1);
         }
         feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
-        String dataSql = "select " + feild + " from " + tableName + " where id in (" + formId + ") limit " + (pageNumber - 1) * pageSize + " , " + pageSize;
+        String dataSql = "select " + feild + " from " + tableName + " where id in (" + formId + ") order by FIELD(id," + formId + ") limit " + (pageNumber - 1) * pageSize + " , " + pageSize;
         String countSql = "select count(1) from " + tableName + " where 1=1 and id in (" + formId + ")";
         List<Map<String, Object>> list = queryData(dataSql, dataSourceConfig);
         Long count = queryCount(countSql, dataSourceConfig);
