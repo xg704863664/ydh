@@ -73,7 +73,7 @@ public class FormServiceImpl implements FormService {
         String id = dynamicDataSourceConfigService.saveData(map, dataSourceConfig, tableName, feildName);
         Record record = recordService.findByFormId(id);
         record = record == null ? new Record() : record;
-        record.setDataSourceId(designerId);
+        record.setDataSourceId(dataSourceId);
         String token = AccessTokenUtil.currentToken();
         ReturnJsonData<OauthUserListDomain> userInfo = oauthServerClient.getUserInfo(token);
         record.setFiller(userInfo.getData().getUserName());

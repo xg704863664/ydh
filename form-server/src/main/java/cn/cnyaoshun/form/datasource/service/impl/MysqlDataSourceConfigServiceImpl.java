@@ -51,8 +51,16 @@ public class MysqlDataSourceConfigServiceImpl implements DynamicDataSourceConfig
         for (String name : feildName) {
             feild += name + ",";
         }
+        StringBuffer formIds = new StringBuffer();
+        formIdList.forEach(formId -> {
+            formIds.append("'" + formId + "',");
+        });
+        String formId = formIds.toString();
+        if (formId.endsWith(",")) {
+            formId = formId.substring(0, formId.length() - 1);
+        }
         feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
-        String dataSql = "select " + feild + " from " + tableName + " where id in (" + formIdList + ") limit " + (pageNumber - 1) * pageSize + " , " + pageSize;
+        String dataSql = "select " + feild + " from " + tableName + " where id in (" + formId + ") limit " + (pageNumber - 1) * pageSize + " , " + pageSize;
         String countSql = "select count(1) from " + tableName + " where 1=1 ";
         List<Map<String, Object>> list = queryData(dataSql, dataSourceConfig);
         Long count = queryCount(countSql, dataSourceConfig);
