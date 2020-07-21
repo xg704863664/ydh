@@ -59,6 +59,7 @@ public class FormServiceImpl implements FormService {
         DataSourceConfig dataSourceConfig = dataSourceConfigService.findById(dataSourceId);
         DynamicDataSourceConfigService dynamicDataSourceConfigService = handlerContext.getInstance(dataSourceConfig.getType());
         dynamicDataSourceConfigService.deleteData(id, dataSourceConfig, tableName);
+        recordService.deleteByFormId(id);
     }
 
     @Override

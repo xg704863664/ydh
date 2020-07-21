@@ -49,4 +49,12 @@ public class RecordServiceImpl implements RecordService {
     public Record findById(Long id) {
         return recordRepository.findById(id).orElseThrow(ExceptionDataNotExists::new);
     }
+
+    @Override
+    public void deleteByFormId(String formId) {
+        List<Record> recordList = recordRepository.findByFormId(formId);
+        if (recordList.size() > 0) {
+            recordRepository.deleteAll(recordList);
+        }
+    }
 }
