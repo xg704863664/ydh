@@ -126,7 +126,6 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
             conn.close();
         } catch (SQLException e) {
             log.info(e.getMessage());
-            e.printStackTrace();
             return false;
         }
         return result;

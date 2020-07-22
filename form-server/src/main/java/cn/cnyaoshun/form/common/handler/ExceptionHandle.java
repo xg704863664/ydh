@@ -29,7 +29,6 @@ public class ExceptionHandle {
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ExceptionAuth.class)
     public ReturnJsonData doRequiredExceptionHandle(ExceptionAuth e) {
-        e.printStackTrace();
         return createReturnJsonData(e.getCode(), e.getMessage());
     }
 
