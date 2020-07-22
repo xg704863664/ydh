@@ -17,4 +17,10 @@ public class PageDomain {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
     }
+
+    public static Integer getTotalPages(Long totalElements,Integer pageSize){
+        return Integer.parseInt(totalElements+"")/pageSize+(Integer.parseInt(totalElements+"")%pageSize>0?1:0);
+    }
+
+
 }
