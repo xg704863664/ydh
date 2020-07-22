@@ -47,7 +47,7 @@ public class FormServiceImpl implements FormService {
         DataSourceConfig dataSourceConfig = dataSourceConfigService.findById(dataSourceId);
         DynamicDataSourceConfigService dynamicDataSourceConfigService = handlerContext.getInstance(dataSourceConfig.getType());
         List<String> feildName = designerService.findFeildNameById(designerId);
-        List<String> formIdList = recordService.findFormIdByDataSourceIdAndTableName(dataSourceId, tableName);
+        List<String> formIdList = recordService.findFormIdByDesignerId(designerId);
         return dynamicDataSourceConfigService.findByPage(pageNumber, pageSize, dataSourceConfig, tableName, feildName, formIdList);
     }
 
@@ -74,12 +74,11 @@ public class FormServiceImpl implements FormService {
         String id = dynamicDataSourceConfigService.saveData(map, dataSourceConfig, tableName, feildName);
         Record record = recordService.findByFormId(id);
         record = record == null ? new Record() : record;
-        record.setDataSourceId(dataSourceId);
+        record.setDesignerId(designerId);
         String token = AccessTokenUtil.currentToken();
         ReturnJsonData<OauthUserListDomain> userInfo = oauthServerClient.getUserInfo(token);
         record.setFiller(userInfo.getData().getUserName());
         record.setFormId(id);
-        record.setTableName(tableName);
         recordService.save(record);
     }
 

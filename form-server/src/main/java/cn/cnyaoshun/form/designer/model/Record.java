@@ -20,13 +20,8 @@ public class Record extends AbstractEntity {
     private String filler;
 
     /**
-     * 数据源id
+     * 设计器id
      */
-    private Long dataSourceId;
-
-    /**
-     * 表名
-     */
-    private String tableName;
+    private Long designerId;
 
 }

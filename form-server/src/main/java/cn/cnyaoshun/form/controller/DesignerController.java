@@ -115,7 +115,7 @@ public class DesignerController {
     public ReturnJsonData checkName(@NotBlank @ApiParam(value = "name", required = true) @RequestParam(value = "name") String name){
         List<Designer> byName = designerService.findByName(name);
         if(byName.size()>0){
-            return ReturnJsonData.build(999,"名字已被重复");
+            return ReturnJsonData.build(999,"表单名称重复！");
         }else{
             return ReturnJsonData.build("名字可用！");
         }
