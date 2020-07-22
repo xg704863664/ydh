@@ -51,7 +51,7 @@ public class DesignerServiceImpl implements DesignerService {
 
     @Override
     public PageDataDomain<Designer> findByPage(Integer pageNum, Integer pageSize, String searchValue) {
-        Sort sort = new Sort(Sort.Direction.DESC, "updateTime");
+        Sort sort = new Sort(Sort.Direction.DESC, "createTime");
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize, sort);
         Specification<Designer> specification = (Specification<Designer>) (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
