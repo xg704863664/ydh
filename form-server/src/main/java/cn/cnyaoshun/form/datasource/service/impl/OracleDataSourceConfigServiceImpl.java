@@ -125,7 +125,7 @@ public class OracleDataSourceConfigServiceImpl implements DynamicDataSourceConfi
             String feildValue = "'" + id + "',";
             for (String name : feildName) {
                 feild += name + ",";
-                feildValue += "'" + MapUtils.getString(map, name) + "',";
+                feildValue += "'" + (StringUtils.isNotBlank(MapUtils.getString(map, name)) ? MapUtils.getString(map, name) : "") + "',";
             }
             feild = feild.endsWith(",") ? feild.substring(0, feild.length() - 1) : feild;
             feildValue = feildValue.endsWith(",") ? feildValue.substring(0, feildValue.length() - 1) : feildValue;
