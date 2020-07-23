@@ -125,7 +125,7 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
             result = (conn != null);
             conn.close();
         } catch (SQLException e) {
-            log.error("数据库连接失败！");
+            log.info(e.getMessage());
             return false;
         }
         return result;
