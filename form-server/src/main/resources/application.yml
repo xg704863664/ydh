@@ -1,5 +1,5 @@
 #server:
-#  port: 16001
+#  port: 16005
 #  servlet:
 #    context-path: /api/${spring.application.name}
 #  tomcat:
@@ -39,3 +39,24 @@
 #      validation-timeout: 1000
 #      leak-detection-threshold: 30000
 #
+#ribbon:
+#  ConnectTimeout: 6000
+#  ReadTimeout: 5000
+#
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 3000
+#    # 'OauthServerClient#checkToken(String)':
+#    #   execution:
+#    #     isolation:
+#    #       thread:
+#    #         timeoutInMilliseconds: 5000
+#feign:
+#  hystrix:
+#    enabled: true
+#  okhttp:
+#    enabled: true
